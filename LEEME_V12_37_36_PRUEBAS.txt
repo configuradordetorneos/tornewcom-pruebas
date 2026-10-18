@@ -1,0 +1,65 @@
+TORNEWCOM V12.37.36 PRUEBAS — BREVO + ALERTAS
+Fecha: 18/10/2026
+
+ENTORNO DE ESTE PAQUETE
+- Frontend: https://tornewcom-pruebas.netlify.app
+- Supabase PRUEBAS: sistema-torneos-newcom
+- Project ref: bxymdhkxotpiunyuntdd
+- NO ES PRODUCCIÓN.
+- NO subir este ZIP a tornewcom.netlify.app.
+
+BASE
+- Parte de TORNEWCOM_V12_37_33_PRUEBAS_BACKEND_CORRECTO.zip.
+- El ZIP V12.37.33 debe conservarse como rollback.
+
+CAMBIOS V12.37.36
+1. Envío automático por Brevo después de:
+   - modificar programación de un partido;
+   - eliminar un partido PENDIENTE;
+   - corregir un partido FINALIZADO.
+2. El email es complementario: si Brevo falla, el cambio deportivo NO se revierte.
+3. Se evita duplicar avisos futuros cuando ambos equipos afectados tienen el mismo Responsable.
+4. La Edge Function utilizada es notificar-partido-email.
+5. Botón rojo 🔔 ALERTAS junto a Mensajes:
+   - aparece solo cuando el usuario conectado tiene al menos una alerta propia sin leer;
+   - no usa contador;
+   - desaparece al quedar todas sus alertas leídas.
+6. alertas.html admite Admin General, Organizador y Responsable.
+7. En Alertas, Admin/Organizador pueden supervisar avisos de su ámbito, pero solo el destinatario puede marcar su propia alerta como leída.
+8. Se mejoró la visualización de cambios de partido guardados como array JSON.
+9. Cache-bust del helper principal: supabase_v12_24.js?v=12.37.36.
+
+BACKEND DE PRUEBAS YA PREPARADO
+- BREVO_MENSAJES_API_KEY configurado en Edge Function Secrets.
+- notificar-partido-email ACTIVE y validada con envío real.
+- Permisos mínimos de service_role aplicados para perfiles/torneos/notificaciones_sistema.
+- editar_partido_con_notificaciones devuelve notification_ids.
+- crear_notificaciones_cambio_partido deduplica por destinatario.
+- hay_alertas_no_leidas_actual() mira solo alertas propias del usuario actual.
+
+PRUEBA RECOMENDADA ANTES DE PRODUCCIÓN
+A) Organizador: modificar un partido PENDIENTE.
+   Esperado: cambio guardado + una alerta por Responsable + email automático.
+B) Si ambos equipos tienen el mismo Responsable.
+   Esperado: una sola alerta y un solo email para esa persona.
+C) Eliminar un partido PENDIENTE.
+   Esperado: partido eliminado + alerta + email.
+D) Corregir un partido FINALIZADO.
+   Esperado: auditoría + alerta + email.
+E) Responsable con alerta nueva.
+   Esperado: aparece botón rojo 🔔 ALERTAS; al marcar todas como leídas y volver al panel, desaparece.
+F) Mensajes.
+   Esperado: mensajería sigue funcionando sin cambios.
+
+PASO A PRODUCCIÓN
+NO usar este ZIP directamente en producción.
+Después de aprobar PRUEBAS se debe generar un paquete V12.37.36 PRODUCCION FINAL,
+revisar referencias Supabase/URLs/Edge Function/CORS/secretos y hacer triple control antes del reemplazo manual real en Netlify.
+
+
+PATCH V12.37.36 PRUEBAS
+- El envío automático por Brevo obtiene una sesión vigente justo antes de invocar la Edge Function.
+- Se evita reutilizar un access_token vencido en sesiones abiertas durante muchas horas.
+- En partidos FINALIZADOS, “Habilitar corrección” desbloquea durante 5 minutos jornada, hora, sede, cancha, equipos y resultado.
+- Toda modificación de programación sobre FINALIZADO usa la RPC auditada y genera PARTIDO_CORREGIDO.
+- Producción no fue modificada.

@@ -625,13 +625,23 @@ async function listarJornadasTorneo(torneoId){
   return error?{ok:false,error:error.message,data:[]}:{ok:true,data:data||[]};
 }
 async function enviarNotificacionesPartidoEmail(notificationIds){
-  const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;
   if(!iniciar())return{ok:false,error:'Supabase no configurado'};
   const ids=[...new Set((Array.isArray(notificationIds)?notificationIds:[notificationIds]).filter(Boolean))];
   if(!ids.length)return{ok:true,enviados:0,omitido:true};
   try{
-    const{data,error}=await authClient.functions.invoke('notificar-partido-email',{body:{notification_ids:ids}});
-    if(error)return{ok:false,error:mensajeErrorHumano(error)};
+    // Obtener una sesión vigente justo antes del envío. Esto permite mantener la
+    // sesión abierta durante horas/días sin reutilizar un access_token vencido.
+    const rr=await restaurarSesionAuth();
+    if(!rr.ok||!rr.session?.access_token)return{ok:false,error:rr.error||'Tu sesión venció. Volvé a ingresar.'};
+    const token=rr.session.access_token;
+    const r=await fetch(config().url+'/functions/v1/notificar-partido-email',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({notification_ids:ids})
+    });
+    let data=null;
+    try{data=await r.json()}catch(_){data=null}
+    if(!r.ok)return{ok:false,error:data?.error||('No se pudo enviar el aviso por email (HTTP '+r.status+').')};
     if(data?.ok===false)return{ok:false,error:data.error||'No se pudo enviar el aviso por email.'};
     return{ok:true,data,enviados:Number(data?.enviados??ids.length)};
   }catch(e){return{ok:false,error:mensajeErrorHumano(e)}}
@@ -642,9 +652,9 @@ async function hayAlertasNoLeidasActual(){
   const{data,error}=await client.rpc('hay_alertas_no_leidas_actual');
   return error?{ok:false,error:error.message,data:false}:{ok:true,data:!!data};
 }
-async function actualizarProgramacionPartido(id,d){
+async function actualizarProgramacionPartido(id,d,motivo='Edición de programación'){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;if(!iniciar())return{ok:false,error:'Supabase no configurado'};
-  const{data,error}=await client.rpc('editar_partido_con_notificaciones',{p_partido:id,p_jornada:d.jornada_id,p_hora:d.hora||null,p_sede:d.sede_id||null,p_cancha:d.cancha||null,p_equipo_a:d.equipo_a_id,p_equipo_b:d.equipo_b_id,p_motivo:'Edición de programación'});
+  const{data,error}=await client.rpc('editar_partido_con_notificaciones',{p_partido:id,p_jornada:d.jornada_id,p_hora:d.hora||null,p_sede:d.sede_id||null,p_cancha:d.cancha||null,p_equipo_a:d.equipo_a_id,p_equipo_b:d.equipo_b_id,p_motivo:motivo||'Edición de programación'});
   if(error)return{ok:false,error:error.message};
   const ids=Array.isArray(data?.notification_ids)?data.notification_ids:[];
   const mail=await enviarNotificacionesPartidoEmail(ids);
