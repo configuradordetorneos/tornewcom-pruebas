@@ -69,7 +69,7 @@ async function cargar(){
      else res=`<b>${Number(p.sets_a)||0} - ${Number(p.sets_b)||0}</b>`;
    }
    const txt=p.estado==='FINALIZADO'?'Ver / corregir resultado':(p.estado==='SUSPENDIDO'?'Reanudar / cargar':'Cargar resultado');
-   return `<tr><td>${esc(p.jornadas?.nombre||'')}</td><td>${esc(p.jornadas?.fecha||'')}</td><td>${esc(p.categoria)}</td><td>${esc(p.modalidad)}</td><td><b>${esc(p.equipo_a)}</b> vs <b>${esc(p.equipo_b)}</b></td><td>${esc(p.hora||'')}</td><td>${p.sedes_torneo?`<span title="${esc(p.sedes_torneo.domicilio||'')}">${esc(p.sedes_torneo.nombre)}</span>`:'—'}</td><td>${esc(p.cancha||'—')}</td><td class="estado ${p.estado==='FINALIZADO'?'fin':(p.estado==='SUSPENDIDO'?'sus':'pen')}">${esc(p.estado)}</td><td>${res}</td><td class="print-hide"><a class="btn" href="cargar_resultado.html?partido=${encodeURIComponent(p.id)}">${txt}</a> <button class="btn secondary" type="button" onclick="editarPartido('${p.id}')">⚙️ Editar</button></td></tr>`;
+   return `<tr><td>${esc(p.jornadas?.nombre||'')}</td><td>${esc(p.jornadas?.fecha||'')}</td><td>${esc(p.categoria)}</td><td>${esc(p.modalidad)}</td><td><b>${esc(p.equipo_a)}</b> vs <b>${esc(p.equipo_b)}</b></td><td>${esc(p.hora||'')}</td><td>${p.sedes_torneo?`<span title="${esc(p.sedes_torneo.domicilio||'')}">${esc(p.sedes_torneo.nombre)}</span>`:'—'}</td><td>${esc(p.cancha||'—')}</td><td class="estado ${p.estado==='FINALIZADO'?'fin':(p.estado==='SUSPENDIDO'?'sus':'pen')}">${esc(p.estado)}</td><td>${res}</td><td class="print-hide"><a class="btn" href="cargar_resultado.html?partido=${encodeURIComponent(p.id)}">✏️ Editar</a></td></tr>`;
  }).join('')}</tbody></table>`;
 }
 async function enviarEmailsNotificaciones(ids){

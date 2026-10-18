@@ -626,15 +626,8 @@ async function listarJornadasTorneo(torneoId){
 }
 async function actualizarProgramacionPartido(id,d){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;if(!iniciar())return{ok:false,error:'Supabase no configurado'};
-  const previo=await obtenerPartido(id);if(!previo.ok)return previo;if(previo.data.estado!=='PENDIENTE')return{ok:false,error:'Sólo se puede editar normalmente un partido PENDIENTE.'};
-  const cambios={jornada_id:d.jornada_id,hora:d.hora||null,sede_id:d.sede_id||null,cancha:d.cancha||null,equipo_a_id:d.equipo_a_id,equipo_b_id:d.equipo_b_id,equipo_a:d.equipo_a,equipo_b:d.equipo_b,actualizado_en:new Date().toISOString()};
-  const{data,error}=await client.from('partidos').update(cambios).eq('id',id).eq('estado','PENDIENTE').select().single();
-  if(error)return{ok:false,error:error.message};
-  const antes={jornada_id:previo.data.jornada_id,fecha:previo.data.jornadas?.fecha||null,hora:previo.data.hora,sede_id:previo.data.sede_id,cancha:previo.data.cancha,equipo_a_id:previo.data.equipo_a_id,equipo_a:previo.data.equipo_a,equipo_b_id:previo.data.equipo_b_id,equipo_b:previo.data.equipo_b};
-  const despues={jornada_id:data.jornada_id,hora:data.hora,sede_id:data.sede_id,cancha:data.cancha,equipo_a_id:data.equipo_a_id,equipo_a:data.equipo_a,equipo_b_id:data.equipo_b_id,equipo_b:data.equipo_b};
-  const ids=[previo.data.equipo_a_id,previo.data.equipo_b_id,data.equipo_a_id,data.equipo_b_id].filter(Boolean);
-  const nr=await client.rpc('crear_notificaciones_cambio_partido',{p_partido:id,p_tipo:'PARTIDO_MODIFICADO',p_titulo:'Partido modificado',p_detalle:'La Organización modificó la programación de un partido.',p_cambios:{antes,despues},p_equipo_ids:ids});
-  return{ok:true,data,notification_ids:nr.error?[]:(nr.data||[]),warning:nr.error?('Partido guardado, pero falló la notificación: '+nr.error.message):null};
+  const{data,error}=await client.rpc('editar_partido_con_notificaciones',{p_partido:id,p_jornada:d.jornada_id,p_hora:d.hora||null,p_sede:d.sede_id||null,p_cancha:d.cancha||null,p_equipo_a:d.equipo_a_id,p_equipo_b:d.equipo_b_id,p_motivo:'Edición de programación'});
+  if(error)return{ok:false,error:error.message};return{ok:true,data,notification_ids:[]};
 }
 async function eliminarPartidoPendiente(id){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;if(!iniciar())return{ok:false,error:'Supabase no configurado'};
