@@ -1,5 +1,5 @@
 // TORNEWCOM — ENTORNO DE PRUEBAS (sistema-torneos-newcom / bxymdhkxotpiunyuntdd)
-// Clon del frontend V12.35. NO apunta a producciÃ³n.
+// Frontend V12.37.34 PRUEBAS. NO apunta a producción.
 window.NEWCOM_SUPABASE = {
   url: "https://bxymdhkxotpiunyuntdd.supabase.co",
   anonKey: "sb_publishable_K9gw29Ddho_29Fi12JK3Kw_n96AKTYc"

@@ -10,7 +10,7 @@
 </head>
 <body>
 <script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);</script>
-<header class="topbar"><div class="brand"><h1>Sistema de Torneos Newcom</h1><small>V12.37.30 CANDIDATA · Control flexible de reglas</small></div></header>
+<header class="topbar"><div class="brand"><h1>Sistema de Torneos Newcom</h1><small>V12.37.34 PRUEBAS · Control flexible de reglas</small></div></header>
 <main class="wrap">
 <a class="back" href="index.html">← Volver al inicio</a>
 <section class="panel">
@@ -19,7 +19,7 @@
 </section>
 </main>
 <footer class="footer"><strong>Creado por Gabriel Prozzillo</strong> · Proyecto Newcom</footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.34"></script>
 <script>
 const box=document.getElementById('alertas-box'),nbox=document.getElementById('notificaciones-box'),msg=document.getElementById('msg'),sesion=NewcomRoles.sesion();
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
@@ -35,7 +35,7 @@ function estadoUI(estado){
  if(e==='RECHAZADA')return{txt:'NO ACEPTADA',cls:'rejected'};
  return{txt:'PENDIENTE',cls:'pending'};
 }
-async function cargarNotificaciones(){const r=await NewcomSupabase.listarNotificacionesSistema();if(!r.ok){nbox.innerHTML='<div class="msg err">'+esc(r.error)+'</div>';return}const ns=r.data||[];if(!ns.length){nbox.innerHTML='<div class="note">No tenés notificaciones automáticas.</div>';return}nbox.innerHTML=ns.map(n=>{const c=n.cambios||{},a=c.antes||{},d=c.despues||{};const cambios=[];for(const k of ['equipo_a','equipo_b','fecha','hora','sede_id','cancha'])if(String(a[k]??'')!==String(d[k]??'')&&(a[k]!=null||d[k]!=null))cambios.push(`<li><b>${esc(k.replace('_',' '))}:</b> ${esc(a[k]??'—')} → ${esc(d[k]??'—')}</li>`);return `<article class="alert-card ${n.leida?'accepted':'pending'}"><h3>${esc(n.titulo)}</h3><div class="meta"><span class="chip">${esc(n.torneos?.nombre||'Torneo')}</span><span class="chip">${esc(fmtFechaHora(n.creado_en))}</span>${n.leida?'<span class="estado accepted">LEÍDA</span>':'<span class="estado pending">NUEVA</span>'}</div><p>${esc(n.detalle)}</p>${cambios.length?'<ul>'+cambios.join('')+'</ul>':''}${!n.leida?`<button class="btn primary" onclick="leerNotificacion('${n.id}')">Marcar como leída</button>`:''}</article>`}).join('')}
+async function cargarNotificaciones(){const r=await NewcomSupabase.listarNotificacionesSistema();if(!r.ok){nbox.innerHTML='<div class="msg err">'+esc(r.error)+'</div>';return}const ns=r.data||[];if(!ns.length){nbox.innerHTML='<div class="note">No tenés notificaciones automáticas.</div>';return}nbox.innerHTML=ns.map(n=>{const c=n.cambios||{};const cambios=[];if(Array.isArray(c)){for(const x of c){if(!x||!x.campo)continue;cambios.push(`<li><b>${esc(x.campo)}:</b> ${esc(x.antes??'—')} → ${esc(x.despues??'—')}</li>`)}}else{const a=c.antes||{},d=c.despues||{};for(const k of ['equipo_a','equipo_b','fecha','hora','sede_id','cancha'])if(String(a[k]??'')!==String(d[k]??'')&&(a[k]!=null||d[k]!=null))cambios.push(`<li><b>${esc(k.replace('_',' '))}:</b> ${esc(a[k]??'—')} → ${esc(d[k]??'—')}</li>`)}const propia=String(n.destinatario_usuario_id||'')===String(sesion.user_id||'');const estado=n.leida?'<span class="estado accepted">LEÍDA</span>':(propia?'<span class="estado pending">NUEVA</span>':'<span class="estado pending">PENDIENTE DEL DESTINATARIO</span>');return `<article class="alert-card ${n.leida?'accepted':'pending'}"><h3>${esc(n.titulo)}</h3><div class="meta"><span class="chip">${esc(n.torneos?.nombre||'Torneo')}</span><span class="chip">${esc(fmtFechaHora(n.creado_en))}</span>${estado}</div><p>${esc(n.detalle)}</p>${cambios.length?'<ul>'+cambios.join('')+'</ul>':''}${!n.leida&&propia?`<button class="btn primary" onclick="leerNotificacion('${n.id}')">Marcar como leída</button>`:''}</article>`}).join('')}
 window.leerNotificacion=async id=>{const r=await NewcomSupabase.marcarNotificacionLeida(id);if(!r.ok){aviso(r.error,'err');return}await cargarNotificaciones()};
 async function cargarAlertas(){
  msg.className='';msg.textContent='';box.innerHTML='<div class="note">Cargando alertas…</div>';

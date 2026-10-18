@@ -5,7 +5,7 @@
 </style><script src="legal_v12_33.js?v=12.35" defer></script>
 </head><body>
 <script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script>
-<div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b></div>
+<div class="top"><b>TORNEWCOM — V12.37.34 PRUEBAS</b></div>
 <main class="wrap">
 <div class="nav"><a class="btn secondary" href="index.html">← Panel</a><a class="btn" id="irEquipos" href="equipos.html">Equipos</a></div>
 <div class="card"><h1 style="margin-bottom:10px">Editar configuración del torneo</h1><h2 style="margin:0 0 8px;font-size:18px">Editar categorías y otras reglas</h2><div class="note">Estas opciones normalmente se definen al crear el torneo. Usá esta pantalla sólo si después necesitás agregar o modificar una categoría, modalidad o regla.</div><label for="torneo"><b>Seleccioná el torneo:</b></label><select id="torneo"></select></div>
@@ -38,7 +38,7 @@
 <div class="formActions"><button id="guardar">Guardar categoría</button><button id="cancelar" class="secondary" style="display:none">Cancelar edición</button></div><div id="msg"></div></div>
 <div class="card"><h2>Categorías habilitadas</h2><div id="lista" class="ruleList"><div class="msg">Cargando…</div></div></div>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.34"></script>
 <script src="autosave_v12_26.js"></script><script>
 const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search);let torneoId=qs.get('torneo')||'',reglas=[],editId='',torneosCache=[];const borradoresVistos=new Set();
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}

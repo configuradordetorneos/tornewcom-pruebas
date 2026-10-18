@@ -76,7 +76,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1
 
 .buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px;font-weight:700;font-size:14px;border:none;cursor:pointer}
 
-.primary{background:#4A90C2;color:white}.secondary{background:#EEF2F5;color:#2F5D7E}
+.primary{background:#4A90C2;color:white}.secondary{background:#EEF2F5;color:#2F5D7E}.alertTop{background:#b42318;color:#fff}
 
 .footer{margin-top:38px;background:#eaf1f5;padding:22px 18px;text-align:center;color:#516a79;font-size:14px}
 
@@ -730,6 +730,12 @@ function prepararPanel(){
 
     : '';
 
+  const botonAlertas=tieneRolOperativo
+
+    ? '<a id="alertasTop" class="btn alertTop" href="alertas.html" style="display:none">🔔 ALERTAS</a>'
+
+    : '';
+
 
 
   const navGestion=document.getElementById('navGestion');
@@ -738,19 +744,19 @@ function prepararPanel(){
 
     if(sesion.es_admin_general){
 
-      navGestion.innerHTML='<a class="btn primary" href="torneos.html">TORNEOS</a> &nbsp; <a class="btn primary" href="crear_torneo.html">CREAR TORNEO</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="torneos.html">TORNEOS</a> &nbsp; <a class="btn primary" href="crear_torneo.html">CREAR TORNEO</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else if(sesion.puede_crear_torneos){
 
-      navGestion.innerHTML='<a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else if(sesion.tiene_asignaciones_organizador){
 
-      navGestion.innerHTML='<a class="btn primary" href="#mis-torneos">MIS TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="#mis-torneos">MIS TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else if(sesion.tiene_responsabilidades){
 
-      navGestion.innerHTML='<a class="btn primary" href="#responsabilidadesWrap">MIS INSTITUCIONES</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="#responsabilidadesWrap">MIS INSTITUCIONES</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else{
 
@@ -856,7 +862,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <header class="topbar">
 
-  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.30 CANDIDATA</small></div>
+  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.34 PRUEBAS</small></div>
 
   <nav class="quicklinks"><span style="width:100%;font-size:12px;font-weight:700;opacity:.9">VISITÁ TAMBIÉN</span>
 
@@ -868,7 +874,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 </header>
 
-<p id="navGestion" style="text-align:center;margin:18px 0"><a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a></p>
+<p id="navGestion" style="text-align:center;margin:18px 0"><a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a id="alertasTop" class="btn alertTop" href="alertas.html" style="display:none">🔔 ALERTAS</a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a></p>
 
 <main class="wrap">
 
@@ -930,7 +936,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 (function(){
 
- const LIM=30\*60\*1000,AV=25\*60\*1000;let t=Date.now(),avisado=false;
+ const LIM=30*60*1000,AV=25*60*1000;let t=Date.now(),avisado=false;
 
  function act(){t=Date.now();avisado=false}
 
@@ -966,7 +972,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <script src="supabase-config.js?v=12.35"></script>
 
-<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="supabase_v12_24.js?v=12.37.34"></script>
 
 <script src="roles_v12_24.js?v=12.35"></script>
 
@@ -1000,11 +1006,19 @@ async function cargarContadorMensajesV1235(){
 
 }
 
+async function cargarBotonAlertasV123734(){
+ const b=document.getElementById('alertasTop');if(!b||!window.NewcomSupabase)return;
+ const r=await NewcomSupabase.hayAlertasNoLeidasActual();
+ if(!r.ok){b.style.display='none';return}
+ b.style.display=r.data?'inline-block':'none';
+}
+
 window.addEventListener('DOMContentLoaded',async()=>{
 
  await cargarNovedadesV1235();
 
  await cargarContadorMensajesV1235();
+ await cargarBotonAlertasV123734();
 
 });
 
@@ -1018,9 +1032,10 @@ async function actualizarPanelResponsableV1220(){
 
    nav.style.display='block';
 
-   nav.innerHTML='<a class="btn primary" href="#mis-torneos">MIS INSTITUCIONES</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+   nav.innerHTML='<a class="btn primary" href="#mis-torneos">MIS INSTITUCIONES</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a id="alertasTop" class="btn alertTop" href="alertas.html" style="display:none">🔔 ALERTAS</a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
    await cargarContadorMensajesV1235();
+   await cargarBotonAlertasV123734();
 
  }
 

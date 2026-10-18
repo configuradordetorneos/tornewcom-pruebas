@@ -624,10 +624,31 @@ async function listarJornadasTorneo(torneoId){
   const{data,error}=await client.from('jornadas').select('id,torneo_id,nombre,fecha').eq('torneo_id',torneoId).order('fecha',{ascending:true}).order('creado_en',{ascending:true});
   return error?{ok:false,error:error.message,data:[]}:{ok:true,data:data||[]};
 }
+async function enviarNotificacionesPartidoEmail(notificationIds){
+  const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;
+  if(!iniciar())return{ok:false,error:'Supabase no configurado'};
+  const ids=[...new Set((Array.isArray(notificationIds)?notificationIds:[notificationIds]).filter(Boolean))];
+  if(!ids.length)return{ok:true,enviados:0,omitido:true};
+  try{
+    const{data,error}=await authClient.functions.invoke('notificar-partido-email',{body:{notification_ids:ids}});
+    if(error)return{ok:false,error:mensajeErrorHumano(error)};
+    if(data?.ok===false)return{ok:false,error:data.error||'No se pudo enviar el aviso por email.'};
+    return{ok:true,data,enviados:Number(data?.enviados??ids.length)};
+  }catch(e){return{ok:false,error:mensajeErrorHumano(e)}}
+}
+async function hayAlertasNoLeidasActual(){
+  const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;
+  if(!iniciar())return{ok:false,error:'Supabase no configurado',data:false};
+  const{data,error}=await client.rpc('hay_alertas_no_leidas_actual');
+  return error?{ok:false,error:error.message,data:false}:{ok:true,data:!!data};
+}
 async function actualizarProgramacionPartido(id,d){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;if(!iniciar())return{ok:false,error:'Supabase no configurado'};
   const{data,error}=await client.rpc('editar_partido_con_notificaciones',{p_partido:id,p_jornada:d.jornada_id,p_hora:d.hora||null,p_sede:d.sede_id||null,p_cancha:d.cancha||null,p_equipo_a:d.equipo_a_id,p_equipo_b:d.equipo_b_id,p_motivo:'Edición de programación'});
-  if(error)return{ok:false,error:error.message};return{ok:true,data,notification_ids:[]};
+  if(error)return{ok:false,error:error.message};
+  const ids=Array.isArray(data?.notification_ids)?data.notification_ids:[];
+  const mail=await enviarNotificacionesPartidoEmail(ids);
+  return{ok:true,data,notification_ids:ids,warning:mail.ok?null:'Partido actualizado, pero no se pudo enviar el aviso por email: '+mail.error,email:mail};
 }
 async function eliminarPartidoPendiente(id){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;if(!iniciar())return{ok:false,error:'Supabase no configurado'};
@@ -635,11 +656,17 @@ async function eliminarPartidoPendiente(id){
   const ids=[previo.data.equipo_a_id,previo.data.equipo_b_id].filter(Boolean);
   const nr=await client.rpc('crear_notificaciones_cambio_partido',{p_partido:id,p_tipo:'PARTIDO_ELIMINADO',p_titulo:'Partido eliminado',p_detalle:`La Organización eliminó el partido ${previo.data.equipo_a} vs ${previo.data.equipo_b}.`,p_cambios:{antes:previo.data},p_equipo_ids:ids});
   const{error}=await client.from('partidos').delete().eq('id',id).eq('estado','PENDIENTE');
-  return error?{ok:false,error:error.message}:{ok:true,notification_ids:nr.error?[]:(nr.data||[]),warning:nr.error?('Partido eliminado, pero falló la notificación: '+nr.error.message):null};
+  if(error)return{ok:false,error:error.message};
+  const notifIds=nr.error?[]:(nr.data||[]);
+  const mail=nr.error?{ok:false,error:'No se generaron las notificaciones.'}:await enviarNotificacionesPartidoEmail(notifIds);
+  const warning=nr.error
+    ? 'Partido eliminado, pero falló la notificación: '+nr.error.message
+    : (!mail.ok?'Partido eliminado y alerta generada, pero no se pudo enviar el aviso por email: '+mail.error:null);
+  return{ok:true,notification_ids:notifIds,warning,email:mail};
 }
 async function listarNotificacionesSistema(){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;if(!iniciar())return{ok:false,error:'Supabase no configurado',data:[]};
-  const{data,error}=await client.from('notificaciones_sistema').select('id,torneo_id,partido_id,tipo,titulo,detalle,cambios,leida,creado_en,torneos(nombre)').order('creado_en',{ascending:false}).limit(100);
+  const{data,error}=await client.from('notificaciones_sistema').select('id,torneo_id,destinatario_usuario_id,partido_id,tipo,titulo,detalle,cambios,leida,creado_en,torneos(nombre)').order('creado_en',{ascending:false}).limit(100);
   return error?{ok:false,error:error.message,data:[]}:{ok:true,data:data||[]};
 }
 async function marcarNotificacionLeida(id){
@@ -744,7 +771,12 @@ async function corregirPartido(id,d,motivo){
   }
   const ids=[previo.data.equipo_a_id,previo.data.equipo_b_id,data.equipo_a_id,data.equipo_b_id].filter(Boolean);
   const nr=await client.rpc('crear_notificaciones_cambio_partido',{p_partido:id,p_tipo:'PARTIDO_CORREGIDO',p_titulo:'Corrección de partido finalizado',p_detalle:'La Organización corrigió un partido ya finalizado.',p_cambios:{antes,despues},p_equipo_ids:ids});
-  return{ok:true,data,notification_ids:nr.error?[]:(nr.data||[]),warning:nr.error?('La corrección quedó auditada, pero falló la notificación: '+nr.error.message):null};
+  const notifIds=nr.error?[]:(nr.data||[]);
+  const mail=nr.error?{ok:false,error:'No se generaron las notificaciones.'}:await enviarNotificacionesPartidoEmail(notifIds);
+  const warning=nr.error
+    ? 'La corrección quedó auditada, pero falló la notificación: '+nr.error.message
+    : (!mail.ok?'La corrección quedó auditada y la alerta fue generada, pero no se pudo enviar el aviso por email: '+mail.error:null);
+  return{ok:true,data,notification_ids:notifIds,warning,email:mail};
 }
 async function listarAuditoriaPartidos(torneoId){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;
@@ -1502,5 +1534,5 @@ async function listarProgramacionPublica(torneoId){
   return error?{ok:false,error:error.message,data:[]}:{ok:true,data:data||[]};
 }
 
-return{iniciar,mensajeErrorHumano,restaurarSesionAuth,usuarioAuth,obtenerContextoUsuario,registrarCuentaAuth,solicitarRecuperacionPassword,esperarRecuperacionPassword,actualizarPasswordRecuperacion,iniciarSesionAuth,verificarAceptacionLegal,registrarAceptacionLegal,cerrarSesionAuth,listarTorneos,crearTorneo,obtenerTorneo,actualizarPuntuacionTorneo,eliminarTorneoAdmin,cerrarPlantelAhora,programarCierrePlantel,eliminarSedeTorneo,actualizarSedeTorneo,crearSedeTorneo,listarSedesTorneo,crearJornadaConPartidos,listarPartidos,obtenerPartido,listarJornadasTorneo,actualizarProgramacionPartido,eliminarPartidoPendiente,listarNotificacionesSistema,marcarNotificacionLeida,guardarBorradorPartido,suspenderPartido,finalizarPartido,corregirPartido,listarAuditoriaPartidos,listarPartidosFinalizados,listarCategoriasTorneo,crearCategoriaTorneo,actualizarCategoriaTorneo,eliminarCategoriaTorneo,actualizarCierreCategoriaTorneo,actualizarCierreTodasCategoriasTorneo,listarInstituciones,listarEquiposCompetitivos,crearInstitucion,actualizarInstitucion,crearEquipoCompetitivo,actualizarEquipoCompetitivo,eliminarEquipoCompetitivo,urlPublicaLogoEquipo,guardarLogoEquipo,eliminarLogoEquipo,listarJugadoresInstitucion,listarJugadoresParticipantesInstitucion,guardarJugador,actualizarAsignacionesJugador,eliminarJugador,listarAlertasPlantelPendientes,listarAlertasPlantel,resolverAlertaPlantel,listarAsignacionesResponsable,obtenerInstitucion,listarEstadoOrganizadoresPorTorneo,listarJugadoresMaestros,crearJugadorMaestro,actualizarJugadorMaestro,desactivarJugadorMaestro,plantelCategoriaAbierto,agregarJugadorMaestroEquipoAbierto,solicitarCambioPlantel,resolverCambioPlantel,aplicarAltaExcepcionalPlantel,listarSolicitudesCambioPlantel,crearSolicitudListaCerrada,resolverSolicitudListaCerrada,listarSolicitudesListaCerrada,resumenSolicitudesListaCerrada,adminListarPerfiles,adminListarMembresias,adminResumen,adminConfigurarOrganizador,adminAsignarOrganizadorTorneo,actualizarPublicacionTorneo,listarTorneosPublicos,listarEquiposPublicos,listarPartidosPublicosFinalizados,listarProgramacionPublica};
+return{iniciar,mensajeErrorHumano,restaurarSesionAuth,usuarioAuth,obtenerContextoUsuario,registrarCuentaAuth,solicitarRecuperacionPassword,esperarRecuperacionPassword,actualizarPasswordRecuperacion,iniciarSesionAuth,verificarAceptacionLegal,registrarAceptacionLegal,cerrarSesionAuth,listarTorneos,crearTorneo,obtenerTorneo,actualizarPuntuacionTorneo,eliminarTorneoAdmin,cerrarPlantelAhora,programarCierrePlantel,eliminarSedeTorneo,actualizarSedeTorneo,crearSedeTorneo,listarSedesTorneo,crearJornadaConPartidos,listarPartidos,obtenerPartido,listarJornadasTorneo,actualizarProgramacionPartido,eliminarPartidoPendiente,enviarNotificacionesPartidoEmail,hayAlertasNoLeidasActual,listarNotificacionesSistema,marcarNotificacionLeida,guardarBorradorPartido,suspenderPartido,finalizarPartido,corregirPartido,listarAuditoriaPartidos,listarPartidosFinalizados,listarCategoriasTorneo,crearCategoriaTorneo,actualizarCategoriaTorneo,eliminarCategoriaTorneo,actualizarCierreCategoriaTorneo,actualizarCierreTodasCategoriasTorneo,listarInstituciones,listarEquiposCompetitivos,crearInstitucion,actualizarInstitucion,crearEquipoCompetitivo,actualizarEquipoCompetitivo,eliminarEquipoCompetitivo,urlPublicaLogoEquipo,guardarLogoEquipo,eliminarLogoEquipo,listarJugadoresInstitucion,listarJugadoresParticipantesInstitucion,guardarJugador,actualizarAsignacionesJugador,eliminarJugador,listarAlertasPlantelPendientes,listarAlertasPlantel,resolverAlertaPlantel,listarAsignacionesResponsable,obtenerInstitucion,listarEstadoOrganizadoresPorTorneo,listarJugadoresMaestros,crearJugadorMaestro,actualizarJugadorMaestro,desactivarJugadorMaestro,plantelCategoriaAbierto,agregarJugadorMaestroEquipoAbierto,solicitarCambioPlantel,resolverCambioPlantel,aplicarAltaExcepcionalPlantel,listarSolicitudesCambioPlantel,crearSolicitudListaCerrada,resolverSolicitudListaCerrada,listarSolicitudesListaCerrada,resumenSolicitudesListaCerrada,adminListarPerfiles,adminListarMembresias,adminResumen,adminConfigurarOrganizador,adminAsignarOrganizadorTorneo,actualizarPublicacionTorneo,listarTorneosPublicos,listarEquiposPublicos,listarPartidosPublicosFinalizados,listarProgramacionPublica};
 })();
