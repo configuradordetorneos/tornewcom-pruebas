@@ -1,0 +1,14 @@
+TORNEWCOM V12.37.37 PRUEBAS
+
+Cambios incluidos:
+- El acceso superior MENSAJES conserva un único botón visual.
+- Mensaje interno sin leer: aparece un círculo rojo junto a MENSAJES.
+- Alerta automática sin leer: aparece una campanita roja 🔔 junto a MENSAJES.
+- La campanita lleva directamente a alertas.html.
+- Si no hay pendientes, no se muestran indicadores.
+- Se mantiene la confirmación previa al eliminar partidos PENDIENTES.
+- Conserva todas las correcciones validadas de V12.37.36: Brevo automático, alertas legibles, deduplicación, edición/corrección de partidos y recálculo de tablas.
+
+ENTORNO: SOLO PRUEBAS
+Supabase: bxymdhkxotpiunyuntdd
+No subir a producción.

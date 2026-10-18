@@ -143,7 +143,8 @@ td input,td select{padding:9px 10px}
 
 
 
-.msgBadge{display:none;background:#c93b3b;color:#fff;border-radius:999px;min-width:21px;padding:3px 6px;text-align:center;font-size:11px;font-weight:900}
+.msgBadge{display:none;width:10px;height:10px;background:#c93b3b;border-radius:50%;margin-left:6px;vertical-align:middle;padding:0;min-width:0}
+.alertBell{display:none;margin-left:7px;color:#c92525;font-size:18px;line-height:1;vertical-align:middle;cursor:pointer;filter:saturate(1.2)}
 
 .newsLink{margin:2px 0 16px;font-size:13px;color:#456579}.newsLink summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;color:#456f8c;list-style:none;padding:4px 2px}.newsLink summary::-webkit-details-marker{display:none}.newsLink summary::before{content:'▸';font-size:12px;transition:transform .15s ease}.newsLink[open] summary::before{transform:rotate(90deg)}.newsLink summary:hover{text-decoration:underline}.newsLinkBody{margin-top:7px;background:#fff;border:1px solid #dfe9ef;border-radius:10px;padding:9px 12px;max-width:620px;box-shadow:0 2px 8px rgba(32,72,98,.05)}.newsRow{padding:6px 0;border-top:1px solid #edf2f5;font-size:12.5px;line-height:1.35}.newsRow:first-child{border-top:0}.newsRow b{color:#315b77}.newsRow small{color:#7b8f9c}.newsRow p{display:inline;margin:0 0 0 5px;color:#5f7583}.newsEmpty{font-size:12.5px;color:#7b8f9c}
 
@@ -698,8 +699,6 @@ function prepararPanel(){
 
     }
 
-    if(sesion.puede_crear_torneos||sesion.tiene_asignaciones_organizador||sesion.tiene_responsabilidades)a.push(`<a class="action" href="alertas.html"><div class="icon">🔔</div><h3>Alertas</h3><p>Notificaciones automáticas y avisos del sistema.</p></a>`);
-
     a.push(`<a class="action" href="publico.html"><div class="icon">📊</div><h3>Ver resultados</h3><p>Consulta pública sin necesidad de permisos.</p></a>`);
 
     acciones.innerHTML=a.join('');
@@ -726,15 +725,10 @@ function prepararPanel(){
 
   const botonMensajes=tieneRolOperativo
 
-    ? '<a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a>'
+    ? '<a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge" title="Tenés mensajes sin leer"></span><span id="alertasBadge" class="alertBell" title="Tenés alertas sin leer. Tocá la campanita para verlas." onclick="event.preventDefault();event.stopPropagation();location.href=\'alertas.html\'">🔔</span></a>'
 
     : '';
 
-  const botonAlertas=tieneRolOperativo
-
-    ? '<a id="alertasTop" class="btn alertTop" href="alertas.html" style="display:none">🔔 ALERTAS</a>'
-
-    : '';
 
 
 
@@ -744,19 +738,19 @@ function prepararPanel(){
 
     if(sesion.es_admin_general){
 
-      navGestion.innerHTML='<a class="btn primary" href="torneos.html">TORNEOS</a> &nbsp; <a class="btn primary" href="crear_torneo.html">CREAR TORNEO</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="torneos.html">TORNEOS</a> &nbsp; <a class="btn primary" href="crear_torneo.html">CREAR TORNEO</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else if(sesion.puede_crear_torneos){
 
-      navGestion.innerHTML='<a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else if(sesion.tiene_asignaciones_organizador){
 
-      navGestion.innerHTML='<a class="btn primary" href="#mis-torneos">MIS TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="#mis-torneos">MIS TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else if(sesion.tiene_responsabilidades){
 
-      navGestion.innerHTML='<a class="btn primary" href="#responsabilidadesWrap">MIS INSTITUCIONES</a> &nbsp; '+botonMensajes+' &nbsp; '+botonAlertas+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+      navGestion.innerHTML='<a class="btn primary" href="#responsabilidadesWrap">MIS INSTITUCIONES</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
     }else{
 
@@ -862,7 +856,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <header class="topbar">
 
-  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.36 PRUEBAS</small></div>
+  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.37 PRUEBAS</small></div>
 
   <nav class="quicklinks"><span style="width:100%;font-size:12px;font-weight:700;opacity:.9">VISITÁ TAMBIÉN</span>
 
@@ -874,7 +868,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 </header>
 
-<p id="navGestion" style="text-align:center;margin:18px 0"><a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a id="alertasTop" class="btn alertTop" href="alertas.html" style="display:none">🔔 ALERTAS</a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a></p>
+<p id="navGestion" style="text-align:center;margin:18px 0"><a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge" title="Tenés mensajes sin leer"></span><span id="alertasBadge" class="alertBell" title="Tenés alertas sin leer. Tocá la campanita para verlas." onclick="event.preventDefault();event.stopPropagation();location.href='alertas.html'">🔔</span></a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a></p>
 
 <main class="wrap">
 
@@ -1002,12 +996,12 @@ async function cargarContadorMensajesV1235(){
 
  const r=await TorNewcomMensajes.contarNoLeidos();if(!r.ok)return;
 
- const n=Number(r.data||0);b.textContent=n;b.style.display=n?'inline-block':'none';
+ const n=Number(r.data||0);b.style.display=n?'inline-block':'none';
 
 }
 
 async function cargarBotonAlertasV123734(){
- const b=document.getElementById('alertasTop');if(!b||!window.NewcomSupabase)return;
+ const b=document.getElementById('alertasBadge');if(!b||!window.NewcomSupabase)return;
  const r=await NewcomSupabase.hayAlertasNoLeidasActual();
  if(!r.ok){b.style.display='none';return}
  b.style.display=r.data?'inline-block':'none';
@@ -1032,7 +1026,7 @@ async function actualizarPanelResponsableV1220(){
 
    nav.style.display='block';
 
-   nav.innerHTML='<a class="btn primary" href="#mis-torneos">MIS INSTITUCIONES</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a id="alertasTop" class="btn alertTop" href="alertas.html" style="display:none">🔔 ALERTAS</a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+   nav.innerHTML='<a class="btn primary" href="#mis-torneos">MIS INSTITUCIONES</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge" title="Tenés mensajes sin leer"></span><span id="alertasBadge" class="alertBell" title="Tenés alertas sin leer. Tocá la campanita para verlas." onclick="event.preventDefault();event.stopPropagation();location.href=\'alertas.html\'">🔔</span></a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
 
    await cargarContadorMensajesV1235();
    await cargarBotonAlertasV123734();
