@@ -1,0 +1,7 @@
+TORNEWCOM V12.37.12 CANDIDATA — LIMPIEZA UX
+
+Cambios respecto de V12.37.11:
+1. Mis jugadores: se eliminó la barra flotante inferior de selección. Se conserva el contador normal y el botón principal de acción.
+2. Inicio: Mensajes deja de estar dentro del encabezado junto al borde derecho y pasa a una franja propia, centrada, debajo del encabezado. Así queda visualmente separado del botón global Cerrar sesión.
+
+Sin cambios en Supabase, RLS, autenticación, sesiones ni lógica de torneo.

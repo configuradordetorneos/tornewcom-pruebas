@@ -1,0 +1,14 @@
+TORNEWCOM V12.37.28 CANDIDATA — CORRECCIONES RESPONSABLE
+
+Base inmediata: V12.37.27 candidata.
+Base validada de referencia: V12.37.22.
+
+Cambios funcionales únicos:
+1. Inicio del Responsable: la tarjeta “Documentación del torneo” entra directamente a Documentación.
+2. Documentación: si el Responsable tiene varios torneos y entra sin uno seleccionado, la propia pantalla muestra un selector de torneo.
+3. Panel del Responsable (mis_torneos.html): si el Organizador del torneo está suspendido, la tarjeta muestra “⚠ TORNEO SUSPENDIDO” en lugar de “ACTIVO”. Los torneos no suspendidos conservan su estado normal.
+
+Revisión de otros perfiles:
+- Admin General y Organizador ya usan Documentación vinculada al torneo seleccionado; no se modificó ese flujo.
+- No se modificaron partidos, tablas, impresión/PDF, listas, solicitudes ni mensajería.
+- No hay SQL nuevo.

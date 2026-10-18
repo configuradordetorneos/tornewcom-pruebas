@@ -1,0 +1,301 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Instituciones y equipos — Sistema de Torneos Newcom</title>
+
+<style>
+
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7fa;color:#243746}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:1180px;margin:28px auto;padding:0 16px}.card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 1px 0 rgba(35,55,70,.03)}
+
+.btn,button{border:0;border-radius:9px;padding:10px 14px;background:#4A90C2;color:#fff;font-weight:bold;text-decoration:none;cursor:pointer;display:inline-block}.secondary{background:#6c7f8d}.danger{background:#8b4b4b}.successBtn{background:#3d8a66}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+
+label{display:block;font-size:12px;font-weight:bold;color:#2F5D7E;margin-bottom:5px}input,select{width:100%;padding:11px;border:1px solid #bdcbd5;border-radius:8px;background:#fff;color:#243746}.msg{padding:12px;border-radius:9px;background:#EAF4FB;margin-top:12px}.err{background:#faecec;color:#7b2c2c}.ok{background:#e8f5ee;color:#245d39}.warn{background:#fff4dd;color:#795f22}.roleNote{border-left:4px solid #4A90C2;padding:10px 14px;background:#f6fafc;color:#526b7a;margin:12px 0 18px}.muted{color:#6b7f8c;font-size:13px}.hint{font-size:12px;color:#718590;margin-top:5px}
+
+.formGrid{display:grid;grid-template-columns:1.25fr 1fr 1fr 1.2fr;gap:12px;align-items:end}.saveRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}.saveRow .btnMain{padding:12px 18px;font-size:15px}.assignment{max-width:680px}.hidden{display:none!important}
+
+/* Árbol vertical: Torneo → Instituciones → Equipos */
+
+.orgWrap{padding:6px 2px 18px}.orgRoot{max-width:900px;margin:0 auto}.rootCenter{text-align:center}.rootNode{display:inline-block;background:#2F5D7E;color:#fff;border-radius:10px;padding:11px 24px;font-weight:800;letter-spacing:.2px;min-width:230px}.rootStem{width:2px;height:24px;background:#b9cbd6;margin:0 auto}.branches{display:grid;gap:18px;position:relative;padding-left:42px}.branches:before{content:'';position:absolute;left:20px;top:0;bottom:34px;width:2px;background:#b9cbd6}.instBranch{position:relative;min-width:0}.instBranch:before{content:'';position:absolute;left:-22px;top:24px;width:22px;height:2px;background:#b9cbd6}.instHeaderRow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.instNode{display:inline-block;border:2px solid var(--accent,#4A90C2);background:#fff;border-radius:10px;padding:10px 14px;min-width:240px;font-weight:800}.instMeta{font-size:11px;font-weight:normal;color:#617887;margin-top:5px;line-height:1.45}.instButtons{display:flex;gap:6px;flex-wrap:wrap}.miniBtn{font-size:11px;padding:6px 8px}.teamZone{margin-left:26px}.teamStem{width:2px;height:12px;background:#b9cbd6;margin-left:13px}.teamListOrg{border-left:2px solid #b9cbd6;margin-left:13px;padding:0 0 0 18px;display:grid;gap:8px;max-width:620px}.teamNode{position:relative;text-align:left;border:1px solid #cfdde5;border-radius:9px;padding:8px 9px;background:#fbfdfe;font-size:13px;min-height:38px}.teamNode:before{content:'';position:absolute;left:-20px;top:50%;width:18px;height:2px;background:#b9cbd6}.teamName{font-weight:800}.chip{display:inline-block;border-radius:999px;background:#e8f2f8;color:#2F5D7E;padding:4px 7px;font-size:10px;font-weight:bold;margin-left:4px}.chip.mod{background:#f1edf9;color:#66578f}.teamActions{float:right;display:flex;gap:5px;margin-left:6px}.emptyNode{font-size:12px;color:#795f22;background:#fff8e8;border:1px dashed #d6b761;border-radius:8px;padding:8px;text-align:left;max-width:420px}.teamLoader{display:none;margin:10px 0 0 26px;max-width:430px;text-align:left;background:#f7fafc;border:1px solid #dce6ec;border-radius:10px;padding:10px}.teamLoader.open{display:block}.eqGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.eqGrid .full{grid-column:1/-1}.eqActions{display:flex;gap:7px;margin-top:9px}.subTitle{margin:0 0 5px}.treeIntro{margin:0 0 14px;color:#607787;font-size:13px}.counter{display:inline-block;background:#2F5D7E;color:#fff;border-radius:999px;padding:4px 9px;font-size:12px;vertical-align:middle}
+
+.respSummary{max-width:760px;margin:0 auto}.respInst{border-left:5px solid #4A90C2;background:#fff;border-radius:12px;padding:16px;border-top:1px solid #dbe5eb;border-right:1px solid #dbe5eb;border-bottom:1px solid #dbe5eb}.respTeams{margin-top:12px;display:grid;gap:8px}.respTeam{display:grid;grid-template-columns:minmax(190px,1fr) auto;gap:8px 12px;align-items:center;padding:9px 10px;background:#f7fafc;border-radius:9px}.respTeamMain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}.respTeamMain b{margin-right:4px}.respTeamActions{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}.respTeamActions .logoTools{display:inline-flex;gap:5px;align-items:center;flex-wrap:wrap}@media(max-width:760px){.respTeam{grid-template-columns:1fr}.respTeamActions{justify-content:flex-start}}
+.teamIdentity{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;overflow:visible}.teamLogo{width:28px;height:28px;object-fit:contain;display:inline-block;flex:0 0 28px;cursor:zoom-in;position:relative;z-index:1;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;border-radius:5px}.teamLogo:hover{transform:scale(4.4);transform-origin:left center;z-index:100;background:#fff;box-shadow:0 5px 18px rgba(25,45,60,.28);padding:2px}.logoTools{display:inline-flex;gap:5px;align-items:center;flex-wrap:wrap}
+
+@media(max-width:900px){.formGrid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.formGrid,.eqGrid{grid-template-columns:1fr}.eqGrid .full{grid-column:auto}.nav a{flex:1;text-align:center}}
+
+</style><script src="legal_v12_33.js?v=12.35" defer></script>
+
+</head><body>
+
+<div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b></div>
+
+<div class="wrap">
+
+<div class="nav"><a class="btn secondary" href="index.html">← Inicio</a><a class="btn" id="irCategorias" href="categorias.html">Categorías y edades</a><a class="btn" id="irPlantel" href="jugadores.html">Lista de participación</a><a class="btn" id="irTabla" href="tabla.html">Tabla</a></div>
+
+
+
+<div class="card">
+
+<h1 style="margin-bottom:6px">Instituciones y equipos</h1>
+
+<div id="roleNote" class="roleNote"></div>
+
+<div id="selectorOrg"><label>Torneo</label><select id="torneo"></select></div>
+
+<div id="selectorResp" class="assignment hidden"><label>Mi institución asignada</label><select id="asignacion"></select></div>
+
+</div>
+
+
+
+<div class="card" id="altaInstitucion">
+
+<h2 style="margin-bottom:4px">1 · Crear institución</h2>
+
+<p class="muted" style="margin-top:0"><b>Primero creá la institución.</b> El equipo es un nivel inferior y se carga recién después de guardar la institución.</p>
+
+<div class="formGrid">
+
+  <div><label>Institución</label><input id="inombre" placeholder="Ej.: Los Fuertes"></div>
+
+  <div><label>Responsable</label><input id="iresp" placeholder="Nombre y apellido"></div>
+
+  <div><label>WhatsApp</label><input id="iwa" inputmode="tel" placeholder="Ej.: +54 9 11 2252-7681"><div class="hint">Podés escribir +, espacios o guiones. TorNewcom guarda solo los números.</div></div>
+
+  <div><label>Email del responsable</label><input id="iemail" type="email" placeholder="correo@ejemplo.com"><div class="hint">Este email identifica al Responsable que luego cargará el plantel.</div></div>
+
+</div>
+
+<div class="saveRow"><button class="btnMain" id="guardarInstitucion">Guardar institución</button><span class="muted">Después de guardarla se habilita <b>Cargar equipo</b>.</span></div>
+
+<div id="msg"></div>
+
+</div>
+
+
+
+<div class="card" id="estructuraCard">
+
+<h2 class="subTitle"><span id="estructuraTitulo">Estructura del torneo</span> <span id="cantInstituciones" class="counter">0</span></h2>
+
+<p class="treeIntro" id="subLista">Torneo → Institución → Equipo. El Responsable recibe esta estructura y arma la lista de participación desde Mis jugadores.</p>
+
+<div id="lista"><div class="msg">Cargando...</div></div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script src="roles_v12_24.js?v=12.35"></script><script src="autosave_v12_26.js"></script>
+
+<script>
+
+const $=x=>document.getElementById(x),qs=new URLSearchParams(location.search);let sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);let torneoId=qs.get('torneo')||'',instId=qs.get('institucion')||'',torneoNombre='',torneos=[],instituciones=[],asignaciones=[],reglas=[];const borradoresVistos=new Set();
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+
+function aviso(t,tipo=''){const m=$('msg');if(!m)return;m.className='msg '+tipo;m.textContent=t}
+
+function norm(v){return String(v||'').trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ')}
+
+function reglaEquipo(e){return reglas.find(r=>String(r.id)===String(e.categoria_torneo_id))||reglas.find(r=>norm(r.categoria)===norm(e.categoria)&&norm(r.modalidad)===norm(e.modalidad))||null}
+
+function equipoCerrado(e){const r=reglaEquipo(e);if(!r?.cierre_plantel_en)return false;return new Date(r.cierre_plantel_en).getTime()<=Date.now()}
+
+function linkSolicitud(e,rol){return `solicitudes_lista.html?nuevo=1&solicitante=${encodeURIComponent(rol)}&torneo=${encodeURIComponent(e.torneo_id||torneoId)}&institucion=${encodeURIComponent(e.institucion_id||instId)}&equipo=${encodeURIComponent(e.id)}`}
+
+function linkAlta(e){return `mis_jugadores.html?torneo=${encodeURIComponent(e.torneo_id||torneoId)}&institucion=${encodeURIComponent(e.institucion_id||instId)}&equipo=${encodeURIComponent(e.id)}`}
+
+function emailValido(v){const e=String(v||'').trim().toLowerCase();return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)}
+
+function normalizarWhatsapp(v){return String(v||'').replace(/\D/g,'')}
+
+function validarContacto(email,wa){const e=String(email||'').trim().toLowerCase(),w=normalizarWhatsapp(wa);if(!emailValido(e))return{ok:false,error:'Ingresá un email válido, por ejemplo nombre@correo.com.'};if(w&&(!/^\d+$/.test(w)||w.length<8||w.length>15))return{ok:false,error:'El WhatsApp debe tener entre 8 y 15 dígitos. Podés escribir +, espacios o guiones; TorNewcom los normaliza.'};return{ok:true,email:e,wa:w}}
+
+function esResponsable(){
+
+ const modo=qs.get('modo');
+
+ if(modo==='responsable')return NewcomRoles.tieneResponsabilidades(sesion);
+
+ if(torneoId&&NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR'))return false;
+
+ return !NewcomRoles.organizadorHabilitado(sesion)&&NewcomRoles.tieneResponsabilidades(sesion);
+
+}
+
+function hoy(){return new Date().toISOString().slice(0,10)}
+
+function edadDesdeCategoria(cat){const m=String(cat||'').match(/(\d+)/);return m?Number(m[1]):0}
+
+function claveBorradorInstitucion(){return NewcomAutosave.key('institucion',{torneo:torneoId})}
+
+function guardarLocalInstitucion(){if(esResponsable()||!torneoId)return;NewcomAutosave.schedule(claveBorradorInstitucion(),()=>{const d={nombre:$('inombre').value,resp:$('iresp').value,wa:$('iwa').value,email:$('iemail').value};if(!d.nombre&&!d.resp&&!d.wa&&!d.email)return{__empty:true};return d})}
+
+function recuperarLocalInstitucion(){if(esResponsable()||!torneoId)return;const k=claveBorradorInstitucion();if(borradoresVistos.has(k))return;borradoresVistos.add(k);const d=NewcomAutosave.offer(k,'una institución sin guardar');if(!d)return;$('inombre').value=d.nombre||'';$('iresp').value=d.resp||'';$('iwa').value=d.wa||'';$('iemail').value=d.email||'';aviso('Carga de institución recuperada desde el autoguardado local.','warn')}
+
+function claveBorradorEquipo(inst){return NewcomAutosave.key('equipo',{torneo:torneoId,institucion:inst})}
+
+function guardarLocalEquipo(inst){if(!inst||esResponsable())return;NewcomAutosave.schedule(claveBorradorEquipo(inst),()=>{const d={nombre:$('en_'+inst)?.value||'',categoria:$('ec_'+inst)?.value||'',modalidad:$('em_'+inst)?.value||'Mixto'};if(!d.nombre&&!d.categoria)return{__empty:true};return d})}
+
+function recuperarLocalEquipo(inst,abrirAutomaticamente=false){if(esResponsable())return false;const k=claveBorradorEquipo(inst);if(borradoresVistos.has(k))return false;const rec=NewcomAutosave.offer(k,'un equipo sin guardar');if(!rec)return false;borradoresVistos.add(k);const f=$('form_'+inst);if(abrirAutomaticamente&&f)f.classList.add('open');setTimeout(()=>{if($('en_'+inst))$('en_'+inst).value=rec.nombre||'';if($('ec_'+inst))$('ec_'+inst).value=rec.categoria||'';if($('em_'+inst))$('em_'+inst).value=rec.modalidad||'Mixto';aviso('Borrador de equipo recuperado automáticamente. Podés continuar donde lo dejaste.','warn')},0);return true}
+
+function actualizarLinks(){
+
+ $('irPlantel').href=torneoId&&instId?`jugadores.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`:(torneoId?`jugadores.html?torneo=${encodeURIComponent(torneoId)}`:'jugadores.html');
+
+ $('irTabla').style.display=esResponsable()?'inline-block':'inline-block';
+
+ $('irCategorias').style.display=esResponsable()?'none':'inline-block';
+
+ $('irCategorias').href=torneoId?`categorias.html?torneo=${encodeURIComponent(torneoId)}`:'categorias.html';
+
+ $('irTabla').href=torneoId?`tabla.html?torneo=${encodeURIComponent(torneoId)}&desde=torneos`:'tabla.html';
+
+}
+
+function toggleEquipo(inst){const f=$('form_'+inst);if(f){f.classList.toggle('open');if(f.classList.contains('open')){setTimeout(()=>$('en_'+inst)?.focus(),0);recuperarLocalEquipo(inst,false)}}}
+
+function buscarEquipo(id){for(const inst of instituciones){const e=(inst.equipos_competitivos||[]).find(x=>String(x.id)===String(id));if(e)return e}return null}
+function logoHtml(e){if(!e?.logo_path)return '';const u=NewcomSupabase.urlPublicaLogoEquipo(e.logo_path);return u?`<img class="teamLogo" src="${esc(u)}" alt="Escudo de ${esc(e.nombre||'equipo')}" loading="lazy">`:''}
+function canvasBlob(canvas,tipo,calidad){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('No se pudo procesar la imagen.')),tipo,calidad))}
+async function adaptarLogo(file){
+ if(!file)return null;
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Usá una imagen PNG, JPG/JPEG o WEBP.');
+ const url=URL.createObjectURL(file);let img;
+ try{img=await new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error('No se pudo leer la imagen.'));i.src=url})}finally{setTimeout(()=>URL.revokeObjectURL(url),0)}
+ let maxDim=512,calidad=.86,blob=null;
+ for(let intento=0;intento<8;intento++){
+  const escala=Math.min(1,maxDim/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
+  const w=Math.max(1,Math.round((img.naturalWidth||img.width)*escala)),h=Math.max(1,Math.round((img.naturalHeight||img.height)*escala));
+  const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.clearRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+  blob=await canvasBlob(c,'image/webp',calidad);
+  if(blob.size<=500*1024)return blob;
+  if(calidad>.55)calidad-=.08;else{maxDim=Math.max(220,Math.round(maxDim*.82));calidad=.82}
+ }
+ if(blob&&blob.size<=500*1024)return blob;
+ throw new Error('No se pudo reducir la imagen por debajo de 500 KB. Probá con otra imagen.');
+}
+async function seleccionarLogoEquipo(id){
+ const e=buscarEquipo(id);if(!e)return;
+ const input=document.createElement('input');input.type='file';input.accept='image/png,image/jpeg,image/webp';
+ input.onchange=async()=>{const f=input.files?.[0];if(!f)return;try{aviso('Preparando escudo...','');const blob=await adaptarLogo(f);const r=await NewcomSupabase.guardarLogoEquipo({equipo_id:e.id,torneo_id:e.torneo_id||torneoId,institucion_id:e.institucion_id,archivo:blob});if(!r.ok){aviso(errHumano(r.error),'err');return}aviso('Escudo guardado.','ok');if(esResponsable())await cargarResponsable();else await cargarInstitucionesOrg()}catch(err){aviso(errHumano(err),'err')}};
+ input.click();
+}
+async function quitarLogoEquipo(id){
+ const e=buscarEquipo(id);if(!e?.logo_path)return;if(!confirm('¿Quitar el escudo de este equipo?'))return;
+ const r=await NewcomSupabase.eliminarLogoEquipo(id);if(!r.ok){aviso(errHumano(r.error),'err');return}aviso(r.warning||'Escudo eliminado.','ok');if(esResponsable())await cargarResponsable();else await cargarInstitucionesOrg();
+}
+
+function errHumano(e,c=''){return window.NewcomSupabase?.mensajeErrorHumano?NewcomSupabase.mensajeErrorHumano(e,c):String(e||'No se pudo completar la operación.')}
+
+async function asegurarRegla(categoria,modalidad){
+
+ categoria=String(categoria||'').trim();modalidad=String(modalidad||'').trim();
+
+ let regla=reglas.find(r=>norm(r.categoria)===norm(categoria)&&norm(r.modalidad)===norm(modalidad));if(regla)return{ok:true,data:regla};
+
+ const edad=edadDesdeCategoria(categoria);if(!edad)return{ok:false,error:'La categoría debe indicar una edad, por ejemplo +50, +60 o +68.'};
+
+ const r=await NewcomSupabase.crearCategoriaTorneo({torneo_id:torneoId,categoria,modalidad,edad_minima:edad,excepcion_edad_habilitada:false,menores_permitidos:0,edad_minima_excepcion:null,fecha_referencia:hoy()});
+
+ if(r.ok){reglas.push(r.data);return r}
+
+ await cargarReglas();regla=reglas.find(x=>norm(x.categoria)===norm(categoria)&&norm(x.modalidad)===norm(modalidad));return regla?{ok:true,data:regla}:{ok:false,error:r.error};
+
+}
+
+function equipoForm(inst){return `<div class="teamLoader" id="form_${inst.id}"><div class="eqGrid"><div class="full"><label>Nombre del equipo</label><input id="en_${inst.id}" placeholder="Ej.: Cargar nombre equipo"></div><div><label>Categoría</label><input id="ec_${inst.id}" list="cats_${inst.id}" placeholder="Ej.: +50"><datalist id="cats_${inst.id}">${[...new Set(reglas.map(r=>r.categoria))].map(c=>`<option value="${esc(c)}"></option>`).join('')}</datalist></div><div><label>Modalidad</label><select id="em_${inst.id}"><option>Mixto</option><option>Femenino</option></select></div></div><div class="hint">Si la categoría todavía no existe, se crea con su edad mínima y sin excepción. Luego podés ajustarla en “Categorías y edades”.</div><div class="eqActions"><button onclick="agregarEquipo('${inst.id}')">Guardar equipo</button><button class="secondary" onclick="toggleEquipo('${inst.id}')">Cancelar</button></div></div>`}
+
+function renderOrganizador(){
+
+ $('cantInstituciones').textContent=instituciones.length;
+
+ if(!instituciones.length){$('estructuraCard').classList.add('hidden');return}
+
+ $('estructuraCard').classList.remove('hidden');
+
+ const paleta=['#4A90C2','#4d9b7a','#b27a3f','#7c6db1','#b65f74','#4f8f96'];
+
+ const branches=instituciones.map((inst,idx)=>{
+
+   const equipos=(inst.equipos_competitivos||[]).sort((a,b)=>String(a.nombre).localeCompare(String(b.nombre),'es'));
+
+   const teams=equipos.length
+
+     ?`<div class="teamZone"><div class="teamStem"></div><div class="teamListOrg">${equipos.map(e=>{const cerrado=equipoCerrado(e);return `<div class="teamNode"><span class="teamActions"><button class="miniBtn secondary" onclick="seleccionarLogoEquipo('${e.id}')">${e.logo_path?'Cambiar escudo':'Cargar escudo'}</button>${e.logo_path?`<button class="miniBtn danger" onclick="quitarLogoEquipo('${e.id}')">Quitar escudo</button>`:''}<button class="miniBtn secondary" onclick="editarEquipo('${e.id}','${encodeURIComponent(e.nombre)}','${encodeURIComponent(e.categoria)}','${encodeURIComponent(e.modalidad)}')">Editar</button><button class="miniBtn danger" onclick="borrarEquipo('${e.id}')">Eliminar</button>${cerrado?`<a class="btn miniBtn" href="${linkAlta(e)}">Solicitar ALTA</a><a class="btn miniBtn secondary" href="${linkSolicitud(e,'ORGANIZADOR')}">BAJA / REASIGNACIÓN</a>`:''}</span><span class="teamIdentity">${logoHtml(e)}<span class="teamName">${esc(e.nombre)}</span></span><span class="chip">${esc(e.categoria)}</span><span class="chip mod">${esc(e.modalidad)}</span>${cerrado?'<span class="chip" style="background:#faecec;color:#7b2c2c">LISTA CERRADA</span>':'<span class="chip" style="background:#e8f5ee;color:#245d39">LISTA ABIERTA</span>'}</div>`}).join('')}</div></div>`
+
+     :`<div class="teamZone"><div class="teamStem"></div><div class="emptyNode">Todavía no hay equipos cargados.</div></div>`;
+
+   return `<div class="instBranch" style="--accent:${paleta[idx%paleta.length]}"><div class="instHeaderRow"><div class="instNode">${esc(inst.nombre)}<div class="instMeta">Responsable: ${esc(inst.responsable_nombre||'—')}<br>${esc(inst.responsable_email||'—')} · ${esc(inst.responsable_whatsapp||'—')}</div></div><div class="instButtons"><button class="miniBtn" onclick="toggleEquipo('${inst.id}')">+ Cargar equipo</button><button class="miniBtn secondary" onclick="editarInst('${inst.id}')">Editar institución</button>${equipos.length?`<a class="btn miniBtn successBtn" href="jugadores.html?torneo=${encodeURIComponent(inst.torneo_id)}&institucion=${encodeURIComponent(inst.id)}">Ver lista de participación</a>`:''}</div></div>${equipoForm(inst)}${teams}</div>`;
+
+ }).join('');
+
+ $('lista').innerHTML=`<div class="orgWrap"><div class="orgRoot"><div class="rootCenter"><div class="rootNode">${esc(torneoNombre||'TORNEO')}</div></div><div class="rootStem"></div><div class="branches">${branches}</div></div></div>`;
+
+}
+
+function renderResponsable(){
+
+ $('estructuraTitulo').textContent='Mis equipos para este torneo';
+
+ $('estructuraCard').classList.remove('hidden');$('cantInstituciones').textContent=instituciones.length;
+
+ if(!instituciones.length){$('lista').innerHTML='<div class="msg">No tenés una institución asignada.</div>';return}
+
+ $('lista').innerHTML='<div class="respSummary">'+instituciones.map(inst=>{const equipos=inst.equipos_competitivos||[],hayCerrados=equipos.some(equipoCerrado);return `<div class="respInst"><h3 style="margin:0">${esc(inst.nombre)}</h3><div class="muted">Responsable: ${esc(inst.responsable_nombre||'—')}</div>${hayCerrados?'<div class="msg warn"><b>Hay listas cerradas.</b> No se modifican directamente. Para un ALTA usá <b>Solicitar ALTA</b>. Para BAJA o REASIGNACIÓN usá el botón correspondiente; el Organizador resolverá la situación informada.</div>':''}<div class="respTeams">${equipos.length?equipos.map(e=>{const cerrado=equipoCerrado(e);return `<div class="respTeam"><div class="respTeamMain"><b><span class="teamIdentity">${logoHtml(e)}<span>${esc(e.nombre)}</span></span></b><span class="chip">${esc(e.categoria)}</span><span class="chip mod">${esc(e.modalidad)}</span></div><div class="respTeamActions"><span class="logoTools"><button class="miniBtn secondary" onclick="seleccionarLogoEquipo('${e.id}')">${e.logo_path?'Cambiar escudo':'Cargar escudo'}</button>${e.logo_path?`<button class="miniBtn danger" onclick="quitarLogoEquipo('${e.id}')">Quitar escudo</button>`:''}</span>${cerrado?`<span class="chip" style="background:#faecec;color:#7b2c2c">LISTA CERRADA</span><a class="btn miniBtn" href="${linkAlta(e)}">Solicitar ALTA</a><a class="btn miniBtn secondary" href="${linkSolicitud(e,'RESPONSABLE')}">BAJA / REASIGNACIÓN</a>`:'<span class="chip" style="background:#e8f5ee;color:#245d39">LISTA ABIERTA</span>'}</div></div>`}).join(''):'<div class="msg warn">El Organizador todavía no cargó equipos para esta institución.</div>'}</div>${equipos.length?`<p><a class="btn successBtn" href="jugadores.html?torneo=${encodeURIComponent(inst.torneo_id)}&institucion=${encodeURIComponent(inst.id)}">Ver lista de participación</a></p>`:''}</div>`}).join('')+'</div>';
+
+}
+
+function render(){esResponsable()?renderResponsable():renderOrganizador()}
+
+async function cargarReglas(){if(!torneoId){reglas=[];return}const r=await NewcomSupabase.listarCategoriasTorneo(torneoId,false);if(!r.ok){reglas=[];aviso('No se pudieron leer las categorías: '+errHumano(r.error),'err');return}reglas=r.data||[]}
+
+async function cargarOrganizador(){
+
+ $('estructuraTitulo').textContent='Estructura del torneo';
+
+ $('roleNote').innerHTML='<b>Área del Organizador.</b> La secuencia es: <b>1) crear institución → 2) cargar uno o más equipos → 3) el Responsable arma la lista de participación.</b>';
+
+ $('altaInstitucion').classList.remove('hidden');$('selectorOrg').classList.remove('hidden');$('selectorResp').classList.add('hidden');$('subLista').textContent='Torneo → Institución → Equipo. El Responsable recibe esta estructura y arma la lista de participación desde Mis jugadores.';
+
+ const r=await NewcomSupabase.listarTorneos();if(!r.ok){aviso(errHumano(r.error),'err');return}torneos=r.data||[];$('torneo').innerHTML=torneos.map(t=>`<option value="${t.id}">${esc(t.nombre)}</option>`).join('');
+
+ if(torneoId&&torneos.some(t=>t.id===torneoId))$('torneo').value=torneoId;else torneoId=$('torneo').value||'';await cargarInstitucionesOrg();
+
+}
+
+async function cargarInstitucionesOrg(){torneoId=$('torneo').value||torneoId;const t=torneos.find(x=>x.id===torneoId);torneoNombre=t?.nombre||'';await cargarReglas();const r=await NewcomSupabase.listarInstituciones(torneoId);if(!r.ok){aviso(errHumano(r.error),'err');return}instituciones=r.data||[];instId='';render();actualizarLinks();recuperarLocalInstitucion();instituciones.forEach(i=>recuperarLocalEquipo(i.id,true));history.replaceState(null,'',torneoId?'equipos.html?torneo='+encodeURIComponent(torneoId):'equipos.html')}
+
+async function cargarResponsable(){
+
+ $('roleNote').innerHTML='<b>Área del Responsable.</b> El Organizador ya creó tu institución y tus equipos. Acá los consultás y desde <b>Mis jugadores</b> armás la lista de participación del torneo.';
+
+ $('altaInstitucion').classList.add('hidden');$('selectorOrg').classList.add('hidden');$('selectorResp').classList.remove('hidden');$('subLista').textContent='Tu institución y los equipos definidos por el Organizador.';
+
+ const r=await NewcomSupabase.listarAsignacionesResponsable(sesion.email);if(!r.ok){$('lista').innerHTML='<div class="msg err">Error: '+esc(errHumano(r.error))+'</div>';return}asignaciones=(r.data||[]).filter(x=>x.torneo?.estado!=='ARCHIVADO');$('asignacion').innerHTML=asignaciones.map(a=>`<option value="${a.id}">${esc(a.torneo?.nombre||'Torneo')} — ${esc(a.nombre)}</option>`).join('');let elegida=asignaciones.find(a=>a.id===instId&&(!torneoId||a.torneo_id===torneoId))||asignaciones.find(a=>a.torneo_id===torneoId)||asignaciones[0];if(elegida){$('asignacion').value=elegida.id;instId=elegida.id;torneoId=elegida.torneo_id;torneoNombre=elegida.torneo?.nombre||'';instituciones=[elegida]}else{instituciones=[];instId='';torneoId='';torneoNombre=''}await cargarReglas();render();actualizarLinks();if(elegida)history.replaceState(null,'',`equipos.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`)
+
+}
+
+$('torneo').onchange=cargarInstitucionesOrg;$('asignacion').onchange=async()=>{const a=asignaciones.find(x=>x.id===$('asignacion').value);if(!a)return;instId=a.id;torneoId=a.torneo_id;torneoNombre=a.torneo?.nombre||'';instituciones=[a];await cargarReglas();render();actualizarLinks();history.replaceState(null,'',`equipos.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`)};
+
+['inombre','iresp','iwa','iemail'].forEach(x=>$(x).addEventListener('input',guardarLocalInstitucion));$('lista').addEventListener('input',e=>{const m=(e.target.id||'').match(/^e[cn]_(.+)$/);if(m)guardarLocalEquipo(m[1])});$('lista').addEventListener('change',e=>{const m=(e.target.id||'').match(/^em_(.+)$/);if(m)guardarLocalEquipo(m[1])});$('iwa').addEventListener('blur',()=>{$('iwa').value=normalizarWhatsapp($('iwa').value)});$('iemail').addEventListener('blur',()=>{$('iemail').value=$('iemail').value.trim().toLowerCase()});
+
+$('guardarInstitucion').onclick=async()=>{const nombre=$('inombre').value.trim(),resp=$('iresp').value.trim(),contacto=validarContacto($('iemail').value,$('iwa').value);if(!torneoId){aviso('Seleccioná un torneo.','err');return}if(!nombre||!resp||!$('iemail').value.trim()){aviso('Completá institución, responsable y email.','err');return}if(!contacto.ok){aviso(contacto.error,'err');return}const email=contacto.email,wa=contacto.wa;$('iemail').value=email;$('iwa').value=wa;if(instituciones.some(i=>norm(i.nombre)===norm(nombre))){aviso('Esa institución ya existe en este torneo.','err');return}const r=await NewcomSupabase.crearInstitucion({torneo_id:torneoId,nombre,responsable_nombre:resp,responsable_email:email,responsable_whatsapp:wa||null});if(!r.ok){aviso(errHumano(r.error,'institucion'),'err');return}NewcomAutosave.clear(claveBorradorInstitucion());['inombre','iresp','iemail','iwa'].forEach(x=>$(x).value='');aviso('Institución creada. IMPORTANTE: avisale al Responsable que se registre en TorNewcom usando exactamente este email: '+email+'. Si ya está registrado con ese mismo email, no debe registrarse nuevamente. Ahora podés cargar uno o más equipos debajo de la institución.','ok');await cargarInstitucionesOrg();setTimeout(()=>toggleEquipo(r.data.id),50)};
+
+async function agregarEquipo(inst){if(esResponsable())return;const nombre=$('en_'+inst)?.value.trim()||'',categoria=$('ec_'+inst)?.value.trim()||'',modalidad=$('em_'+inst)?.value||'Mixto';if(!nombre||!categoria){aviso('Completá nombre del equipo, categoría y modalidad.','err');return}const rr=await asegurarRegla(categoria,modalidad);if(!rr.ok){aviso('No se pudo preparar la categoría: '+errHumano(rr.error),'err');return}const r=await NewcomSupabase.crearEquipoCompetitivo({torneo_id:torneoId,institucion_id:inst,nombre,categoria_torneo_id:rr.data.id,categoria:rr.data.categoria,modalidad:rr.data.modalidad});if(!r.ok){aviso(errHumano(r.error,'equipo'),'err');return}NewcomAutosave.clear(claveBorradorEquipo(inst));aviso('Equipo guardado. El Responsable ya podrá incorporar jugadores desde su Bolsa y consultar la Lista de participación.','ok');await cargarInstitucionesOrg()}
+
+async function editarInst(id){if(esResponsable())return;const inst=instituciones.find(x=>x.id===id);if(!inst)return;const nombre=prompt('Institución:',inst.nombre);if(nombre===null)return;const resp=prompt('Responsable:',inst.responsable_nombre||'');if(resp===null)return;const email=prompt('Email del responsable:',inst.responsable_email||'');if(email===null)return;const wa=prompt('WhatsApp:',inst.responsable_whatsapp||'');if(wa===null)return;const contacto=validarContacto(email,wa);if(!contacto.ok){aviso(contacto.error,'err');return}const emailNuevo=contacto.email,waNuevo=contacto.wa,cambioEmail=emailNuevo!==String(inst.responsable_email||'').trim().toLowerCase();const r=await NewcomSupabase.actualizarInstitucion(id,{nombre:String(nombre||'').trim(),responsable_nombre:String(resp||'').trim(),responsable_email:emailNuevo,responsable_whatsapp:waNuevo||null});if(!r.ok){aviso(errHumano(r.error),'err');return}const texto=cambioEmail&&emailNuevo?'Institución actualizada. IMPORTANTE: avisale al Responsable que debe ingresar o registrarse en TorNewcom usando exactamente este email: '+emailNuevo+'. Si ya está registrado con ese mismo email, no debe registrarse nuevamente.':'Institución actualizada.';aviso(texto,'ok');await cargarInstitucionesOrg()}
+
+async function editarEquipo(id,n,c,m){if(esResponsable())return;const nombre=prompt('Nombre del equipo:',decodeURIComponent(n));if(nombre===null)return;const categoria=prompt('Categoría:',decodeURIComponent(c));if(categoria===null)return;const modalidad=prompt('Modalidad (Mixto/Femenino):',decodeURIComponent(m));if(modalidad===null)return;const rr=await asegurarRegla(categoria,modalidad);if(!rr.ok){aviso(errHumano(rr.error),'err');return}const r=await NewcomSupabase.actualizarEquipoCompetitivo(id,{nombre,categoria_torneo_id:rr.data.id,categoria:rr.data.categoria,modalidad:rr.data.modalidad});if(!r.ok){aviso(errHumano(r.error),'err');return}aviso('Equipo actualizado.','ok');await cargarInstitucionesOrg()}
+
+async function borrarEquipo(id){if(esResponsable())return;if(!confirm('¿Eliminar este equipo del torneo?'))return;const r=await NewcomSupabase.eliminarEquipoCompetitivo(id);if(!r.ok){aviso(errHumano(r.error),'err');return}aviso('Equipo eliminado.','ok');await cargarInstitucionesOrg()}
+
+(async()=>{if(!sesion)return;if(esResponsable())await cargarResponsable();else await cargarOrganizador()})();
+
+</script><script src="guia_organizador_v12_35.js?v=12.35"></script>
+
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+
+</body></html>

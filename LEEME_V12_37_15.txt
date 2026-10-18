@@ -1,0 +1,14 @@
+TORNEWCOM V12.37.15 CANDIDATA — AVISO DE EDAD EN MIS JUGADORES
+
+Base: V12.37.14.
+
+Corrección:
+- Mis jugadores / Bolsa ya no permite incorporar silenciosamente a un jugador por debajo de la edad mínima.
+- El jugador sigue siendo seleccionable: la regla es flexible, no bloqueante.
+- Se muestra visualmente la advertencia de edad según el equipo elegido.
+- Al seleccionar un jugador observado aparece un aviso inmediato.
+- Antes de confirmar el ALTA se pide confirmación explicando que el sistema aplicará la regla y generará alerta al Organizador cuando corresponda.
+- Si la edad entra en el rango de excepción, se informa que el sistema verificará el cupo.
+
+No se modifica Supabase, RLS, triggers ni reglas de edad.
+No requiere SQL.

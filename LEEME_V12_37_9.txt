@@ -1,0 +1,8 @@
+TORNEWCOM V12.37.9 CANDIDATA — ORGANIZADOR SUSPENDIDO
+
+Cambio único:
+- Un Organizador con autorización global suspendida ya no ve la tarjeta Solicitudes.
+- Responsable, Organizador autorizado y Admin conservan su comportamiento previo.
+- No se tocaron RLS, permisos, autenticación ni sesiones.
+
+Base: V12.37.8.

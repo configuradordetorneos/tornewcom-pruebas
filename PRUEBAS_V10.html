@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pruebas V10</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}
+.topbar{background:#2F5D7E;color:white;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand h1{margin:0;font-size:24px}.brand small{opacity:.9}
+.quicklinks{display:flex;gap:10px;flex-wrap:wrap}
+.quicklinks a{color:white;text-decoration:none;border:1px solid rgba(255,255,255,.45);padding:9px 13px;border-radius:10px;font-weight:700}
+.wrap{max-width:1100px;margin:32px auto;padding:0 18px}
+.welcome,.panel{background:white;border-radius:18px;padding:26px;box-shadow:0 7px 24px rgba(32,72,98,.10);margin-bottom:22px}
+.welcome h2,.panel h2{margin:0 0 8px;font-size:28px}.welcome p,.panel p{margin:0;color:#587080}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.action{display:block;text-decoration:none;color:#1f3342;background:#fff;border-radius:18px;padding:24px;box-shadow:0 7px 24px rgba(32,72,98,.10);border:2px solid transparent}
+.action:hover{border-color:#4A90C2}.action .icon{font-size:36px}.action h3{margin:12px 0 6px;font-size:22px}.action p{margin:0;color:#617887}
+.section-title{margin:34px 0 14px;font-size:20px}
+.tournaments{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:white;border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(32,72,98,.08)}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#EAF4FB;color:#2F5D7E;font-size:12px;font-weight:700}
+.card h4{font-size:18px;margin:12px 0 6px}.card p{margin:0 0 16px;color:#6a7c88;font-size:14px}
+.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px;font-weight:700;font-size:14px;border:none;cursor:pointer}
+.primary{background:#4A90C2;color:white}.secondary{background:#EEF2F5;color:#2F5D7E}
+.footer{margin-top:38px;background:#eaf1f5;padding:22px 18px;text-align:center;color:#516a79;font-size:14px}
+.footer strong{color:#2F5D7E}.footer-links{margin-top:10px}.footer-links a{color:#2F5D7E;font-weight:700;margin:0 8px;text-decoration:none}
+.note{margin-top:20px;padding:14px 16px;border-radius:12px;background:#DCEEF8;color:#2F5D7E;font-size:14px}
+.back{display:inline-block;margin-bottom:16px;color:#2F5D7E;text-decoration:none;font-weight:700}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
+label{font-weight:700;color:#2F5D7E}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid #c7d5df;border-radius:10px;font-size:15px;background:white;color:#1f3342}
+textarea{min-height:95px;resize:vertical}.help{font-size:12px;color:#728794}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.step{padding:7px 11px;border-radius:999px;background:#EEF2F5;color:#587080;font-size:13px;font-weight:700}
+.step.active{background:#4A90C2;color:white}
+.form-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;flex-wrap:wrap}
+.category-block{border:1px solid #d6e1e8;border-radius:14px;padding:16px;background:#fbfdfe}
+.category-block h4{margin:0 0 12px;color:#2F5D7E}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cat{border:1px solid #c7d5df;border-radius:12px;padding:12px;background:#f9fbfc}
+.cat label{display:flex;align-items:center;gap:8px;cursor:pointer}.cat input{width:auto}
+.table-wrap{overflow:auto;margin-top:18px}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:12px 10px;border-bottom:1px solid #dfe7ec;text-align:left}
+th{background:#EAF4FB;color:#2F5D7E;font-size:14px}
+td input,td select{padding:9px 10px}
+.small-btn{padding:8px 10px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+.danger{background:#f6e9e9;color:#8b3a3a}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+@media(max-width:760px){
+  .actions,.tournaments,.form-grid{grid-template-columns:1fr}
+  .categories{grid-template-columns:1fr 1fr}
+}
+
+.case{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 4px 16px rgba(32,72,98,.08)}
+.ok{color:#21663a;font-weight:700}
+.bad{color:#9a2626;font-weight:700}
+code{background:#eef3f6;padding:3px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="brand"><h1>Sistema de Torneos Newcom</h1><small>Gestión simple de torneos</small></div>
+  <nav class="quicklinks"><span style="width:100%;font-size:12px;font-weight:700;opacity:.9">VISITÁ TAMBIÉN</span>
+    <a href="https://script.google.com/macros/s/AKfycbxikpnjHRjmeZglD4VhPXLeNEBG4c48tetx_duJqms_AZ8YGvlceTdmBFpf4GwEHBrRGw/exec" target="_blank">📘 R.I.N.<br><small>Reglamento Interactivo de Newcom</small></a>
+    <a href="https://dondejugarnewcom.netlify.app" target="_blank">🌐 Dónde Jugar Newcom</a>
+  </nav>
+</header>
+
+
+<main class="wrap">
+<a class="back" href="acceso_real.html">← Volver</a>
+<section class="panel">
+<h2>Pruebas recomendadas — V10</h2>
+
+<div class="case">
+<h3>1. Responsable aprobado</h3>
+<p>Ingresá con la clave de prueba <code>RESP-FUERTES</code> desde <code>acceso_real.html</code>.</p>
+<p class="ok">Debe poder entrar a: su plantel y equipo.</p>
+<p class="bad">No debe poder entrar a: crear torneo, jornadas, administración general ni alertas del organizador.</p>
+</div>
+
+<div class="case">
+<h3>2. Probar intento manual</h3>
+<p>Con la sesión de Responsable abierta, escribí manualmente en la barra del navegador:</p>
+<p><code>crear_torneo.html</code>, <code>jornadas.html</code> y <code>admin_general.html</code>.</p>
+<p class="ok">Debe aparecer “No tenés permiso” y redirigirte.</p>
+</div>
+
+<div class="case">
+<h3>3. Organizador</h3>
+<p>Ingresá con <code>ORG-LIGA</code>.</p>
+<p class="ok">Debe poder entrar a crear torneo, jornadas, equipos, jugadores y alertas.</p>
+<p class="bad">No debe poder entrar a administración general.</p>
+</div>
+
+<div class="case">
+<h3>4. Administrador general</h3>
+<p>Ingresá con <code>ADMIN-NEWCOM</code>.</p>
+<p class="ok">Debe poder entrar a todas las secciones.</p>
+</div>
+
+<div class="case">
+<h3>5. Responsable pendiente</h3>
+<p>Probá <code>RESP-PENDIENTE</code>.</p>
+<p class="ok">Debe seguir bloqueado desde el acceso.</p>
+</div>
+
+<div class="case">
+<h3>6. Cierre de sesión</h3>
+<p>Cerrá sesión y después intentá abrir una página interna manualmente.</p>
+<p class="ok">Debe enviarte nuevamente al acceso.</p>
+</div>
+
+<p><strong>Nota:</strong> sigue siendo una maqueta local. Los permisos ya se prueban en cada pantalla, pero la seguridad real llegará cuando pasemos a servidor y base de datos.</p>
+</section>
+</main>
+<footer class="footer">
+  <div><strong>Creado por Gabriel Prozzillo</strong></div><div>Proyecto Newcom</div>
+  <div class="footer-links">
+    <a href="https://script.google.com/macros/s/AKfycbxikpnjHRjmeZglD4VhPXLeNEBG4c48tetx_duJqms_AZ8YGvlceTdmBFpf4GwEHBrRGw/exec" target="_blank">R.I.N. — Reglamento Interactivo de Newcom</a>
+    <a href="https://dondejugarnewcom.netlify.app" target="_blank">Dónde Jugar Newcom</a>
+  </div>
+</footer>
+<script src="tornewcom_tooltips.js?v=12.36.19"></script>
+</body>
+</html>

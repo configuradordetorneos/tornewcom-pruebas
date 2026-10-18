@@ -1,0 +1,11 @@
+TORNEWCOM V12.37.22 CANDIDATA
+
+Base: V12.37.21 validada.
+
+Cambios funcionales:
+1. Bolsa: aviso contextual al quitar un jugador. Solo agrega la advertencia específica cuando el jugador todavía integra alguna Lista de participación. Quitar de la Bolsa conserva torneo/equipo/historial. Si la lista está cerrada, la salida corresponde mediante solicitud de BAJA; si está abierta, desde Lista de participación.
+2. Acceso: se hace más visible la red/cancha de fondo y se agrega “¿Querés usar este sistema en tu torneo?” + Contacto mediante ícono de WhatsApp, sin mostrar el número.
+3. Crear cuenta: opción Mostrar contraseñas para los dos campos.
+4. Se unifican los números de versión visibles en las pantallas a V12.37.22 CANDIDATA. No se modifican versiones internas de archivos JS ni parámetros de caché.
+
+Sin cambios de SQL, RLS, tablas ni políticas.

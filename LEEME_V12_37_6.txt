@@ -1,0 +1,18 @@
+TORNEWCOM V12.37.6 CANDIDATA — MENSAJERÍA
+
+Cambios:
+- Admin: selector de destinatarios reconstruido desde perfiles/membresías activas.
+- Admin no aparece como destinatario de sí mismo.
+- Etiquetas más claras: rol + persona + institución (si corresponde) + torneo.
+- Botón Responder en mensajes recibidos.
+- Botón Eliminar en mensajes, con confirmación irreversible.
+- Solicitudes NO se eliminan ni se modifican.
+
+SQL:
+Ejecutar SQL_V12_37_6_MENSAJES_ELIMINAR.sql antes de probar Eliminar.
+
+Pruebas sugeridas:
+1) Admin ve ORG1 y ORG2 como destinatarios.
+2) Admin envía a ORG2.
+3) ORG2 recibe y usa Responder.
+4) Eliminar un mensaje de prueba y confirmar que desaparece.

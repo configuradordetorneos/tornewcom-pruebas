@@ -1,0 +1,12 @@
+TORNEWCOM V12.37.13 CANDIDATA — MENSAJES INTEGRADO EN NAVEGACIÓN
+
+Base: V12.37.12.
+
+Cambio:
+- Se elimina la franja independiente de Mensajes.
+- Mensajes se integra en la misma fila que Torneos / Crear torneo / Vista pública.
+- Se mantiene visible solo para cuentas con rol operativo.
+- Se conserva el contador de no leídos.
+- Cerrar sesión permanece separado en su posición habitual.
+
+Sin cambios en Supabase, RLS, autenticación, sesiones ni lógica funcional.

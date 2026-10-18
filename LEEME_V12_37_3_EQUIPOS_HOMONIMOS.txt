@@ -1,0 +1,14 @@
+TORNEWCOM V12.37.3 CANDIDATA — EQUIPOS HOMÓNIMOS
+
+Base inmediata: V12.37.2.
+
+Objetivo:
+- En Jornadas, si dos equipos tienen el mismo nombre en la misma categoría/modalidad, mostrar Equipo — Institución.
+- Equipo A y B se excluyen por ID y en ambos sentidos.
+- Los partidos nuevos guardan también los IDs de ambos equipos para evitar mezclar equipos homónimos en vistas privadas y tablas.
+- Se mantiene compatibilidad con partidos anteriores sin ID mediante fallback por nombre.
+
+Antes de probar:
+1) Ejecutar SQL_V12_37_3_EQUIPOS_HOMONIMOS.sql en tornewcom-test.
+2) Superponer esta versión.
+3) Probar con los dos STRESS EQUIPO GEMELO de instituciones distintas.

@@ -1,0 +1,232 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cargar resultado — Sistema de Torneos Newcom</title><style>
+body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:#fff;padding:18px 24px}
+.wrap{max-width:980px;margin:26px auto;padding:0 16px}.panel{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px}
+.back,.btn,button{display:inline-block;background:#4A90C2;color:#fff;padding:10px 14px;border-radius:9px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}.secondary{background:#6c7f8d}
+.badge{display:inline-block;background:#EAF4FB;padding:6px 10px;border-radius:999px;margin-right:6px;font-size:13px}.teams{display:grid;grid-template-columns:1fr auto 1fr;gap:15px;align-items:center;margin:18px 0}.team{font-size:24px;font-weight:bold;text-align:center}.vs{font-weight:bold}
+.sets{display:grid;gap:12px}.setcard{display:grid;grid-template-columns:70px minmax(110px,1fr) 70px 22px 70px minmax(110px,1fr) minmax(120px,.8fr);gap:10px;align-items:center;background:#f7fafc;padding:14px;border-radius:12px}.setcard input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #bdcbd5;border-radius:8px;text-align:center;font-size:18px}.setcard .lab{text-align:center;font-size:12px}.setWinner{font-size:12px;font-weight:bold;color:#2f7253;text-align:center}.setWinner.none{color:#7a8b95;font-weight:normal}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.sum{background:#EAF4FB;padding:12px;border-radius:10px;text-align:center}.sum b{display:block;font-size:20px;margin-top:5px}
+.msg{margin-top:15px;padding:12px;border-radius:10px}.ok{background:#e8f5ee;color:#245d39}.warn{background:#fff4dd;color:#795f22}.err{background:#faecec;color:#7b2c2c}
+.locked{opacity:.68}.np{margin:14px 0}select{padding:9px;border:1px solid #bdcbd5;border-radius:8px}
+@media(max-width:760px){.summary{grid-template-columns:1fr 1fr}.setcard{grid-template-columns:62px 1fr 52px 14px 52px 1fr}.setWinner{grid-column:2/-1;text-align:left;padding-left:4px}.teams{grid-template-columns:1fr}.vs{text-align:center}}
+</style><script src="legal_v12_33.js?v=12.35" defer></script>
+</head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script><div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b></div>
+<main class="wrap"><p><a class="back secondary" id="volver" href="partidos.html">← Partidos</a></p>
+<section class="panel" id="cab"><div><span class="badge" id="jornada">JORNADA</span><span class="badge" id="division">CATEGORÍA / MODALIDAD</span><span class="badge" id="sistemaPuntos">PUNTUACIÓN</span></div><p id="meta"></p><div class="teams"><div class="team" id="teamA">Equipo A</div><div class="vs">VS</div><div class="team" id="teamB">Equipo B</div></div></section>
+<section class="panel" id="panel"><h2>Resultado</h2><div id="equiposCorreccion" class="np" style="display:none"><div class="autoNotice" style="background:#eaf4fb;padding:12px;border-radius:9px;margin-bottom:12px"><b>🔔 Corrección protegida</b><br>Si cambiás un equipo, TorNewcom notificará automáticamente a los Responsables de los equipos afectados.</div><label><b>Equipo A:</b> <select id="corrA"></select></label> &nbsp; <label><b>Equipo B:</b> <select id="corrB"></select></label></div><div class="np"><label><b>No presentado:</b> </label><select id="np"><option value="NINGUNO">Partido jugado normalmente</option><option value="EQUIPO A">No se presentó Equipo A</option><option value="EQUIPO B">No se presentó Equipo B</option><option value="AMBOS">No se presentaron ambos equipos</option></select></div>
+<div class="sets">
+<div class="setcard"><b>SET 1</b><span class="lab" id="la1">Equipo A</span><input id="a1" type="number" min="0"><span>-</span><input id="b1" type="number" min="0"><span class="lab" id="lb1">Equipo B</span><span class="setWinner none" id="gw1">—</span></div>
+<div class="setcard"><b>SET 2</b><span class="lab" id="la2">Equipo A</span><input id="a2" type="number" min="0"><span>-</span><input id="b2" type="number" min="0"><span class="lab" id="lb2">Equipo B</span><span class="setWinner none" id="gw2">—</span></div>
+<div class="setcard"><b>SET 3</b><span class="lab" id="la3">Equipo A</span><input id="a3" type="number" min="0"><span>-</span><input id="b3" type="number" min="0"><span class="lab" id="lb3">Equipo B</span><span class="setWinner none" id="gw3">—</span></div>
+</div>
+<div class="summary"><div class="sum"><span id="lblSetsA">Sets A</span><b id="setsA">0</b></div><div class="sum"><span id="lblSetsB">Sets B</span><b id="setsB">0</b></div><div class="sum"><span id="lblTa">Tantos A</span><b id="ta">0</b></div><div class="sum"><span id="lblTb">Tantos B</span><b id="tb">0</b></div><div class="sum"><span id="lblPa">Pts tabla A</span><b id="pa">0</b></div><div class="sum"><span id="lblPb">Pts tabla B</span><b id="pb">0</b></div><div class="sum">Ganador<b id="gan">—</b></div><div class="sum">Estado<b id="est">PENDIENTE</b></div></div>
+<p><button id="guardar">Guardar borrador</button> <button id="suspender" class="secondary">Suspender partido</button> <button id="finalizar">Finalizar partido</button> <button id="corregir" class="secondary" style="display:none">Habilitar corrección</button> <button id="nueva" class="secondary" style="display:none">Crear nueva oportunidad</button></p><div id="msg"></div></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script src="autosave_v12_26.js"></script><script>
+const $=id=>document.getElementById(id), id=new URLSearchParams(location.search).get('partido');let P=null,equiposCompatibles=[],REGLA={tipo:'SISTEMA_2',g20:4,p20:0,g21:2,p21:1,npPresente:4,npAusente:0},modoCorreccion=false,motivoCorreccion='',venceCorreccion=0,borradorLocalVisto=false,ultimoNp='NINGUNO',ultimoTanteoNormal=null;
+function claveBorradorResultado(){return NewcomAutosave.key('resultado',{partido:id||''})}
+function datosBorradorResultado(){
+ const d={np:$('np').value||'',a1:$('a1').value,b1:$('b1').value,a2:$('a2').value,b2:$('b2').value,a3:$('a3').value,b3:$('b3').value};
+ if(!d.np&&!d.a1&&!d.b1&&!d.a2&&!d.b2&&!d.a3&&!d.b3)return{__empty:true};return d;
+}
+function guardarLocalResultado(){if(P&&P.estado!=='FINALIZADO')NewcomAutosave.schedule(claveBorradorResultado(),datosBorradorResultado,350)}
+function recuperarLocalResultado(){
+ if(borradorLocalVisto||!P||P.estado==='FINALIZADO')return;borradorLocalVisto=true;const d=NewcomAutosave.offer(claveBorradorResultado(),'un resultado sin guardar');if(!d)return;
+ if(d.np&&['EQUIPO A','EQUIPO B','AMBOS'].includes(d.np))$('np').value=d.np;else $('np').selectedIndex=-1;
+ ['a1','b1','a2','b2','a3','b3'].forEach(x=>$(x).value=d[x]??'');pintar();$('msg').className='msg warn';$('msg').textContent='Resultado recuperado desde el autoguardado local.';
+}
+function n(id){const v=$(id).value;return v===''?null:Number(v)}
+function maxPermitido(rival,tercero){rival=Number(rival||0);if(tercero){if(rival<=8)return 10;if(rival===9)return 11;return 12}else{if(rival<=13)return 15;if(rival===14)return 16;return 17}}
+function limitarPareja(a,b,tercero){const A=$(a),B=$(b);A.max=maxPermitido(B.value,tercero);B.max=maxPermitido(A.value,tercero);if(A.value!==''&&Number(A.value)>Number(A.max))A.value=A.max;if(B.value!==''&&Number(B.value)>Number(B.max))B.value=B.max}
+function validoSet(a,b,t=false){a=Number(a);b=Number(b);if(a<0||b<0||a===b)return false;const win=t?10:15,max=t?12:17,hi=Math.max(a,b),lo=Math.min(a,b);if(hi>max)return false;if(hi===win)return lo<=win-2;if(hi===win+1)return lo===win-1;if(hi===max)return lo===max-2||lo===max-1;return false}
+function calcular(mostrar=false){
+ const np=$('np').value||'NINGUNO';
+ if(np==='AMBOS')return{ok:true,a_set1:null,b_set1:null,a_set2:null,b_set2:null,a_set3:null,b_set3:null,sets_a:0,sets_b:0,tantos_a:0,tantos_b:0,ganador:null,puntos_a:0,puntos_b:0,no_presentado:'AMBOS'};
+ if(np!=='NINGUNO'){const aa=np==='EQUIPO A';return{ok:true,a_set1:aa?0:15,b_set1:aa?15:0,a_set2:aa?0:15,b_set2:aa?15:0,a_set3:null,b_set3:null,sets_a:aa?0:2,sets_b:aa?2:0,tantos_a:aa?0:30,tantos_b:aa?30:0,ganador:aa?'B':'A',puntos_a:aa?REGLA.npAusente:REGLA.npPresente,puntos_b:aa?REGLA.npPresente:REGLA.npAusente,no_presentado:np}}
+ const a1=n('a1'),b1=n('b1'),a2=n('a2'),b2=n('b2'),a3=n('a3'),b3=n('b3');
+ if(a1===null||b1===null||a2===null||b2===null)return{ok:false,msg:'Faltan completar los dos primeros sets.'};
+ if(!validoSet(a1,b1)||!validoSet(a2,b2))return{ok:false,msg:'Hay un tanteo final inválido en Set 1 o Set 2.'};
+ let sa=(a1>b1?1:0)+(a2>b2?1:0),sb=(b1>a1?1:0)+(b2>a2?1:0),A3=a3,B3=b3;
+ if(sa===1&&sb===1){if(a3===null||b3===null)return{ok:false,msg:'El partido está 1-1: falta completar Set 3.'};if(!validoSet(a3,b3,true))return{ok:false,msg:'El tanteo final de Set 3 no es válido.'};if(a3>b3)sa++;else sb++}else{A3=null;B3=null}
+ const ta=a1+a2+(A3??0),tb=b1+b2+(B3??0);
+ const ga=sa>sb?'A':'B';let pa,pb;if(sa===2&&sb===0){pa=REGLA.g20;pb=REGLA.p20}else if(sa===2&&sb===1){pa=REGLA.g21;pb=REGLA.p21}else if(sb===2&&sa===0){pb=REGLA.g20;pa=REGLA.p20}else{pb=REGLA.g21;pa=REGLA.p21}
+ return{ok:true,a_set1:a1,b_set1:b1,a_set2:a2,b_set2:b2,a_set3:A3,b_set3:B3,sets_a:sa,sets_b:sb,tantos_a:ta,tantos_b:tb,ganador:ga,puntos_a:pa,puntos_b:pb,no_presentado:'NINGUNO'}
+}
+function pintarGanadorSet(nro,a,b,tercero=false){
+ const el=$('gw'+nro);if(!el)return;
+ if(a===null||b===null){el.textContent=tercero?'No se juega':'—';el.className='setWinner none';return}
+ if(!validoSet(a,b,tercero)){el.textContent='—';el.className='setWinner none';return}
+ el.textContent='Ganó: '+(a>b?P.equipo_a:P.equipo_b);el.className='setWinner';
+}
+function pintar(){
+ limitarPareja('a1','b1',false);limitarPareja('a2','b2',false);limitarPareja('a3','b3',true);
+
+ // Primero decidimos si corresponde tercer set, aun cuando todavía esté vacío.
+ const np=$('np').value||'NINGUNO';
+ const a1=n('a1'),b1=n('b1'),a2=n('a2'),b2=n('b2');
+ const primerosCompletos=a1!==null&&b1!==null&&a2!==null&&b2!==null;
+ const primerosValidos=primerosCompletos&&validoSet(a1,b1,false)&&validoSet(a2,b2,false);
+ const tercero=np==='NINGUNO'&&primerosValidos&&((a1>b1)!=(a2>b2));
+ const sinNP=np==='NINGUNO';
+ const set1Completo=a1!==null&&b1!==null;
+ const set1Valido=set1Completo&&validoSet(a1,b1,false);
+ ['a1','b1'].forEach(x=>$(x).disabled=!sinNP);
+ ['a2','b2'].forEach(x=>$(x).disabled=!(sinNP&&set1Valido));
+ $('a3').disabled=!tercero;
+ $('b3').disabled=!tercero;
+ if(!tercero&&np==='NINGUNO'){$('a3').value='';$('b3').value=''}
+ if(sinNP&&!set1Valido&&a2===null&&b2===null){$('gw2').textContent='Completá SET 1';$('gw2').className='setWinner none'}
+
+ const r=calcular();
+ if(!r.ok){
+   $('setsA').textContent='0';$('setsB').textContent='0';$('ta').textContent='0';$('tb').textContent='0';$('pa').textContent='0';$('pb').textContent='0';$('gan').textContent='—';pintarGanadorSet(1,a1,b1,false);pintarGanadorSet(2,a2,b2,false);pintarGanadorSet(3,tercero?a3:null,tercero?b3:null,true);
+   $('msg').className='msg warn';$('msg').textContent=r.msg;
+   return;
+ }
+ $('setsA').textContent=r.sets_a;$('setsB').textContent=r.sets_b;$('ta').textContent=r.tantos_a;$('tb').textContent=r.tantos_b;$('pa').textContent=r.puntos_a;$('pb').textContent=r.puntos_b;pintarGanadorSet(1,r.a_set1,r.b_set1,false);pintarGanadorSet(2,r.a_set2,r.b_set2,false);pintarGanadorSet(3,r.a_set3,r.b_set3,true);
+ $('gan').textContent=r.ganador==='A'?P.equipo_a:(r.ganador==='B'?P.equipo_b:'—');$('msg').textContent='';$('msg').className='';
+}
+function bloquear(){
+ $('equiposCorreccion').style.display='none';
+ ['np','a1','b1','a2','b2','a3','b3','guardar','suspender','finalizar'].forEach(x=>$(x).disabled=true);
+ $('corregir').style.display='inline-block';
+ $('corregir').disabled=false;
+ $('panel').classList.add('locked');
+}
+function desbloquearCorreccion(){
+ $('equiposCorreccion').style.display='block';$('corrA').disabled=false;$('corrB').disabled=false;
+ ['np','a1','b1','a2','b2','a3','b3','finalizar'].forEach(x=>$(x).disabled=false);
+ $('guardar').disabled=true;
+ $('suspender').disabled=true;
+ $('corregir').style.display='none';
+ $('finalizar').textContent='Guardar corrección';
+ $('panel').classList.remove('locked');
+ pintar();
+}
+function correccionVigente(){
+ return modoCorreccion && Date.now()<venceCorreccion;
+}
+function cerrarCorreccionPorTiempo(){
+ if(!modoCorreccion)return;
+ if(Date.now()>=venceCorreccion){
+   modoCorreccion=false;
+   motivoCorreccion='';
+   $('finalizar').textContent='Finalizar partido';
+   $('msg').className='msg warn';
+   $('msg').textContent='El modo corrección venció. Volvé a habilitarlo si necesitás continuar.';
+   bloquear();
+ }
+}
+function actualizarOpcionesPresentacion(){
+ if(!P)return;
+ $('np').innerHTML=`<option value="NINGUNO">Partido jugado normalmente</option><option value="EQUIPO A">No se presentó ${P.equipo_a}</option><option value="EQUIPO B">No se presentó ${P.equipo_b}</option><option value="AMBOS">No se presentaron ambos equipos</option>`;$('np').value='NINGUNO';
+}
+function actualizarNuevaOportunidad(){
+ $('nueva').style.display=(P&&P.estado==='FINALIZADO'&&P.no_presentado==='AMBOS')?'inline-block':'none';
+}
+async function cargar(){
+ const r=await NewcomSupabase.obtenerPartido(id);if(!r.ok){$('cab').innerHTML='<h2>Partido no encontrado</h2><p>'+r.error+'</p>';$('panel').style.display='none';return}
+ P=r.data;const er=await NewcomSupabase.listarEquiposCompetitivos(P.torneo_id);equiposCompatibles=er.ok?(er.data||[]).filter(e=>e.categoria===P.categoria&&e.modalidad===P.modalidad):[];const opts=equiposCompatibles.map(e=>`<option value="${e.id}">${e.nombre}</option>`).join('');$('corrA').innerHTML=opts;$('corrB').innerHTML=opts;$('corrA').value=P.equipo_a_id||'';$('corrB').value=P.equipo_b_id||'';const rt=await NewcomSupabase.obtenerTorneo(P.torneo_id);if(rt.ok&&rt.data){const t=rt.data;REGLA={tipo:t.puntuacion_tipo||'SISTEMA_2',g20:Number(t.pts_gana_20??4),p20:Number(t.pts_pierde_20??0),g21:Number(t.pts_gana_21??2),p21:Number(t.pts_pierde_21??1),npPresente:Number(t.pts_np_presente??4),npAusente:Number(t.pts_np_ausente??0)}}$('sistemaPuntos').textContent=`PUNTOS: 2-0 ${REGLA.g20}/${REGLA.p20} · 2-1 ${REGLA.g21}/${REGLA.p21}`;$('volver').href='partidos.html?torneo='+encodeURIComponent(P.torneo_id);$('jornada').textContent=(P.jornadas?.nombre||'JORNADA').toUpperCase();$('division').textContent=(P.categoria+' '+P.modalidad).toUpperCase();$('meta').textContent=[P.jornadas?.fecha||'',P.hora||'',P.cancha?('Cancha '+P.cancha):''].filter(Boolean).join(' · ');$('teamA').textContent=P.equipo_a;$('teamB').textContent=P.equipo_b;['la1','la2','la3'].forEach(x=>$(x).textContent=P.equipo_a);['lb1','lb2','lb3'].forEach(x=>$(x).textContent=P.equipo_b);$('lblSetsA').textContent='Sets '+P.equipo_a;$('lblSetsB').textContent='Sets '+P.equipo_b;$('lblTa').textContent='Tantos '+P.equipo_a;$('lblTb').textContent='Tantos '+P.equipo_b;$('lblPa').textContent='Pts tabla '+P.equipo_a;$('lblPb').textContent='Pts tabla '+P.equipo_b;actualizarOpcionesPresentacion();if(['EQUIPO A','EQUIPO B','AMBOS'].includes(P.no_presentado))$('np').value=P.no_presentado;else $('np').value='NINGUNO';
+ [['a1','a_set1'],['b1','b_set1'],['a2','a_set2'],['b2','b_set2'],['a3','a_set3'],['b3','b_set3']].forEach(([el,k])=>{if(P[k]!==null&&P[k]!==undefined)$(el).value=P[k]});
+ ultimoNp=$('np').value||'NINGUNO';
+ ultimoTanteoNormal=ultimoNp==='NINGUNO'?{a1:$('a1').value,b1:$('b1').value,a2:$('a2').value,b2:$('b2').value,a3:$('a3').value,b3:$('b3').value}:null;
+ $('est').textContent=P.estado||'PENDIENTE';pintar();if(P.estado==='FINALIZADO'){bloquear();$('msg').className='msg ok';$('msg').textContent=P.no_presentado==='AMBOS'?'Partido FINALIZADO: no se presentó ninguno. Ambos equipos quedan con N/P y 0 puntos.':'Partido FINALIZADO. Para modificarlo usá Habilitar corrección.';}if(P.estado==='SUSPENDIDO'){$('msg').className='msg warn';$('msg').textContent='Partido SUSPENDIDO. Podés continuar cargando desde los puntos guardados y finalizarlo cuando corresponda.'}actualizarNuevaOportunidad();recuperarLocalResultado();
+}
+['a1','b1','a2','b2','a3','b3'].forEach(x=>$(x).addEventListener('input',()=>{pintar();guardarLocalResultado()}));$('np').addEventListener('change',()=>{
+ const nuevo=$('np').value||'NINGUNO';
+ if(ultimoNp==='NINGUNO'&&nuevo!=='NINGUNO'){
+   ultimoTanteoNormal={a1:$('a1').value,b1:$('b1').value,a2:$('a2').value,b2:$('b2').value,a3:$('a3').value,b3:$('b3').value};
+   ['a1','b1','a2','b2','a3','b3'].forEach(x=>$(x).value='');
+ }else if(ultimoNp!=='NINGUNO'&&nuevo==='NINGUNO'){
+   const d=ultimoTanteoNormal;
+   ['a1','b1','a2','b2','a3','b3'].forEach(x=>$(x).value=d?d[x]??'':'');
+ }else if(nuevo!=='NINGUNO'){
+   ['a1','b1','a2','b2','a3','b3'].forEach(x=>$(x).value='');
+ }
+ ultimoNp=nuevo;
+ pintar();guardarLocalResultado();
+});
+$('guardar').onclick=async()=>{const d={no_presentado:$('np').value||'NINGUNO',a_set1:n('a1'),b_set1:n('b1'),a_set2:n('a2'),b_set2:n('b2'),a_set3:n('a3'),b_set3:n('b3')};const r=await NewcomSupabase.guardarBorradorPartido(id,d,P?.estado);$('msg').className='msg '+(r.ok?'ok':'err');if(r.ok)NewcomAutosave.clear(claveBorradorResultado());$('msg').textContent=r.ok?'Borrador guardado en Supabase. Todavía no modifica la tabla.':'Error: '+r.error};
+$('suspender').onclick=async()=>{
+ if(!P)return;
+ if(($('np').value||'NINGUNO')!=='NINGUNO'){
+   $('msg').className='msg err';
+   $('msg').textContent='N/P es una finalización especial; no corresponde combinarlo con SUSPENDIDO.';
+   return;
+ }
+ const d={a_set1:n('a1'),b_set1:n('b1'),a_set2:n('a2'),b_set2:n('b2'),a_set3:n('a3'),b_set3:n('b3')};
+ const hayPuntaje=[d.a_set1,d.b_set1,d.a_set2,d.b_set2,d.a_set3,d.b_set3].some(v=>v!==null);
+ if(!hayPuntaje){
+   $('msg').className='msg err';
+   $('msg').textContent='Para marcar SUSPENDIDO, cargá al menos un puntaje parcial.';
+   return;
+ }
+ const r=await NewcomSupabase.suspenderPartido(id,d);
+ if(!r.ok){
+   $('msg').className='msg err';$('msg').textContent='Error: '+r.error;return;
+ }
+ P=r.data;NewcomAutosave.clear(claveBorradorResultado());
+ $('est').textContent='SUSPENDIDO';
+ $('msg').className='msg warn';
+ $('msg').textContent='Partido SUSPENDIDO. Los puntos parciales quedaron guardados en Supabase y no afectan la tabla.';
+};
+$('corregir').onclick=()=>{
+ if(!P||P.estado!=='FINALIZADO')return;
+ const motivo=prompt('Motivo de la corrección:');
+ if(motivo===null)return;
+ if(motivo.trim().length<3){
+   $('msg').className='msg err';
+   $('msg').textContent='Indicá un motivo breve para habilitar la corrección.';
+   return;
+ }
+ if(!confirm('Se habilitará la corrección durante 5 minutos. El cambio quedará registrado en auditoría. ¿Continuar?'))return;
+ motivoCorreccion=motivo.trim();
+ modoCorreccion=true;
+ venceCorreccion=Date.now()+5*60*1000;
+ desbloquearCorreccion();
+ $('msg').className='msg warn';
+ $('msg').textContent='CORRECCIÓN HABILITADA durante 5 minutos. Al guardar, el partido seguirá FINALIZADO y el cambio quedará auditado.';
+};
+setInterval(cerrarCorreccionPorTiempo,1000);
+
+$('finalizar').onclick=async()=>{
+ const d=calcular();
+ if(!d.ok){$('msg').className='msg err';$('msg').textContent=d.msg;return}
+
+ if(P&&P.estado==='FINALIZADO'){
+   if(!correccionVigente()){
+     $('msg').className='msg err';
+     $('msg').textContent='El modo corrección no está habilitado o ya venció.';
+     bloquear();
+     return;
+   }
+   const aid=$('corrA').value,bid=$('corrB').value;if(!aid||!bid||aid===bid){$('msg').className='msg err';$('msg').textContent='Seleccioná dos equipos diferentes.';return}const ea=equiposCompatibles.find(e=>e.id===aid),eb=equiposCompatibles.find(e=>e.id===bid);d.equipo_a_id=aid;d.equipo_b_id=bid;d.equipo_a=ea?.nombre||P.equipo_a;d.equipo_b=eb?.nombre||P.equipo_b;if((d.equipo_a!==P.equipo_a||d.equipo_b!==P.equipo_b)&&!confirm(`ATENCIÓN: cambiar un equipo en un partido FINALIZADO modifica la tabla de posiciones.\n\nAntes: ${P.equipo_a} vs ${P.equipo_b}\nDespués: ${d.equipo_a} vs ${d.equipo_b}\n\nEl resultado actual se conservará salvo los cambios que hayas hecho en esta pantalla. ¿Confirmar corrección?`))return;const r=await NewcomSupabase.corregirPartido(id,d,motivoCorreccion);
+   if(!r.ok){$('msg').className='msg err';$('msg').textContent='Error: '+r.error;return}
+   P=r.data;NewcomAutosave.clear(claveBorradorResultado());
+   modoCorreccion=false;
+   motivoCorreccion='';
+   $('est').textContent='FINALIZADO';
+   $('finalizar').textContent='Finalizar partido';
+   $('msg').className='msg ok';
+   $('msg').textContent='Corrección guardada. El partido continúa FINALIZADO y el cambio quedó registrado en Auditoría.'+(r.warning?' '+r.warning:'');
+   bloquear();actualizarNuevaOportunidad();
+   return;
+ }
+
+ const r=await NewcomSupabase.finalizarPartido(id,d);
+ if(!r.ok){$('msg').className='msg err';$('msg').textContent='Error: '+r.error;return}
+ P=r.data;NewcomAutosave.clear(claveBorradorResultado());
+ $('est').textContent='FINALIZADO';
+ $('msg').className='msg ok';
+ $('msg').textContent=d.no_presentado==='AMBOS'?'Partido FINALIZADO: no se presentó ninguno. Ambos equipos quedan con N/P y 0 puntos.':`Partido FINALIZADO. Ganador ${d.ganador==='A'?P.equipo_a:P.equipo_b} — ${d.sets_a}-${d.sets_b}. Puntos ${d.puntos_a}-${d.puntos_b}.`;
+ bloquear();actualizarNuevaOportunidad();
+};
+$('nueva').onclick=()=>{
+ if(!P||P.estado!=='FINALIZADO'||P.no_presentado!=='AMBOS')return;
+ const q=new URLSearchParams({torneo:P.torneo_id,reprogramar:'1',origen:P.id,cat:P.categoria,mod:P.modalidad,a:P.equipo_a,b:P.equipo_b});
+ location.href='jornadas.html?'+q.toString();
+};
+cargar();
+</script><script src="guia_organizador_v12_35.js?v=12.35"></script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

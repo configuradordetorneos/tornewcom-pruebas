@@ -1,0 +1,16 @@
+TORNEWCOM V12.36.17 CANDIDATA — Correcciones de Solicitudes
+
+BASE: V12.36.16 candidata, con el SQL de V12.36.16 ya aplicado en tornewcom-test.
+NO ejecutar SQL nuevamente para esta versión.
+
+CAMBIOS SOLO DE FRONTEND:
+1. El buscador de jugador funciona en tiempo real por nombre o DNI y tolera errores de una letra (ej. gabrel/gabriel).
+2. Al cambiar ALTA/BAJA/MODIFICACIÓN se limpia el buscador para evitar filtros viejos invisibles.
+3. Mensajes claros cuando no hay candidatos o no existe equipo de destino.
+4. MODIFICACIÓN se deshabilita si la institución no tiene otro equipo en ese torneo.
+5. En lista cerrada, Responsable/Organizador no ven Asignar/Eliminar para jugadores declarados; ven Solicitar modificación.
+6. Las listas cerradas quedan bloqueadas en los checkboxes del Responsable.
+7. Avisos unificados: lista cerrada -> cambio por solicitud y autorización del otro actor.
+
+ROLLBACK DE BASE: sigue siendo SQL_ROLLBACK_V12_36_16.sql.
+La V12.36.14 estable permanece intacta.

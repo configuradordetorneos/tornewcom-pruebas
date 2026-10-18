@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mensajes — TorNewcom V12.37.30</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}
+.top{background:#2F5D7E;color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.wrap{max-width:1050px;margin:26px auto;padding:0 16px}.btn{display:inline-block;border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;font-size:14px}.primary{background:#4A90C2;color:#fff}.secondary{background:#EEF2F5;color:#2F5D7E}.dangerText{color:#9a3f3f}.muted{color:#6b7f8c}.small{font-size:12px}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}.panel{background:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(32,72,98,.09);padding:18px}.panel h2{margin:0 0 12px;font-size:20px}
+label{font-weight:700;color:#2F5D7E;font-size:13px}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #c8d7e0;border-radius:9px;font-size:14px;margin-top:6px;background:#fff;color:#1f3342}textarea{min-height:110px;resize:vertical}.field{margin-bottom:13px}.counter{text-align:right;font-size:11px;color:#738692;margin-top:4px}.status{min-height:20px;margin-top:10px;font-size:13px}
+.inboxHead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.badgeCount{display:none;background:#c93b3b;color:#fff;border-radius:999px;min-width:24px;padding:4px 7px;text-align:center;font-weight:800;font-size:12px}.msg{border:1px solid #dce6ec;border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}.msg.unread{border-left:5px solid #c93b3b;background:#fffafa}.msg.sent{border-left:5px solid #4A90C2}.msgTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.msg h3{margin:0;font-size:15px}.meta{font-size:11px;color:#748894;margin-top:4px;line-height:1.35}.bodyMsg{display:none;margin-top:10px;padding-top:10px;border-top:1px solid #e5edf2;white-space:pre-wrap;font-size:14px;line-height:1.45}.readState{font-weight:700;font-size:12px;margin-top:7px}.readState.ok{color:#2f7a55}.readState.pending{color:#6f8190}.openBtn{padding:7px 10px;font-size:12px}.msgActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.replyBtn{background:#eaf4fb;color:#245b7d}.deleteBtn{background:#fdecec;color:#922f2f}.empty{padding:18px;text-align:center;color:#718592;border:1px dashed #cfdbe2;border-radius:12px}
+.note{background:#eef6fb;border-radius:10px;padding:10px 12px;font-size:12px;color:#587080;margin-bottom:13px}.recipientList{margin-top:6px;border:1px solid #c8d7e0;border-radius:10px;background:#fff;max-height:230px;overflow:auto;padding:5px}.recipientOption{display:flex;align-items:flex-start;gap:9px;padding:9px 8px;border-radius:8px;cursor:pointer;font-size:13px;color:#29475b}.recipientOption:hover{background:#f2f7fa}.recipientOption input{width:auto;margin:2px 0 0;flex:0 0 auto}.recipientOption span{line-height:1.3}.recipientEmpty{padding:12px;color:#718592;font-size:12px}.selectedCount{font-size:11px;font-weight:700;color:#4A90C2;margin-top:6px}.multiHint{font-size:11px;color:#718592;margin-top:5px;line-height:1.35}.refresh{background:#eef2f5;color:#2F5D7E}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.wrap{margin-top:16px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="roles_v12_24.js?v=12.35"></script>
+<script src="mensajes_v12_35.js?v=12.35"></script>
+<script src="legal_v12_33.js?v=12.35" defer></script>
+</head>
+<body>
+<div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA · Mensajes</b></div>
+<main class="wrap">
+  <div style="margin-bottom:12px"><a class="btn secondary" href="index.html">Inicio</a></div>
+  <div class="grid">
+    <section class="panel">
+      <h2>Nuevo mensaje</h2>
+      <div class="note">Mensajería operativa. Máximo 300 caracteres. Sin archivos adjuntos.</div>
+      <div class="field"><label>Destinatarios / torneo</label><div id="dest" class="recipientList"><div class="recipientEmpty">Cargando…</div></div><div id="destCount" class="selectedCount">0 destinatarios seleccionados</div><div class="multiHint">Marcá uno o varios destinatarios. Cada persona recibe un mensaje individual y las respuestas permanecen privadas.</div></div>
+      <div class="field"><label>Asunto<input id="asunto" maxlength="80" placeholder="Opcional"></label><div class="counter"><span id="ca">0</span>/80</div></div>
+      <div class="field"><label>Mensaje<textarea id="mensaje" maxlength="300" placeholder="Escribí un mensaje breve y concreto"></textarea></label><div class="counter"><span id="cm">0</span>/300</div></div>
+      <button class="btn primary" id="enviar">Enviar</button>
+      <div class="status" id="estado"></div>
+    </section>
+
+    <section class="panel">
+      <div class="inboxHead"><h2>Bandeja</h2><div><span class="badgeCount" id="badge">0</span> <button class="btn refresh" id="refrescar">Actualizar</button></div></div>
+      <div id="lista"><div class="empty">Cargando mensajes…</div></div>
+    </section>
+  </div>
+</main>
+<script>
+const S=()=>NewcomRoles.sesion();
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function fecha(v){if(!v)return'';try{return new Date(v).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'})}catch(_){return v}}
+function etiquetaDestinatario(x){
+  const torneo=x.torneo_nombre||'Torneo sin identificar';
+  const institucion=x.institucion_nombre||'';
+  if(x.tipo_relacion==='ADMIN_ORGANIZADOR')return `Organizador — ${torneo}`;
+  if(x.tipo_relacion==='ADMIN_RESPONSABLE')return `Responsable — ${institucion||'Institución sin identificar'}`;
+  if(x.tipo_relacion==='ORGANIZADOR_ADMIN')return `Administrador General — Gabriel`;
+  if(x.tipo_relacion==='ORGANIZADOR_RESPONSABLE')return `Responsable — ${institucion||'Institución sin identificar'}`;
+  if(x.tipo_relacion==='RESPONSABLE_ORGANIZADOR')return `Organizador — ${torneo}`;
+  return `${x.destinatario_nombre||x.destinatario_email||'Usuario'} — ${torneo}`;
+}
+async function destinatariosAdmin(){
+  const [rp,rm]=await Promise.all([NewcomSupabase.adminListarPerfiles(),NewcomSupabase.adminListarMembresias()]);
+  if(!rp.ok)return rp;if(!rm.ok)return rm;
+  const uid=String(S()?.user_id||'');
+  const perfiles=new Map((rp.data||[]).map(p=>[String(p.id),p]));
+  const vistos=new Set(),a=[];
+  for(const m of (rm.data||[])){
+    if(m.activo===false||String(m.usuario_id)===uid)continue;
+    if(m.rol!=='ORGANIZADOR'&&m.rol!=='RESPONSABLE')continue;
+    const p=perfiles.get(String(m.usuario_id));if(!p)continue;
+    const torneo=m.torneos?.nombre||'Torneo';
+    const institucion=m.instituciones?.nombre||'';
+    const k=[m.usuario_id,m.torneo_id,m.rol,m.institucion_id||''].join('|');if(vistos.has(k))continue;vistos.add(k);
+    a.push({
+      destinatario_id:m.usuario_id,torneo_id:m.torneo_id,
+      destinatario_nombre:p.nombre||p.email||'Usuario',destinatario_email:p.email||'',
+      torneo_nombre:torneo,institucion_nombre:institucion,
+      tipo_relacion:m.rol==='ORGANIZADOR'?'ADMIN_ORGANIZADOR':'ADMIN_RESPONSABLE',rol_destinatario:m.rol
+    });
+  }
+  a.sort((x,y)=>`${x.torneo_nombre} ${x.rol_destinatario} ${x.destinatario_nombre}`.localeCompare(`${y.torneo_nombre} ${y.rol_destinatario} ${y.destinatario_nombre}`,'es',{sensitivity:'base'}));
+  return {ok:true,data:a};
+}
+async function cargarDestinatarios(){
+  const box=document.getElementById('dest');
+  const r=S()?.rol==='ADMIN_GENERAL'?await destinatariosAdmin():await TorNewcomMensajes.destinatarios();
+  if(!r.ok){box.innerHTML='<div class="recipientEmpty">No se pudieron cargar destinatarios</div>';box._datos=[];return}
+  const a=r.data||[];
+  mapaEtiquetas=new Map(a.map(x=>[[String(x.destinatario_id),String(x.torneo_id||'')].join('|'),etiquetaDestinatario(x)]));
+  box._datos=a;
+  if(!a.length){box.innerHTML='<div class="recipientEmpty">No hay destinatarios habilitados</div>';actualizarConteoDestinatarios();return}
+  box.innerHTML=a.map((x,i)=>`<label class="recipientOption"><input type="checkbox" class="destCheck" value="${i}"><span>${esc(etiquetaDestinatario(x))}</span></label>`).join('');
+  box.querySelectorAll('.destCheck').forEach(ch=>ch.addEventListener('change',actualizarConteoDestinatarios));
+  actualizarConteoDestinatarios();
+}
+function actualizarConteoDestinatarios(){const n=document.querySelectorAll('#dest .destCheck:checked').length;const e=document.getElementById('destCount');if(e)e.textContent=`${n} destinatario${n===1?'':'s'} seleccionado${n===1?'':'s'}`;}
+async function cargarContador(){
+  const r=await TorNewcomMensajes.contarNoLeidos();const b=document.getElementById('badge');
+  const n=r.ok?Number(r.data||0):0;b.textContent=n;b.style.display=n?'inline-block':'none';
+}
+async function abrirMensaje(btn,id,esRecibido){
+  const box=btn.closest('.msg');const cuerpo=box.querySelector('.bodyMsg');
+  const ya=cuerpo.style.display==='block';cuerpo.style.display=ya?'none':'block';btn.textContent=ya?'Ver mensaje':'Ocultar';
+  if(!ya&&esRecibido&&box.classList.contains('unread')){
+    const r=await TorNewcomMensajes.marcarLeido(id);
+    if(r.ok){box.classList.remove('unread');const e=box.querySelector('.readState');if(e){e.textContent='Leído';e.className='readState ok'}await cargarContador();}
+  }
+}
+let mensajesActuales=[];
+let mapaEtiquetas=new Map();
+function seleccionarDestinatario(destinatarioId,torneoId,nombre){
+  const box=document.getElementById('dest'),datos=box._datos||[];
+  let i=datos.findIndex(d=>String(d.destinatario_id)===String(destinatarioId)&&String(d.torneo_id||'')===String(torneoId||''));
+  if(i<0){
+    datos.push({destinatario_id:destinatarioId,torneo_id:torneoId||null,destinatario_nombre:nombre||'Usuario',torneo_nombre:'Torneo',tipo_relacion:'RESPUESTA'});
+    i=datos.length-1;box._datos=datos;
+    const lab=document.createElement('label');lab.className='recipientOption';lab.innerHTML=`<input type="checkbox" class="destCheck" value="${i}"><span>${esc((nombre||'Usuario')+' — responder')}</span>`;box.appendChild(lab);lab.querySelector('input').addEventListener('change',actualizarConteoDestinatarios);
+  }
+  box.querySelectorAll('.destCheck').forEach(ch=>ch.checked=false);
+  const objetivo=box.querySelector(`.destCheck[value="${i}"]`);if(objetivo)objetivo.checked=true;actualizarConteoDestinatarios();
+}
+function puedeResponderA(remitenteId,torneoId){
+  const datos=document.getElementById('dest')?._datos||[];
+  return datos.some(d=>String(d.destinatario_id)===String(remitenteId)&&String(d.torneo_id||'')===String(torneoId||''));
+}
+async function responderMensaje(id){
+  const m=mensajesActuales.find(x=>String(x.id)===String(id));if(!m)return;
+  if(!puedeResponderA(m.remitente_id,m.torneo_id)){
+    alert('No podés responder a este remitente desde tu rol actual.');
+    return;
+  }
+  seleccionarDestinatario(m.remitente_id,m.torneo_id,m.remitente_nombre||'Usuario');
+  const asunto=document.getElementById('asunto');
+  const base=String(m.asunto||'').replace(/^Re:\s*/i,'').trim();asunto.value=('Re: '+(base||'Mensaje')).slice(0,80);document.getElementById('ca').textContent=asunto.value.length;
+  document.getElementById('mensaje').value='';document.getElementById('cm').textContent='0';
+  document.querySelector('.grid .panel')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>document.getElementById('mensaje').focus(),250);
+  if(!m.leido){const r=await TorNewcomMensajes.marcarLeido(m.id);if(r.ok){m.leido=true;await cargarContador();}}
+}
+async function eliminarMensaje(id){
+  const m=mensajesActuales.find(x=>String(x.id)===String(id));if(!m)return;
+  const ok=confirm('Eliminar este mensaje definitivamente?\n\nEsta acción es irreversible. El mensaje no podrá recuperarse y desaparecerá de ambas bandejas.');
+  if(!ok)return;
+  const r=await TorNewcomMensajes.eliminar(id);
+  if(!r.ok){alert('No se pudo eliminar el mensaje: '+r.error);return}
+  await cargarMensajes();await cargarContador();
+}
+function etiquetaPersonaMensaje(m,recibido){
+  const id=recibido?m.remitente_id:m.destinatario_id;
+  const k=[String(id),String(m.torneo_id||'')].join('|');
+  const conocida=mapaEtiquetas.get(k);
+  if(conocida){
+    return conocida.replace(/^Administrador General\s*—\s*/,'').replace(/^Organizador\s*—\s*/,'').replace(/^Responsable\s*—\s*/,'');
+  }
+  const crudo=recibido?(m.remitente_nombre||'Usuario'):(m.destinatario_nombre||'Usuario');
+  if(/^admin$/i.test(String(crudo).trim()))return 'Gabriel';
+  const s=S();
+  if(s?.rol==='RESPONSABLE'||s?.tiene_responsabilidades){
+    if(String(id)!==String(s.user_id))return m.torneo_nombre||crudo;
+  }
+  return crudo;
+}
+
+async function cargarMensajes(){
+  const cont=document.getElementById('lista');cont.innerHTML='<div class="empty">Cargando mensajes…</div>';
+  const r=await TorNewcomMensajes.listar(20);
+  if(!r.ok){cont.innerHTML=`<div class="empty dangerText">${esc(r.error)}</div>`;return}
+  const a=r.data||[];mensajesActuales=a;if(!a.length){cont.innerHTML='<div class="empty">Todavía no hay mensajes.</div>';return}
+  const uid=S()?.user_id;
+  cont.innerHTML=a.map(m=>{
+    const recibido=String(m.destinatario_id)===String(uid);const enviado=String(m.remitente_id)===String(uid);
+    const persona=etiquetaPersonaMensaje(m,recibido);
+    let estado='';
+    if(enviado)estado=m.leido?'<div class="readState ok">✓✓ Leído'+(m.leido_en?' · '+esc(fecha(m.leido_en)):'')+'</div>':'<div class="readState pending">✓ Enviado</div>';
+    else estado=m.leido?'<div class="readState ok">Leído</div>':'<div class="readState pending">Nuevo</div>';
+    return `<article class="msg ${recibido&&!m.leido?'unread':''} ${enviado?'sent':''}">
+      <div class="msgTop"><div><h3>${esc(m.asunto||'(Sin asunto)')}</h3><div class="meta">${recibido?'De':'Para'}: <b>${esc(persona)}</b>${m.torneo_nombre?' · '+esc(m.torneo_nombre):''}<br>${esc(fecha(m.creado_en))}</div></div></div>
+      ${estado}
+      <div class="msgActions">
+        <button class="btn secondary openBtn" onclick="abrirMensaje(this,'${esc(m.id)}',${recibido})">Ver mensaje</button>
+        ${recibido&&puedeResponderA(m.remitente_id,m.torneo_id)?`<button class="btn replyBtn openBtn" onclick="responderMensaje('${esc(m.id)}')">Responder</button>`:''}
+        <button class="btn deleteBtn openBtn" onclick="eliminarMensaje('${esc(m.id)}')">Eliminar</button>
+      </div>
+      <div class="bodyMsg">${esc(m.mensaje)}</div>
+    </article>`;
+  }).join('');
+}
+async function notificarMensajeEmail(messageId){
+  try{
+    const id=String(messageId||'').trim();
+    if(!id)return {ok:false,error:'message_id vacío'};
+    const rr=await NewcomSupabase.restaurarSesionAuth();
+    const token=rr?.session?.access_token;
+    const base=window.NEWCOM_SUPABASE?.url;
+    if(!rr?.ok||!token||!base)return {ok:false,error:'No se pudo validar la sesión para el aviso por email'};
+    const resp=await fetch(`${base}/functions/v1/notificar-mensaje-email`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({message_id:id}),
+      keepalive:true
+    });
+    const data=await resp.json().catch(()=>({}));
+    return resp.ok&&data?.ok?{ok:true,data}:{ok:false,error:data?.error||`HTTP ${resp.status}`};
+  }catch(e){return {ok:false,error:e?.message||String(e)}}
+}
+function avisarPorEmailSinBloquear(r){
+  const ids=(Array.isArray(r?.data)?r.data:[r?.data]).filter(Boolean);
+  for(const id of ids){
+    void notificarMensajeEmail(id).then(n=>{if(!n.ok)console.warn('TorNewcom: el mensaje fue enviado, pero falló el aviso por email.',id,n.error)});
+  }
+}
+
+async function enviar(){
+  const sel=document.getElementById('dest'),estado=document.getElementById('estado');
+  const asunto=document.getElementById('asunto').value.trim(),mensaje=document.getElementById('mensaje').value.trim();
+  const indices=[...sel.querySelectorAll('.destCheck:checked')].map(o=>Number(o.value)).filter(Number.isInteger);
+  if(!indices.length){estado.textContent='Seleccioná al menos un destinatario.';estado.className='status dangerText';return}
+  if(!mensaje){estado.textContent='Escribí un mensaje.';estado.className='status dangerText';return}
+  const elegidos=indices.map(i=>sel._datos?.[i]).filter(Boolean);
+  if(elegidos.length!==indices.length){estado.textContent='Hay un destinatario inválido.';estado.className='status dangerText';return}
+  const grupos=new Map();
+  for(const d of elegidos){const k=String(d.torneo_id||'');if(!grupos.has(k))grupos.set(k,[]);grupos.get(k).push(d.destinatario_id)}
+  const b=document.getElementById('enviar');b.disabled=true;estado.textContent=`Enviando ${elegidos.length} mensaje${elegidos.length===1?'':'s'}…`;estado.className='status muted';
+  for(const [torneo,ids] of grupos){
+    const r=ids.length===1?await TorNewcomMensajes.enviar(ids[0],torneo||null,asunto,mensaje):await TorNewcomMensajes.enviarMultiple(ids,torneo||null,asunto,mensaje);
+    if(!r.ok){b.disabled=false;estado.textContent=r.error;estado.className='status dangerText';return}
+    avisarPorEmailSinBloquear(r);
+  }
+  b.disabled=false;
+  estado.textContent=elegidos.length===1?'Mensaje enviado.':`${elegidos.length} mensajes individuales enviados.`;estado.className='status';
+  sel.querySelectorAll('.destCheck').forEach(o=>o.checked=false);actualizarConteoDestinatarios();
+  document.getElementById('asunto').value='';document.getElementById('mensaje').value='';document.getElementById('ca').textContent='0';document.getElementById('cm').textContent='0';
+  await cargarMensajes();await cargarContador();
+}
+window.addEventListener('DOMContentLoaded',async()=>{
+  const rr=await NewcomSupabase.restaurarSesionAuth();if(!rr.ok){location.replace('acceso_real.html');return}
+  const s=NewcomRoles.sesion();
+  const permitido=!!(s&&(NewcomRoles.esAdmin(s)||NewcomRoles.organizadorHabilitado(s)||NewcomRoles.tieneAsignacionesOrganizador(s)||NewcomRoles.tieneResponsabilidades(s)));
+  if(!permitido){alert('No tenés permiso para ingresar a esta sección.');location.replace('index.html');return}
+  document.getElementById('asunto').addEventListener('input',e=>document.getElementById('ca').textContent=e.target.value.length);
+  document.getElementById('mensaje').addEventListener('input',e=>document.getElementById('cm').textContent=e.target.value.length);
+  document.getElementById('enviar').addEventListener('click',enviar);document.getElementById('refrescar').addEventListener('click',async()=>{await cargarMensajes();await cargarContador()});
+  await cargarDestinatarios();await cargarMensajes();await cargarContador();
+});
+</script>
+<script src="guia_organizador_v12_35.js?v=12.35"></script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body>
+</html>

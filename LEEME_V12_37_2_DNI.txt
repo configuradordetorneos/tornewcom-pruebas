@@ -1,0 +1,10 @@
+TORNEWCOM V12.37.2 CANDIDATA — AJUSTE DNI
+
+Cambio respecto de V12.37.1:
+- DNI de menos de 7 o más de 8 dígitos: bloqueado.
+- DNI de 8 dígitos: guarda normalmente.
+- DNI de 7 dígitos: muestra confirmación para evitar omisiones accidentales, pero permite guardar si es correcto.
+- Letras siguen bloqueadas; puntos y espacios se admiten como separadores y no se guardan.
+- SQL adicional endurece futuras altas/cambios directos en la base a 7 u 8 dígitos.
+
+No se modificaron archivos de acceso, sesión ni permisos.

@@ -1,0 +1,11 @@
+TorNewcom V12.37.14 CANDIDATA — Fecha de nacimiento sin filtro etario bloqueante
+
+Base: V12.37.13 CANDIDATA.
+
+Cambio:
+- En jugadores.html, el selector de año de nacimiento ya no se recorta según la categoría.
+- Permite cualquier fecha válida dentro del rango de 100 años.
+- Si el jugador no cumple la edad de la categoría, la lógica existente muestra advertencia y permite continuar para generar la alerta al Organizador.
+
+No requiere SQL.
+No se modificó la lógica de alertas, elegibilidad, RLS, sesiones ni Supabase.

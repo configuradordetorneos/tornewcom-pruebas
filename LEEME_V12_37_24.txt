@@ -1,0 +1,22 @@
+TORNEWCOM V12.37.24 CANDIDATA — MENSAJERÍA / RESPONSABLE
+
+BASE: V12.37.22 VALIDADA.
+
+CAMBIOS FUNCIONALES ÚNICOS:
+1. Responsable: vuelve a verse MENSAJES en la barra superior del Inicio.
+2. Panel Mis torneos del Responsable: agrega acceso directo a MENSAJES y contador de no leídos.
+3. Mensajes: etiquetas del selector normalizadas a los tres roles operativos:
+   - Administrador General: Nombre — Torneo
+   - Organizador: Nombre — Torneo
+   - Responsable: Nombre — Institución (si está disponible) — Torneo
+4. mensajes.html queda restringido a ADMIN_GENERAL, ORGANIZADOR y RESPONSABLE; se elimina USUARIO del acceso de compatibilidad.
+
+NO SE TOCÓ:
+- SQL / Supabase / RLS
+- torneos, categorías, equipos, jugadores
+- listas, solicitudes, jornadas, partidos, resultados ni tablas
+- reglas deportivas
+
+PRUEBA:
+- No considerar validada esta versión hasta probarla.
+- V12.37.22 sigue siendo la base validada.

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel del Responsable — V12.37.30 — TorNewcom</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:1180px;margin:26px auto;padding:0 16px}.panel{background:#fff;padding:22px;border-radius:16px;box-shadow:0 6px 18px rgba(32,72,98,.08)}.btn{display:inline-block;background:#4A90C2;color:#fff;padding:10px 14px;border-radius:9px;text-decoration:none;font-weight:bold}.secondary{background:#e9eef2;color:#29475b}.muted{color:#687d8a;font-size:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:18px}.card{background:var(--card-bg,#fff);border:1px solid var(--card-border,#dce6ec);border-radius:14px;padding:18px;box-shadow:0 4px 12px rgba(32,72,98,.05)}.badge{display:inline-block;background:#eaf4fb;color:#2f5d7e;font-size:12px;font-weight:bold;border-radius:999px;padding:5px 9px}.card h3{margin:12px 0 8px}.inst{border-top:1px solid #e3ebf0;padding-top:12px;margin-top:12px}.inst:first-of-type{border-top:0;padding-top:0}.inst p{margin:5px 0;line-height:1.4}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.groupLabel{font-size:12px;font-weight:bold;letter-spacing:.03em;text-transform:uppercase;color:#587080;margin:14px 0 6px}.card .btn{font-size:14px}.card .btn.manage{background:#3f7fae}.card .btn.list{background:#5d8f69}.card .btn.request{background:#7b6aa8}.card .btn.read{background:#e9eef2;color:#29475b}.msg{background:#eaf4fb;padding:14px;border-radius:10px;margin-top:16px}.msgBadge{display:none;background:#c93b3b;color:#fff;border-radius:999px;min-width:21px;padding:3px 6px;text-align:center;font-size:11px;font-weight:900}@media(max-width:760px){.wrap{padding:0 10px}.panel{padding:16px}}
+</style>
+<script src="legal_v12_33.js?v=12.35" defer></script>
+</head>
+<body>
+<script src="roles_v12_24.js?v=12.35"></script>
+<script>NewcomRoles.exigir(['RESPONSABLE']);</script>
+<div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b></div>
+<main class="wrap">
+<p><a class="btn secondary" href="index.html">← Inicio</a> <a class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a></p>
+<section class="panel">
+<h1>Panel del Responsable</h1>
+<p class="muted"><b>Mis torneos e instituciones.</b> Cada tarjeta reúne los accesos de trabajo y consulta correspondientes a ese torneo.</p>
+<div id="contenido" class="msg">Cargando tus torneos…</div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="mensajes_v12_35.js?v=12.35"></script>
+<script>
+const sesion=NewcomRoles.sesion();
+const contenido=document.getElementById('contenido');
+function esc(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function plural(n,s,p){return `${n} ${n===1?s:p}`;}
+(async()=>{
+ const r=await NewcomSupabase.listarAsignacionesResponsable(sesion.email);
+ if(!r.ok){contenido.className='msg';contenido.textContent='No se pudieron cargar tus torneos: '+r.error;return;}
+ const datos=(r.data||[]).filter(a=>a.torneo?.estado!=='ARCHIVADO');
+ if(!datos.length){contenido.className='msg';contenido.textContent='Todavía no tenés torneos asignados como Responsable.';return;}
+ const rs=await NewcomSupabase.listarEstadoOrganizadoresPorTorneo();
+ const mapaSusp=new Map((rs.ok?rs.data:[]).map(x=>[String(x.torneo_id),!!x.suspendido]));
+ const grupos=new Map();
+ for(const a of datos){
+   const key=String(a.torneo_id);
+   if(!grupos.has(key))grupos.set(key,{torneo:a.torneo||{id:a.torneo_id,nombre:'Torneo'},asignaciones:[]});
+   grupos.get(key).asignaciones.push(a);
+ }
+ contenido.className='grid';
+ const paleta=[
+   ['#f2f8ff','#cbdff0'],
+   ['#f3faf5','#cfe5d5'],
+   ['#fff8ee','#ecd9ba'],
+   ['#f8f3ff','#ddd0ee'],
+   ['#fff3f5','#ecd0d6'],
+   ['#f2faf9','#c9e3df']
+ ];
+ function colorTorneo(id){let h=0;for(const ch of String(id||''))h=(h*31+ch.charCodeAt(0))>>>0;return paleta[h%paleta.length]}
+ contenido.innerHTML=[...grupos.values()].map(g=>{const [bg,border]=colorTorneo(g.torneo?.id);const suspendido=mapaSusp.get(String(g.torneo?.id))===true;const estado=suspendido?'⚠ TORNEO SUSPENDIDO':(g.torneo?.estado||'ACTIVO');return `<article class="card" style="--card-bg:${bg};--card-border:${border}">
+   <span class="badge"${suspendido?' style="background:#faecec;color:#8b3030"':''}>${esc(estado)}</span>
+   <h3>${esc(g.torneo?.nombre||'Torneo')}</h3>
+   ${g.asignaciones.map(a=>{const equipos=a.equipos_competitivos||[];return `<div class="inst">
+      <p><b>Institución:</b> ${esc(a.nombre)}</p>
+      <p>${plural(equipos.length,'equipo','equipos')}</p>
+      <div class="groupLabel">Gestión de jugadores y equipos</div>
+      <div class="buttons">
+        <a class="btn manage" href="equipos.html?modo=responsable&torneo=${encodeURIComponent(a.torneo_id)}&institucion=${encodeURIComponent(a.id)}">Mis equipos</a>
+        <a class="btn manage" href="mis_jugadores.html?torneo=${encodeURIComponent(a.torneo_id)}&institucion=${encodeURIComponent(a.id)}">Mis jugadores</a>
+        <a class="btn list" href="jugadores.html?torneo=${encodeURIComponent(a.torneo_id)}&institucion=${encodeURIComponent(a.id)}">Lista de participación</a>
+        <a class="btn request" href="solicitudes_lista.html?modo=responsable&torneo=${encodeURIComponent(a.torneo_id)}">Mis solicitudes</a>
+      </div>
+      <div class="groupLabel">Consulta del torneo</div>
+      <div class="buttons">
+        <a class="btn read" href="mis_jornadas.html?torneo=${encodeURIComponent(a.torneo_id)}&institucion=${encodeURIComponent(a.id)}">Mis jornadas</a>
+        <a class="btn read" href="partidos.html?modo=responsable&torneo=${encodeURIComponent(a.torneo_id)}">Partidos jugados</a>
+        <a class="btn read" href="tabla.html?modo=responsable&torneo=${encodeURIComponent(a.torneo_id)}">Tabla</a>
+        <a class="btn read" href="documentacion.html?torneo=${encodeURIComponent(a.torneo_id)}">Documentación</a>
+      </div>
+   </div>`}).join('')}
+ </article>`}).join('');
+})();
+(async()=>{
+ const b=document.getElementById('mensajesBadge');
+ if(!b||!window.TorNewcomMensajes)return;
+ const r=await TorNewcomMensajes.contarNoLeidos();
+ if(!r.ok)return;
+ const n=Number(r.data||0);b.textContent=n;b.style.display=n?'inline-block':'none';
+})();
+</script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body>
+</html>

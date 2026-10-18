@@ -1,0 +1,169 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jornadas — V12.37.30 — Sistema de Torneos Newcom</title><style>
+body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:1180px;margin:25px auto;padding:0 16px}.card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px}.grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:10px}.row{display:grid;grid-template-columns:1.1fr 1fr 1.5fr 1.5fr 1fr .8fr auto;gap:8px;align-items:end;margin:10px 0;padding:12px;background:#f7fafc;border-radius:12px}label{font-size:12px;font-weight:bold}input,select{width:100%;box-sizing:border-box;padding:9px;border:1px solid #bdcbd5;border-radius:8px}button,.btn{border:0;border-radius:9px;padding:10px 14px;background:#4A90C2;color:#fff;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:#6c7f8d}.danger{background:#7b8790}.msg{margin-top:12px;padding:12px;border-radius:9px}.ok{background:#e8f5ee;color:#245d39}.err{background:#faecec;color:#7b2c2c}.info{background:#EAF4FB;color:#315b77}.contexto{margin-top:12px;font-size:14px;color:#60717f}.contexto b{color:#243746}@media(max-width:900px){.grid,.row{grid-template-columns:1fr 1fr}}
+</style><script src="legal_v12_33.js?v=12.35" defer></script>
+</head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script><div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b></div><div class="wrap"><p><a class="btn secondary" href="torneos.html">← Torneos</a> <a class="btn" id="irPartidos" href="partidos.html">Ir a Partidos</a> <a class="btn" id="irTabla" href="tabla.html">Tabla</a></p>
+<div class="card"><h1>Crear jornada <span id="tituloTorneo"></span></h1><p>La jornada y sus partidos quedarán asociados al torneo seleccionado y guardados en Supabase.</p><div class="grid"><div><label>Torneo</label><select id="torneo"></select></div><div><label>Nombre / Nº jornada</label><input id="jn" value="Jornada 1"></div><div><label>Fecha</label><input id="fecha" type="date" min="2000-01-01" max="2100-12-31"></div></div><div id="contexto" class="contexto"></div></div>
+<div class="card"><h2>Partidos de la jornada</h2><div id="filas"></div><button id="agregar">+ Agregar partido</button> <button id="guardar">Guardar jornada</button><div id="msg"></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script src="autosave_v12_26.js"></script><script>
+const torneo=document.getElementById('torneo'),filasEl=document.getElementById('filas'),msg=document.getElementById('msg'),contexto=document.getElementById('contexto');
+const params=new URLSearchParams(location.search);
+const reprogramacion={
+ activa:params.get('reprogramar')==='1',
+ origen:params.get('origen')||'',
+ categoria:params.get('cat')||'',
+ modalidad:params.get('mod')||'',
+ equipoA:params.get('a')||'',
+ equipoB:params.get('b')||''
+};
+let filas=[];
+let equiposTorneo=[];
+let torneosActivos=[];let sedesTorneo=[];const borradoresVistos=new Set();
+
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function validarFechaJornada(v){if(!v)return{ok:true};if(v<'2000-01-01'||v>'2100-12-31')return{ok:false,error:'La fecha de la jornada debe estar entre 01/01/2000 y 31/12/2100.'};return{ok:true}}
+function claveBorradorJornada(){return NewcomAutosave.key('jornada',{torneo:torneo.value,reprogramacion:reprogramacion.origen||''})}
+function datosBorradorJornada(){
+ const d={jn:document.getElementById('jn').value,fecha:document.getElementById('fecha').value,filas:filas.map(x=>({...x}))};
+ const vacias=!d.fecha&&(!d.jn||d.jn==='Jornada 1')&&d.filas.length<=1&&d.filas.every(f=>!f.equipoA&&!f.equipoB&&!f.hora&&!f.cancha);
+ if(vacias)return{__empty:true};return d;
+}
+function guardarLocalJornada(){if(torneo.value)NewcomAutosave.schedule(claveBorradorJornada(),datosBorradorJornada)}
+function recuperarLocalJornada(){
+ if(!torneo.value)return;const k=claveBorradorJornada();if(borradoresVistos.has(k))return;borradoresVistos.add(k);
+ const d=NewcomAutosave.offer(k,'una jornada sin guardar');if(!d)return;
+ document.getElementById('jn').value=d.jn||'Jornada 1';document.getElementById('fecha').value=d.fecha||'';filas=Array.isArray(d.filas)?d.filas.map(x=>({...x})):[];if(!filas.length)add();else render();
+ msg.className='msg info';msg.textContent='Jornada recuperada desde el autoguardado local.';
+}
+function unicos(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>String(x).localeCompare(String(y),'es',{numeric:true,sensitivity:'base'}));}
+function equiposDe(categoria,modalidad){return equiposTorneo.filter(e=>(!categoria||e.categoria===categoria)&&(!modalidad||e.modalidad===modalidad));}
+function categorias(){return unicos(equiposTorneo.map(e=>e.categoria));}
+function modalidades(cat){return unicos(equiposTorneo.filter(e=>!cat||e.categoria===cat).map(e=>e.modalidad));}
+function optionList(valores,seleccionado,placeholder){return (placeholder?`<option value="">${esc(placeholder)}</option>`:'')+valores.map(x=>{const v=typeof x==='object'?x.value:x,l=typeof x==='object'?x.label:x;return `<option value="${esc(v)}" ${String(v)===String(seleccionado)?'selected':''}>${esc(l)}</option>`}).join('');}
+function normalizarNombre(v){return String(v||'').trim().toLocaleLowerCase('es');}
+function etiquetaEquipo(e,universo=equiposTorneo){
+ if(!e)return'';
+ const iguales=universo.filter(x=>x.categoria===e.categoria&&x.modalidad===e.modalidad&&normalizarNombre(x.nombre)===normalizarNombre(e.nombre));
+ return iguales.length>1&&e.institucion?`${e.nombre} — ${e.institucion}`:e.nombre;
+}
+function opcionesEquipos(categoria,modalidad,excluirId=''){
+ const eqs=equiposDe(categoria,modalidad);
+ return eqs.filter(e=>String(e.id)!==String(excluirId||'')).map(e=>({value:e.id,label:etiquetaEquipo(e,eqs)}));
+}
+function equipoPorId(id){return equiposTorneo.find(e=>String(e.id)===String(id))||null;}
+function normalizarFila(f){
+ const cs=categorias();
+ if(!cs.includes(f.categoria))f.categoria=cs[0]||'';
+ const ms=modalidades(f.categoria);
+ if(!ms.includes(f.modalidad))f.modalidad=ms[0]||'';
+ const ids=new Set(equiposDe(f.categoria,f.modalidad).map(e=>String(e.id)));
+ if(!ids.has(String(f.equipoA||'')))f.equipoA='';
+ if(!ids.has(String(f.equipoB||''))||String(f.equipoB)===String(f.equipoA))f.equipoB='';
+}
+function render(){
+ filasEl.innerHTML='';
+ filas.forEach((f,i)=>{
+   normalizarFila(f);
+   const cs=categorias(),ms=modalidades(f.categoria);
+   const eqA=opcionesEquipos(f.categoria,f.modalidad,f.equipoB);
+   const eqB=opcionesEquipos(f.categoria,f.modalidad,f.equipoA);
+   const d=document.createElement('div');d.className='row';
+   d.innerHTML=`<div><label>Categoría</label><select onchange="upd(${i},'categoria',this.value)">${optionList(cs,f.categoria,'Elegir...')}</select></div><div><label>Modalidad</label><select onchange="upd(${i},'modalidad',this.value)">${optionList(ms,f.modalidad,'Elegir...')}</select></div><div><label>Equipo A</label><select onchange="upd(${i},'equipoA',this.value)">${optionList(eqA,f.equipoA,'Elegir...')}</select></div><div><label>Equipo B</label><select onchange="upd(${i},'equipoB',this.value)">${optionList(eqB,f.equipoB,'Elegir...')}</select></div><div><label>Hora</label><input type="time" value="${esc(f.hora)}" onchange="upd(${i},'hora',this.value)"></div><div><label>📍 Sede</label><select onchange="upd(${i},'sedeId',this.value)"><option value="">Sin sede asignada</option>${sedesTorneo.map(x=>`<option value="${esc(x.id)}" ${String(x.id)===String(f.sedeId||'')?'selected':''}>${esc(x.nombre)}${x.domicilio?' — '+esc(x.domicilio):''}</option>`).join('')}</select></div><div><label>Cancha</label><select onchange="upd(${i},'cancha',this.value)"><option value="">—</option>${Array.from({length:20},(_,n)=>n+1).map(n=>`<option value="${n}" ${String(f.cancha||'')===String(n)?'selected':''}>${n}</option>`).join('')}</select></div><button class="danger" onclick="quitar(${i})">Quitar</button>`;
+   filasEl.appendChild(d);
+ });
+}
+function add(){
+ const cs=categorias();const cat=cs[0]||'';const ms=modalidades(cat);
+ filas.push({categoria:cat,modalidad:ms[0]||'',equipoA:'',equipoB:'',hora:'',sedeId:'',cancha:''});render();guardarLocalJornada();
+}
+window.upd=(i,k,v)=>{filas[i][k]=v;if(k==='categoria'||k==='modalidad'){filas[i].equipoA='';filas[i].equipoB='';}if((k==='equipoA'||k==='equipoB')&&String(filas[i].equipoA)===String(filas[i].equipoB)){if(k==='equipoA')filas[i].equipoB='';else filas[i].equipoA='';}render();guardarLocalJornada();};
+window.quitar=i=>{filas.splice(i,1);render();guardarLocalJornada();};
+document.getElementById('agregar').onclick=add;
+
+function actualizarLinks(){
+ if(!torneo.value)return;
+ document.getElementById('irPartidos').href='partidos.html?torneo='+encodeURIComponent(torneo.value);
+ document.getElementById('irTabla').href='tabla.html?torneo='+encodeURIComponent(torneo.value)+'&desde=jornadas';
+}
+function actualizarTitulo(){
+ const t=torneosActivos.find(x=>String(x.id)===String(torneo.value));
+ document.getElementById('tituloTorneo').textContent=t?'— '+t.nombre:'';
+}
+function errHumano(e,c=''){return window.NewcomSupabase?.mensajeErrorHumano?NewcomSupabase.mensajeErrorHumano(e,c):String(e||'No se pudo completar la operación.')}
+async function cargarSedesDelTorneo(){
+ sedesTorneo=[];
+ if(!torneo.value)return;
+ const r=await NewcomSupabase.listarSedesTorneo(torneo.value);
+ if(r.ok)sedesTorneo=r.data||[];
+}
+async function cargarEquiposDelTorneo(){
+ equiposTorneo=[];filas=[];filasEl.innerHTML='';msg.className='';msg.textContent='';
+ actualizarLinks();actualizarTitulo();
+ await cargarSedesDelTorneo();
+ if(!torneo.value){contexto.textContent='Seleccioná un torneo.';document.getElementById('agregar').disabled=true;document.getElementById('guardar').disabled=true;return;}
+ contexto.innerHTML='Leyendo equipos inscriptos en este torneo…';
+ const r=await NewcomSupabase.listarEquiposCompetitivos(torneo.value);
+ if(!r.ok){contexto.innerHTML='<span style="color:#7b2c2c">No se pudieron cargar los equipos: '+esc(errHumano(r.error))+'</span>';document.getElementById('agregar').disabled=true;document.getElementById('guardar').disabled=true;return;}
+ equiposTorneo=(r.data||[]).map(e=>({id:e.id,nombre:e.nombre,categoria:e.categoria,modalidad:e.modalidad,institucion:e.instituciones?.nombre||''})).filter(e=>e.nombre);
+ const combinaciones=unicos(equiposTorneo.map(e=>[e.categoria,e.modalidad].filter(Boolean).join(' · ')));
+ if(!equiposTorneo.length){
+   contexto.innerHTML='<b>Este torneo todavía no tiene equipos competitivos inscriptos.</b> Cargalos desde Equipos antes de armar una jornada.';
+   document.getElementById('agregar').disabled=true;document.getElementById('guardar').disabled=true;return;
+ }
+ const tSel=torneosActivos.find(x=>String(x.id)===String(torneo.value));
+ contexto.innerHTML=`<b>${esc(tSel?.nombre||'Torneo seleccionado')}</b> · <b>${equiposTorneo.length}</b> equipo(s) competitivo(s) disponibles${combinaciones.length?' · '+esc(combinaciones.join(' | ')):''}.`;
+ document.getElementById('agregar').disabled=false;
+ document.getElementById('guardar').disabled=equiposTorneo.length<2;
+
+ // Si venimos de un partido donde no se presentó ninguno, abrimos una nueva
+ // oportunidad ya prearmada. El partido original permanece FINALIZADO y no se borra.
+ const eqsRepro=equiposDe(reprogramacion.categoria,reprogramacion.modalidad);
+ const resolverRepro=(v)=>{const porEtiqueta=eqsRepro.filter(e=>etiquetaEquipo(e,eqsRepro)===v);if(porEtiqueta.length===1)return porEtiqueta[0];const porNombre=eqsRepro.filter(e=>e.nombre===v);return porNombre.length===1?porNombre[0]:null;};
+ const reproA=resolverRepro(reprogramacion.equipoA),reproB=resolverRepro(reprogramacion.equipoB);
+ const reproValida=reprogramacion.activa && reproA && reproB && String(reproA.id)!==String(reproB.id);
+ if(reproValida){
+   filas=[{categoria:reprogramacion.categoria,modalidad:reprogramacion.modalidad,equipoA:reproA.id,equipoB:reproB.id,hora:'',sedeId:'',cancha:''}];
+   document.getElementById('jn').value='Nueva oportunidad';
+   render();
+   msg.className='msg info';
+   msg.textContent='Nueva oportunidad preparada para '+etiquetaEquipo(reproA,eqsRepro)+' vs '+etiquetaEquipo(reproB,eqsRepro)+'. Elegí fecha, hora y cancha y guardá la jornada. El N/P anterior se conserva.';
+ }else{
+   add();
+   if(reprogramacion.activa){
+     msg.className='msg err';
+     msg.textContent='No se pudo prearmar la nueva oportunidad porque los equipos ya no coinciden con la categoría/modalidad de este torneo.';
+   }
+ }
+ if(equiposTorneo.length<2){msg.className='msg info';msg.textContent='Hay un solo equipo inscripto en este torneo. Podés verificarlo acá, pero necesitás al menos dos equipos de la misma categoría/modalidad para crear un partido.';}
+ recuperarLocalJornada();
+}
+
+(async()=>{
+ const r=await NewcomSupabase.listarTorneos();
+ if(!r.ok){torneo.innerHTML=`<option>Error: ${esc(errHumano(r.error))}</option>`;return;}
+ torneosActivos=r.data.filter(t=>t.estado==='ACTIVO');
+ torneo.innerHTML=torneosActivos.map(t=>`<option value="${esc(t.id)}">${esc(t.nombre)}</option>`).join('');
+ const q=params.get('torneo');if(q&&torneosActivos.some(t=>String(t.id)===String(q)))torneo.value=q;
+ await cargarEquiposDelTorneo();
+})();
+torneo.onchange=cargarEquiposDelTorneo;document.getElementById('jn').addEventListener('input',guardarLocalJornada);document.getElementById('fecha').addEventListener('change',guardarLocalJornada);
+
+document.getElementById('guardar').onclick=async()=>{
+ msg.className='';
+ const vf=validarFechaJornada(document.getElementById('fecha').value);if(!vf.ok){msg.className='msg err';msg.textContent=vf.error;return;}
+ if(!filas.length){msg.className='msg err';msg.textContent='Agregá al menos un partido.';return;}
+ const partidosGuardar=[];
+ for(const f of filas){
+   const a=equipoPorId(f.equipoA),bEq=equipoPorId(f.equipoB),universo=equiposDe(f.categoria,f.modalidad);
+   if(!f.categoria||!f.modalidad||!a||!bEq||String(a.id)===String(bEq.id)){msg.className='msg err';msg.textContent='Revisá categoría, modalidad y equipos de todos los partidos.';return;}
+   if(a.categoria!==f.categoria||bEq.categoria!==f.categoria||a.modalidad!==f.modalidad||bEq.modalidad!==f.modalidad){msg.className='msg err';msg.textContent='Uno de los equipos ya no corresponde a la categoría/modalidad seleccionada.';return;}
+   partidosGuardar.push({...f,equipoA:etiquetaEquipo(a,universo),equipoB:etiquetaEquipo(bEq,universo),equipoAId:a.id,equipoBId:bEq.id});
+ }
+ const b=document.getElementById('guardar');b.disabled=true;
+ const r=await NewcomSupabase.crearJornadaConPartidos(torneo.value,document.getElementById('jn').value,document.getElementById('fecha').value,partidosGuardar);
+ if(r.ok){NewcomAutosave.clear(claveBorradorJornada());msg.className='msg ok';msg.innerHTML=`<b>Jornada guardada en Supabase.</b> Se crearon ${r.partidos.length} partido(s).`;filas=[];add();actualizarLinks();}
+ else{msg.className='msg err';msg.textContent='No se pudo guardar: '+errHumano(r.error);}
+ b.disabled=equiposTorneo.length<2;
+};
+</script><script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

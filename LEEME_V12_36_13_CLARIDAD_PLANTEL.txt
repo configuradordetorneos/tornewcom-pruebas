@@ -1,0 +1,8 @@
+TorNewcom V12.36.13 LOCAL
+
+Cambio acotado de comunicación conceptual para Responsable:
+- En Mis instituciones, el botón de plantel muestra la institución: Plantel — NOMBRE.
+- En jugadores.html, el encabezado y el título del listado muestran: Plantel de NOMBRE.
+- Debajo del título se informa el torneo actual.
+
+No se modificó Supabase, tablas, jugadores, asignaciones, permisos ni navegación funcional.

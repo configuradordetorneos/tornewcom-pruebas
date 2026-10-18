@@ -1,0 +1,12 @@
+TORNEWCOM V12.36.3 - RECUPERACION DE CONTRASENA - CANDIDATA LOCAL
+
+Base: V12.36.1 estable consolidada.
+Cambio unico: deteccion del flujo PASSWORD_RECOVERY en nueva_password.html / supabase_v12_24.js.
+No modifica Supabase, datos, roles, torneos, planteles, partidos ni otras pantallas.
+
+Prueba requerida:
+1. Abrir recuperar_password.html desde Go Live.
+2. Pedir UN enlace nuevo.
+3. Abrir el enlace recibido.
+4. Debe aparecer el formulario Nueva contrasena.
+5. Cambiar clave e iniciar sesion con la nueva clave.

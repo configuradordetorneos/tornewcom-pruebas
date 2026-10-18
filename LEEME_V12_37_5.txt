@@ -1,0 +1,15 @@
+TORNEWCOM V12.37.5 CANDIDATA — RECUPERACIÓN DE CONTRASEÑA
+
+Cambios de esta versión:
+- recuperar_password.html: texto simplificado; no muestra vencimiento.
+- nueva_password.html: título "Recuperación de contraseña", diseño alineado con Crear cuenta, campos Nueva contraseña / Repetir contraseña / Mostrar contraseña.
+- acceso_real.html: si Supabase devuelve un enlace inválido, se muestra un mensaje humano y un enlace para solicitar uno nuevo; no se muestra otp_expired al usuario.
+
+IMPORTANTE — SUPABASE:
+En Authentication > URL Configuration > Redirect URLs agregar exactamente:
+http://127.0.0.1:5500/nueva_password.html
+
+Para producción, antes del deploy agregar también:
+https://tornewcom.netlify.app/nueva_password.html
+
+No se requiere SQL.

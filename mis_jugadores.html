@@ -1,0 +1,141 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mis jugadores / Bolsa — TorNewcom</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7fa;color:#243746}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:1100px;margin:28px auto;padding:0 16px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.btn,button{border:0;border-radius:9px;padding:10px 14px;background:#4A90C2;color:#fff;font-weight:700;text-decoration:none;cursor:pointer;display:inline-block}.secondary{background:#6c7f8d}.danger{background:#8b4b4b}.card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 18px rgba(32,72,98,.08)}h1,h2{margin-top:0}.intro{color:#607887}.grid{display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:12px;align-items:end}label{display:block;font-size:12px;font-weight:700;color:#2F5D7E;margin-bottom:5px}input,select,textarea{width:100%;padding:11px;border:1px solid #bdcbd5;border-radius:9px;font:inherit}textarea{min-height:90px;resize:vertical}.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.toolbar select{width:auto;min-width:190px}.msg{padding:12px;border-radius:9px;background:#EAF4FB;margin-top:12px}.err{background:#faecec;color:#7b2c2c}.ok{background:#e8f5ee;color:#245d39}.warn{background:#fff4dd;color:#795f22}.context{border-left:4px solid #4A90C2;background:#f6fafc;padding:12px 14px;border-radius:8px;margin:12px 0}.status{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}.open{background:#e8f5ee;color:#245d39}.closed{background:#faecec;color:#7b2c2c}.playerList{display:grid;gap:9px;margin-top:14px}.player{display:grid;grid-template-columns:auto 1.45fr 1fr .8fr 1fr auto;gap:12px;align-items:center;border:1px solid #dce5eb;border-radius:12px;padding:12px;background:#fbfdfe;position:relative}.playerActions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.miniBtn{padding:7px 9px;font-size:12px;border-radius:8px}.editBtn{background:#4A90C2}.removeBtn{background:#8b4b4b}.player input[type=checkbox]{width:20px;height:20px}.player.noContext{cursor:help}.player.noContext::after{content:attr(data-help);position:absolute;left:18px;bottom:calc(100% + 8px);max-width:min(390px,calc(100vw - 48px));padding:10px 12px;border-radius:9px;background:#243746;color:#fff;font-size:12px;font-weight:700;line-height:1.35;box-shadow:0 5px 16px rgba(0,0,0,.18);opacity:0;transform:translateY(4px);pointer-events:none;transition:.15s ease;z-index:30}.player.noContext::before{content:'';position:absolute;left:34px;bottom:100%;border:7px solid transparent;border-top-color:#243746;opacity:0;pointer-events:none;transition:.15s ease;z-index:31}.player.noContext:hover::after,.player.noContext:focus::after,.player.noContext:hover::before,.player.noContext:focus::before{opacity:1;transform:translateY(0)}.muted{color:#6b7f8c;font-size:12px}.name{font-weight:800}.player.ageWarning{border-color:#d6b26a;background:#fffaf0}.ageFlag{color:#795f22;font-weight:800}.actionBox{margin-top:18px;padding:16px;border:1px solid #dce5eb;border-radius:12px;background:#f9fbfc}.actionRow{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;align-items:end}.count{font-weight:800;color:#2F5D7E}.hidden{display:none!important}.contextPick{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:14px}.contextPick select{max-width:620px}
+@media(max-width:760px){.grid,.actionRow{grid-template-columns:1fr 1fr}.player{grid-template-columns:auto 1fr}.player .extra,.player .playerActions{grid-column:2}.playerActions{justify-content:flex-start}}
+@media(max-width:520px){.grid,.actionRow{grid-template-columns:1fr}.player{grid-template-columns:auto 1fr}}
+</style>
+<script src="legal_v12_33.js?v=12.35" defer></script></head><body>
+<div class="top"><b>TORNEWCOM — Mis jugadores / Bolsa</b></div>
+<div class="wrap">
+  <div class="nav"><a class="btn secondary" href="index.html">← Inicio</a><a class="btn secondary" id="volverPlantel" href="jugadores.html">Lista de participación</a><a class="btn secondary" id="irSolicitudes" href="solicitudes_lista.html?modo=responsable">Solicitudes de cambios</a></div>
+  <div class="card"><h1>Mis jugadores</h1><p class="intro"><b>Esta es tu Bolsa de jugadores permanente.</b> Los cargás una sola vez y después elegís cuáles participan en cada torneo.</p>
+    <div class="contextPick"><label for="asignacionContexto">Usar la Bolsa en torneo / institución</label><select id="asignacionContexto"><option value="">Elegí torneo e institución…</option></select><div class="muted">Al elegir un torneo se habilitan las acciones para incorporar jugadores a sus equipos.</div></div>
+    <div id="contexto" class="context hidden"></div></div>
+
+  <div class="card" id="altaCard">
+    <h2 id="tituloAlta">Agregar jugador a la Bolsa</h2>
+    <div class="grid"><div><label>Nombre y apellido</label><input id="nombre"></div><div><label>DNI</label><input id="dni" inputmode="numeric" autocomplete="off" placeholder="Solo números"></div><div><label>Fecha de nacimiento</label><input id="nac" type="date"></div><div><label>Posición</label><select id="pos"><option>Zaguero</option><option>Delantero</option><option>Líbero</option></select></div></div>
+    <p><button id="guardarMaestro">Guardar en la Bolsa</button> <button id="cancelarEdicion" class="secondary hidden" type="button">Cancelar edición</button></p><div id="notaEdicion" class="muted hidden">Editar corrige los datos de la Bolsa. No quita al jugador de torneos, equipos ni historial donde ya figure.</div><div id="msgAlta"></div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar"><div><h2 style="margin-bottom:4px">Bolsa de jugadores</h2><div class="muted" id="resumen">Cargando…</div></div><div><label>Orden</label><select id="orden"><option value="AZ">Alfabético A–Z</option><option value="EDAD">Edad (mayor a menor)</option></select></div></div>
+    <div id="ayudaSeleccion" class="hidden"></div><div id="msgBolsa"></div>
+    <div id="lista" class="playerList"></div>
+
+    <div id="accionTorneo" class="actionBox hidden">
+      <div class="actionRow"><div><label>Equipo</label><select id="equipo"></select></div><div><span id="estadoPlantel" class="status"></span></div></div>
+      <div id="motivoWrap" class="hidden" style="margin-top:12px"><label>Motivo de la solicitud (máximo 300 palabras)</label><textarea id="motivo" placeholder="Explicá brevemente por qué necesitás incorporar al jugador con la lista cerrada."></textarea></div>
+      <p><span class="count" id="selCount">0 seleccionados</span></p>
+      <button id="accionSeleccionados">Agregar seleccionados al torneo</button>
+      <div id="msgAccion"></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script src="roles_v12_24.js?v=12.35"></script><script src="autosave_v12_26.js"></script>
+<script>
+const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search);const sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);let jugadores=[],jugadoresTorneo=[],asignaciones=[],torneoId=qs.get('torneo')||'',instId=qs.get('institucion')||'',equipoInicial=qs.get('equipo')||'',institucion=null,equipos=[],reglas=[],responsableFiltro=null,jugadorEditandoId=null,puedeGestionarBolsa=false;
+const ayudaContextoTexto='Para habilitar las casillas de selección, primero elegí un torneo e institución arriba.';
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function edad(f){if(!f)return'';const n=new Date(f+'T12:00:00'),h=new Date();let e=h.getFullYear()-n.getFullYear();if(h.getMonth()<n.getMonth()||(h.getMonth()===n.getMonth()&&h.getDate()<n.getDate()))e--;return e}
+function edadEn(f,ref){if(!f||!ref)return'';const n=new Date(f+'T12:00:00'),h=new Date(ref+'T12:00:00');if(Number.isNaN(n.getTime())||Number.isNaN(h.getTime()))return'';let e=h.getFullYear()-n.getFullYear();if(h.getMonth()<n.getMonth()||(h.getMonth()===n.getMonth()&&h.getDate()<n.getDate()))e--;return e}
+function msg(id,t,tipo=''){const e=$(id);e.className='msg '+tipo;e.textContent=t}
+function isoLocal(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dia=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${dia}`}
+function limitesNacimiento(){const hoy=new Date(),min=new Date(hoy.getFullYear()-100,hoy.getMonth(),hoy.getDate());return{min:isoLocal(min),max:isoLocal(hoy)}}
+function validarDniEntrada(v){const raw=String(v||'').trim();if(!raw)return{ok:false,error:'Ingresá el DNI.'};if(!/^[0-9.\s]+$/.test(raw))return{ok:false,error:'El DNI debe contener solo números. Podés usar puntos o espacios como separadores.'};const dni=raw.replace(/[.\s]/g,'');if(!/^\d+$/.test(dni))return{ok:false,error:'El DNI debe contener solo números.'};if(dni.length<7||dni.length>8)return{ok:false,error:'El DNI debe tener 7 u 8 dígitos.'};return{ok:true,dni,aviso7:dni.length===7}}
+function validarNacimiento(v){if(!v)return{ok:false,error:'Ingresá la fecha de nacimiento.'};const lim=limitesNacimiento();if(v<lim.min)return{ok:false,error:'La fecha de nacimiento no puede corresponder a una persona mayor de 100 años.'};if(v>lim.max)return{ok:false,error:'La fecha de nacimiento no puede ser futura.'};return{ok:true}}
+function claveBorradorJugador(){return NewcomAutosave.key('jugador_maestro',{usuario:String(sesion?.email||'').trim().toLowerCase()})}
+function guardarLocalJugador(){if(jugadorEditandoId||!window.NewcomAutosave||$('altaCard').classList.contains('hidden'))return;NewcomAutosave.schedule(claveBorradorJugador(),()=>{const d={nombre:$('nombre').value,dni:$('dni').value,nac:$('nac').value,pos:$('pos').value};if(!d.nombre&&!d.dni&&!d.nac)return{__empty:true};return d})}
+function recuperarLocalJugador(){if(jugadorEditandoId||!window.NewcomAutosave||$('altaCard').classList.contains('hidden'))return;const d=NewcomAutosave.offer(claveBorradorJugador());if(!d)return;$('nombre').value=d.nombre||'';$('dni').value=d.dni||'';$('nac').value=d.nac||'';if(d.pos)$('pos').value=d.pos;msg('msgAlta','Carga de jugador recuperada desde el autoguardado local.','warn')}
+function esOrg(){return !!(sesion&&(NewcomRoles.esAdmin(sesion)||NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR')))}
+function reglaEquipo(eq){return reglas.find(r=>r.id===eq?.categoria_torneo_id)||reglas.find(r=>String(r.categoria||'').trim().toLowerCase()===String(eq?.categoria||'').trim().toLowerCase()&&String(r.modalidad||'').trim().toLowerCase()===String(eq?.modalidad||'').trim().toLowerCase())}
+function evaluarEdadEquipo(eq,j){const r=reglaEquipo(eq);if(!eq||!j)return{aviso:false,texto:''};if(!r)return{aviso:true,fuera:true,texto:'⚠ Sin regla de edad configurada. Se permitirá continuar y el Organizador deberá revisarlo.'};const e=edadEn(j.fecha_nacimiento,r.fecha_referencia);const min=Number(r.edad_minima);if(e===''||!Number.isFinite(min))return{aviso:true,fuera:true,texto:'⚠ No se pudo validar la edad con la regla de esta categoría.'};if(e>=min)return{aviso:false,fuera:false,edad:e,texto:`✓ ${e} años · cumple la edad mínima (+${min})`};const exc=!!r.excepcion_edad_habilitada,minExc=Number(r.edad_minima_excepcion);if(exc&&Number.isFinite(minExc)&&e>=minExc)return{aviso:true,fuera:false,edad:e,texto:`⚠ ${e} años · por debajo de +${min}, dentro del rango de excepción. El sistema verificará el cupo al incorporarlo.`};return{aviso:true,fuera:true,edad:e,texto:`⚠ ${e} años · FUERA DE LA REGLA DE EDAD (+${min}). Podés continuar; se generará una alerta al Organizador.`}}
+function cerrado(eq){const r=reglaEquipo(eq);return !!(r?.cierre_plantel_en&&new Date()>=new Date(r.cierre_plantel_en))}
+function actualizarEstado(){const eq=equipos.find(e=>e.id===$('equipo').value);if(!eq)return;const c=cerrado(eq);$('estadoPlantel').className='status '+(c?'closed':'open');$('estadoPlantel').textContent=c?'🔒 LISTA DE PARTICIPACIÓN CERRADA':'● LISTA DE PARTICIPACIÓN ABIERTA';$('motivoWrap').classList.toggle('hidden',!c);$('accionSeleccionados').textContent=c?'Solicitar altas seleccionadas':'Agregar seleccionados a la lista'}
+function seleccionados(){return [...document.querySelectorAll('.chkJugador:checked')].map(x=>x.value)}
+function actualizarCount(){const n=seleccionados().length;$('selCount').textContent=n+' seleccionado'+(n===1?'':'s')}
+function avisarEdadSeleccion(){const eq=equipos.find(e=>e.id===$('equipo').value);if(!eq)return;const obs=seleccionados().map(id=>{const j=jugadores.find(x=>x.id===id);return j?{j,ev:evaluarEdadEquipo(eq,j)}:null}).filter(x=>x&&x.ev.aviso);if(obs.length){const primero=obs[0],extra=obs.length>1?` · y ${obs.length-1} jugador${obs.length-1===1?'':'es'} más`:'';msg('msgAccion',`${primero.j.nombre_apellido}: ${primero.ev.texto}${extra}`,'warn');$('msgAccion').dataset.avisoEdad='1'}else if($('msgAccion').dataset.avisoEdad==='1'){$('msgAccion').className='';$('msgAccion').textContent='';delete $('msgAccion').dataset.avisoEdad}}
+function dniNorm(v){return String(v||'').replace(/\D/g,'')}
+function render(){
+ const ord=$('orden').value;
+ const arr=[...jugadores].sort((a,b)=>ord==='EDAD'?(edad(b.fecha_nacimiento)-edad(a.fecha_nacimiento)):a.nombre_apellido.localeCompare(b.nombre_apellido,'es'));
+ const idsEquiposActuales=new Set(equipos.map(e=>e.id));
+ const participantes=jugadoresTorneo.filter(j=>(j.jugador_equipos||[]).some(a=>idsEquiposActuales.has(a.equipo_competitivo_id)));
+ const idsParticipan=new Set(participantes.map(j=>j.jugador_maestro_id).filter(Boolean));
+ const dnisParticipan=new Set(participantes.map(j=>dniNorm(j.dni)).filter(Boolean));
+ const disponible=j=>!(idsParticipan.has(j.id)||dnisParticipan.has(dniNorm(j.dni)));
+ const hayContexto=!!(torneoId&&instId);
+ const disponibles=hayContexto?arr.filter(disponible):arr;
+ $('ayudaSeleccion').className='hidden';$('ayudaSeleccion').textContent='';
+ if(hayContexto){
+   $('resumen').textContent=`${arr.length} jugador${arr.length===1?'':'es'} en tu Bolsa · ${disponibles.length} disponible${disponibles.length===1?'':'s'} para ALTA en este torneo`;
+ }else{
+   $('resumen').textContent=`${arr.length} jugador${arr.length===1?'':'es'} en tu Bolsa`;
+ }
+ if(!arr.length){$('lista').innerHTML='<div class="muted">Todavía no hay jugadores en esta Bolsa.</div>';return}
+ const eqActual=equipos.find(e=>e.id===$('equipo').value);
+ $('lista').innerHTML=arr.map(j=>{
+   const disp=!hayContexto||disponible(j);
+   const ev=(disp&&eqActual)?evaluarEdadEquipo(eqActual,j):{aviso:false,texto:''};
+   const estado=!hayContexto?'En tu Bolsa':(!disp?'Ya participa en este torneo':(ev.aviso?ev.texto:'Disponible para ALTA'));
+   const check=hayContexto?`<input class="chkJugador" type="checkbox" value="${j.id}" ${disp?'':'disabled'}>`:'<span style="width:20px"></span>';
+   const ayuda=!hayContexto?` noContext" data-help="${esc(ayudaContextoTexto)}" tabindex="0" aria-label="${esc(ayudaContextoTexto)}`:'';
+   const acciones=puedeGestionarBolsa?`<div class="playerActions"><button type="button" class="miniBtn editBtn jsEditarJugador" data-id="${j.id}">Editar</button><button type="button" class="miniBtn removeBtn jsQuitarBolsa" data-id="${j.id}">Quitar de la Bolsa</button></div>`:'<div></div>';
+   return `<div class="player ${disp&&ev.aviso?'ageWarning':''}${ayuda}" style="${disp?'':'opacity:.72'}">${check}<div><div class="name">${esc(j.nombre_apellido)}</div><div class="muted">DNI ${esc(j.dni)}</div></div><div class="extra">${esc(j.fecha_nacimiento)} · ${edad(j.fecha_nacimiento)} años</div><div class="extra">${esc(j.posicion)}</div><div class="extra ${disp&&ev.aviso?'ageFlag':'muted'}">${esc(estado)}</div>${acciones}</div>`;
+ }).join('');
+ document.querySelectorAll('.chkJugador:not(:disabled)').forEach(x=>x.onchange=()=>{actualizarCount();avisarEdadSeleccion()});
+ document.querySelectorAll('.jsEditarJugador').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();iniciarEdicionJugador(b.dataset.id)});
+ document.querySelectorAll('.jsQuitarBolsa').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();quitarJugadorBolsa(b.dataset.id)});
+ document.querySelectorAll('.player.noContext').forEach(x=>{const mostrar=()=>msg('ayudaSeleccion',ayudaContextoTexto,'warn');x.onclick=mostrar;x.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mostrar()}}});
+ actualizarCount();
+}
+function limpiarFormularioMaestro(){jugadorEditandoId=null;['nombre','dni','nac'].forEach(id=>$(id).value='');$('pos').value='Zaguero';$('tituloAlta').textContent='Agregar jugador a la Bolsa';$('guardarMaestro').textContent='Guardar en la Bolsa';$('cancelarEdicion').classList.add('hidden');$('notaEdicion').classList.add('hidden')}
+function iniciarEdicionJugador(id){if(!puedeGestionarBolsa)return;const j=jugadores.find(x=>x.id===id);if(!j)return;jugadorEditandoId=id;$('nombre').value=j.nombre_apellido||'';$('dni').value=j.dni||'';$('nac').value=j.fecha_nacimiento||'';$('pos').value=j.posicion||'Zaguero';$('tituloAlta').textContent='Editar jugador de la Bolsa';$('guardarMaestro').textContent='Guardar cambios';$('cancelarEdicion').classList.remove('hidden');$('notaEdicion').classList.remove('hidden');$('msgAlta').className='';$('msgAlta').textContent='';$('altaCard').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('nombre').focus(),250)}
+function cancelarEdicionJugador(){limpiarFormularioMaestro();$('msgAlta').className='';$('msgAlta').textContent=''}
+async function jugadorIntegraListaParticipacion(jugador){
+ if(!jugador?.id||!asignaciones.length)return false;
+ const dni=dniNorm(jugador.dni);
+ const rs=await Promise.all(asignaciones.map(a=>NewcomSupabase.listarJugadoresParticipantesInstitucion(a.torneo_id,a.id)));
+ return rs.some(r=>r.ok&&(r.data||[]).some(x=>(x.jugador_maestro_id===jugador.id||(dni&&dniNorm(x.dni)===dni))&&(x.jugador_equipos||[]).length));
+}
+async function quitarJugadorBolsa(id){if(!puedeGestionarBolsa)return;const j=jugadores.find(x=>x.id===id);if(!j)return;const participa=await jugadorIntegraListaParticipacion(j);const detalle=participa?`
+
+Este jugador todavía integra una Lista de participación. Quitar de la Bolsa NO lo elimina del torneo ni del equipo.
+
+Si esa lista está cerrada, para retirarlo debés solicitar la BAJA correspondiente. Si está abierta, hacelo desde "Lista de participación".`:`
+
+Dejará de aparecer para nuevas altas. No se borrará ningún historial previo.`;const ok=window.confirm(`¿Quitar a ${j.nombre_apellido} de tu Bolsa?${detalle}`);if(!ok)return;const r=await NewcomSupabase.desactivarJugadorMaestro(id);if(!r.ok){msg('msgBolsa',errHumano(r.error,'jugador_bolsa'),'err');return}if(jugadorEditandoId===id)limpiarFormularioMaestro();msg('msgBolsa',`${j.nombre_apellido} fue quitado de la Bolsa. Sus participaciones e historial se conservan.`,'ok');await cargarJugadores()}
+function errHumano(e,c=''){return window.NewcomSupabase?.mensajeErrorHumano?NewcomSupabase.mensajeErrorHumano(e,c):String(e||'No se pudo completar la operación.')}
+async function cargarAsignacionesContexto(){
+ const sel=$('asignacionContexto');
+ const r=await NewcomSupabase.listarAsignacionesResponsable(sesion?.email||'');
+ if(!r.ok){sel.innerHTML='<option value="">No se pudieron cargar tus torneos</option>';return}
+ asignaciones=(r.data||[]).filter(a=>a.torneo?.estado!=='ARCHIVADO');
+ sel.innerHTML='<option value="">Elegí torneo e institución…</option>'+asignaciones.map(a=>`<option value="${a.id}">${esc(a.torneo?.nombre||'Torneo')} — ${esc(a.nombre)}</option>`).join('');
+ let elegida=asignaciones.find(a=>a.id===instId&&(!torneoId||a.torneo_id===torneoId));
+ if(!elegida&&asignaciones.length===1)elegida=asignaciones[0];
+ if(elegida){instId=elegida.id;torneoId=elegida.torneo_id;sel.value=elegida.id;history.replaceState(null,'',`mis_jugadores.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`)}
+}
+async function cargarContexto(){if(!torneoId||!instId){$('accionTorneo').classList.add('hidden');return}const [ri,re,rr,rj]=await Promise.all([NewcomSupabase.obtenerInstitucion(instId),NewcomSupabase.listarEquiposCompetitivos(torneoId,instId),NewcomSupabase.listarCategoriasTorneo(torneoId,false),NewcomSupabase.listarJugadoresParticipantesInstitucion(torneoId,instId)]);if(!ri.ok){msg('msgAccion',ri.error,'err');return}institucion=ri.data;responsableFiltro=institucion.responsable_usuario_id||null;equipos=re.ok?(re.data||[]):[];reglas=rr.ok?(rr.data||[]):[];jugadoresTorneo=rj.ok?(rj.data||[]):[];$('contexto').classList.remove('hidden');$('contexto').innerHTML=`<b>${esc(institucion.nombre)}</b> · Esta Bolsa es permanente. Elegí solamente jugadores disponibles para incorporarlos a la lista de participación.`;$('accionTorneo').classList.remove('hidden');$('volverPlantel').href=`jugadores.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`;$('irSolicitudes').href=`solicitudes_lista.html?modo=responsable&torneo=${encodeURIComponent(torneoId)}`;$('equipo').innerHTML=equipos.map(e=>`<option value="${e.id}">${esc(e.nombre)} — ${esc(e.categoria)} ${esc(e.modalidad)}</option>`).join('');if(equipoInicial&&equipos.some(e=>e.id===equipoInicial))$('equipo').value=equipoInicial;actualizarEstado()}
+async function cargarJugadores(){let filtro=null;if(esOrg()&&responsableFiltro)filtro=responsableFiltro;else{const u=await NewcomSupabase.usuarioAuth();filtro=u?.id||null}const r=await NewcomSupabase.listarJugadoresMaestros(filtro,true);if(!r.ok){$('lista').innerHTML='<div class="msg err">'+esc(errHumano(r.error))+'</div>';return}jugadores=r.data||[];render()}
+async function inicio(){if(!sesion)return;await cargarAsignacionesContexto();await cargarContexto();puedeGestionarBolsa=!!sesion.tiene_responsabilidades&&!esOrg();if(!puedeGestionarBolsa)$('altaCard').classList.add('hidden');else recuperarLocalJugador();await cargarJugadores()}
+const limNac=limitesNacimiento();$('nac').min=limNac.min;$('nac').max=limNac.max;
+['nombre','dni','nac'].forEach(id=>$(id).addEventListener('input',guardarLocalJugador));$('pos').addEventListener('change',guardarLocalJugador);
+$('cancelarEdicion').onclick=cancelarEdicionJugador;
+$('asignacionContexto').onchange=async()=>{const a=asignaciones.find(x=>x.id===$('asignacionContexto').value);if(!a){torneoId='';instId='';equipoInicial='';institucion=null;equipos=[];reglas=[];jugadoresTorneo=[];$('contexto').classList.add('hidden');$('accionTorneo').classList.add('hidden');history.replaceState(null,'','mis_jugadores.html');render();return}instId=a.id;torneoId=a.torneo_id;equipoInicial='';history.replaceState(null,'',`mis_jugadores.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`);await cargarContexto();await cargarJugadores()};$('orden').onchange=render;$('equipo').onchange=()=>{actualizarEstado();render();if($('msgAccion').dataset.avisoEdad==='1'){$('msgAccion').className='';$('msgAccion').textContent='';delete $('msgAccion').dataset.avisoEdad}};
+$('guardarMaestro').onclick=async()=>{
+ const nombre=$('nombre').value.trim();
+ if(!nombre){msg('msgAlta','Completá nombre y apellido.','err');return}
+ const vd=validarDniEntrada($('dni').value);if(!vd.ok){msg('msgAlta',vd.error,'err');return}
+ if(vd.aviso7&&!window.confirm('El DNI ingresado tiene 7 dígitos. Verificá que esté completo.\n\nAceptar = confirmar y guardar.\nCancelar = volver a revisarlo.'))return;
+ const vn=validarNacimiento($('nac').value);if(!vn.ok){msg('msgAlta',vn.error,'err');return}
+ const d={nombre_apellido:nombre,dni:vd.dni,fecha_nacimiento:$('nac').value,posicion:$('pos').value};
+ const editando=jugadorEditandoId;
+ const r=editando?await NewcomSupabase.actualizarJugadorMaestro(editando,d):await NewcomSupabase.crearJugadorMaestro(d);if(!r.ok){msg('msgAlta',errHumano(r.error,'jugador_bolsa'),'err');return}
+ NewcomAutosave.clear(claveBorradorJugador());limpiarFormularioMaestro();msg('msgAlta',editando?'Datos actualizados en la Bolsa. El jugador no fue quitado de los torneos o equipos donde ya figura.':'Jugador guardado en tu Bolsa de jugadores.','ok');await cargarJugadores()};
+$('accionSeleccionados').onclick=async()=>{const ids=seleccionados();if(!ids.length){msg('msgAccion','Seleccioná al menos un jugador.','err');return}const eq=equipos.find(e=>e.id===$('equipo').value);if(!eq){msg('msgAccion','Seleccioná un equipo.','err');return}const c=cerrado(eq),motivo=$('motivo').value.trim();if(c&&!motivo){msg('msgAccion','El motivo es obligatorio porque la lista de participación está cerrada.','err');return}const observados=ids.map(id=>{const j=jugadores.find(x=>x.id===id);return j?{j,ev:evaluarEdadEquipo(eq,j)}:null}).filter(x=>x&&x.ev.aviso);if(observados.length){const fuera=observados.filter(x=>x.ev.fuera).length;const resumen=observados.slice(0,3).map(x=>`${x.j.nombre_apellido}: ${x.ev.texto.replace(/^⚠\s*/, '')}`).join('\n');const mas=observados.length>3?`\n… y ${observados.length-3} más.`:'';const consecuencia=c?'La solicitud se enviará igualmente. Al aplicarse el alta, el sistema evaluará la regla y generará la alerta correspondiente si queda fuera de edad.':'Se incorporará igualmente. El sistema aplicará la regla configurada y generará una alerta al Organizador cuando corresponda.';if(!confirm(`${fuera?`Hay ${fuera} jugador${fuera===1?'':'es'} fuera de la regla de edad. `:''}${observados.length-fuera?`${observados.length-fuera} queda${observados.length-fuera===1?'':'n'} dentro del rango de excepción y se verificará el cupo. `:''}\n${resumen}${mas}\n\n${consecuencia}\n\n¿Continuar?`))return}let ok=0,errores=[];const rol=esOrg()?'ORGANIZADOR':'RESPONSABLE';for(const id of ids){let r;if(c)r=await NewcomSupabase.crearSolicitudListaCerrada({equipo_origen_id:eq.id,jugador_id:null,jugador_maestro_id:id,accion:'ALTA',motivo,equipo_destino_id:null,solicitante_rol:rol});else r=await NewcomSupabase.agregarJugadorMaestroEquipoAbierto(id,eq.id);if(r.ok)ok++;else errores.push(errHumano(r.error,'jugador_bolsa'))}if(errores.length){msg('msgAccion',`${ok} procesado(s). Error: ${errores[0]}`,'warn')}else msg('msgAccion',c?(rol==='RESPONSABLE'?`${ok} solicitud(es) enviada(s) al Organizador.`:`${ok} solicitud(es) enviada(s) al Responsable.`):`${ok} jugador(es) incorporado(s) a la lista de participación.`,'ok');document.querySelectorAll('.chkJugador').forEach(x=>x.checked=false);actualizarCount()};
+inicio();
+</script><script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

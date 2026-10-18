@@ -1,0 +1,49 @@
+TORNEWCOM V12.36.16 CANDIDATA — SOLICITUDES BILATERALES
+========================================================
+
+BASE: V12.36.14 estable.
+DESTINO: SOLO tornewcom-test + Go Live local. NO PRODUCCIÓN.
+
+OBJETIVO
+- Lista abierta: funcionamiento actual.
+- Lista cerrada: no hay cambios directos.
+- Responsable solicita -> Organizador autoriza/rechaza.
+- Organizador solicita -> Responsable autoriza/rechaza.
+- Al AUTORIZAR, el cambio se aplica en la misma operación y queda registrado.
+- El solicitante nunca puede autorizar su propia solicitud.
+
+NAVEGACIÓN
+- Responsable: llega desde MIS EQUIPOS > SOLICITAR CAMBIO en equipos cerrados.
+- Organizador: también puede iniciar desde la lista de equipos cerrados.
+- Organizador: nueva tarjeta global SOLICITUDES con contador pendiente.
+- Responsable: NO tiene dashboard global. Solo recibe un aviso cuando el Organizador necesita su aprobación.
+
+IMPORTANTE
+Esta candidata NO redefine Plantel General ni Bolsa de jugadores.
+Prueba únicamente el circuito de autorización sobre la estructura actual.
+Para ALTA, el jugador debe existir ya en la institución/torneo actual; ampliar ALTA desde un plantel maestro queda fuera de este bloque.
+
+ORDEN DE PRUEBA
+1) Ejecutar SQL_PRECHECK_V12_36_16.sql en tornewcom-test.
+2) Enviar el resultado a ChatGPT. NO ejecutar todavía SQL_APLICAR.
+3) Si el precheck está bien, ejecutar SQL_APLICAR_V12_36_16.sql.
+4) Abrir esta carpeta con VS Code > Go Live.
+5) Probar primero Responsable -> Mis equipos -> equipo CERRADO -> Solicitar cambio.
+6) Entrar como Organizador -> tarjeta Solicitudes -> Autorizar/Rechazar.
+7) Probar el flujo inverso: Organizador solicita -> Responsable recibe alerta -> Autorizar/Rechazar.
+
+ROLLBACK
+SQL_ROLLBACK_V12_36_16.sql elimina SOLO:
+- tabla solicitudes_lista_cerrada
+- funciones nuevas del módulo
+No toca jugadores, equipos, torneos, solicitudes viejas ni producción.
+
+ARCHIVOS FUNCIONALES NUEVOS/MODIFICADOS
+- solicitudes_lista.html (nuevo)
+- solicitudes_plantel.html (redirige al módulo nuevo)
+- equipos.html
+- index.html
+- supabase_v12_24.js
+- SQL_PRECHECK_V12_36_16.sql
+- SQL_APLICAR_V12_36_16.sql
+- SQL_ROLLBACK_V12_36_16.sql

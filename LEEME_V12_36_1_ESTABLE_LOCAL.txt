@@ -1,0 +1,31 @@
+TORNEWCOM V12.36.1 — CONSOLIDADO ESTABLE LOCAL / SIN DEPLOY
+
+Este paquete consolida en una sola carpeta:
+1) TORNEWCOM_V12_36_MIS_JUGADORES_CIERRE_LOCAL_SIN_DEPLOY
+2) PARCHE_V12_36_1_SESION_LOCAL
+
+El parche V12.36.1 ya está incorporado. NO hay que aplicar ningún parche adicional.
+
+Archivos de V12.36.1 que prevalecen sobre V12.36:
+- mis_jugadores.html
+- supabase_v12_24.js
+
+Corrección incorporada:
+- Detección/restauración de sesión en "Mis jugadores".
+
+Estado funcional heredado de V12.36:
+- Pantalla Mis jugadores / bolsa permanente.
+- Selección de equipo y armado de plantel desde la bolsa.
+- Categoría abierta: incorporación al plantel.
+- Categoría cerrada: solicitud de ALTA con motivo.
+- Pantalla Solicitudes de plantel.
+- Organizador/Admin: autorizar, rechazar y aplicar altas autorizadas.
+- Bloqueo de cambios directos sobre categorías cerradas desde la interfaz.
+
+Pendiente ya existente en esa versión:
+- BAJA y MODIFICACION posteriores al cierre tienen circuito de solicitud/auditoría,
+  pero todavía no estaba integrada su aplicación automática en la interfaz.
+
+IMPORTANTE:
+- Paquete LOCAL. NO desplegar a producción.
+- Punto de retorno consolidado correspondiente al estado de la noche del 15/09/2026.

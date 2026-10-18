@@ -1,0 +1,23 @@
+TORNEWCOM V12.36.10 LOCAL — NAVEGACIÓN RESPONSABLE
+
+Base: V12.36.9.
+
+Cambio funcional acotado al panel/navegación del Responsable:
+1. Mis instituciones
+2. Mi plantel
+3. Mis torneos
+4. Mis equipos
+5. Mis jornadas
+6. Mis partidos jugados
+7. Tabla de posiciones
+
+Se agregan dos vistas de consulta:
+- mis_torneos.html
+- mis_jornadas.html
+
+Mis jornadas es solo lectura y muestra partidos PENDIENTES, SUSPENDIDOS y FINALIZADOS de los equipos de la institución/torneo seleccionados.
+
+Se evita el bloque duplicado “Mis responsabilidades” en la vista Responsable.
+
+NO se modifican tablas, RLS, SQL, planteles, jugadores, equipos ni resultados.
+Los cambios V12.36.9 -> V12.36.10 en otras páginas son solo el texto visible de versión.

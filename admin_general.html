@@ -1,0 +1,124 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administración general — Sistema de Torneos Newcom</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:1180px;margin:28px auto;padding:0 16px}.nav{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}.btn,button{display:inline-block;border:0;border-radius:9px;padding:9px 12px;background:#4A90C2;color:#fff;text-decoration:none;font-weight:700;cursor:pointer;font-size:13px}.secondary{background:#6c7f8d}.green{background:#3d8a66}.orange{background:#ad7629}.card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 5px 18px rgba(32,72,98,.07)}h1,h2{margin-top:0}.muted{color:#647b89;font-size:13px}.note{padding:12px 14px;background:#EAF4FB;color:#2F5D7E;border-radius:10px;margin:12px 0}.warn{background:#fff4dd;color:#795f22}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:16px;background:#f8fbfd;border:1px solid #dde8ee;border-radius:12px}.stat b{display:block;font-size:27px;color:#2F5D7E;margin-top:4px}.stat span{font-size:12px;color:#647b89;font-weight:700}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:820px}th,td{padding:10px;border-bottom:1px solid #dfe7ec;text-align:left;vertical-align:middle}th{background:#2F5D7E;color:#fff;font-size:13px}tbody tr:nth-child(even){background:#f8fbfd}.pill{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;background:#e9f2f8;color:#2F5D7E}.pill.admin{background:#e8edf8;color:#554991}.pill.org{background:#e5f4eb;color:#2f7253}.pill.resp{background:#fff4dd;color:#795f22}.actions{display:flex;gap:6px;flex-wrap:wrap}.loading{padding:14px;background:#f7fafc;border-radius:10px;color:#627986}.error{padding:14px;background:#faecec;border-radius:10px;color:#7b2c2c}.who{font-size:13px;opacity:.92}.sectionTitle{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px}.sectionTitle h2{margin:0}@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.wrap{padding:0 10px}}@media(max-width:500px){.stats{grid-template-columns:1fr}}
+</style><script src="legal_v12_33.js?v=12.35" defer></script>
+</head><body>
+<div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b><div class="who" id="quien"></div></div>
+<main class="wrap">
+<div class="nav"><a class="btn secondary" href="index.html">← Panel</a><a class="btn" href="torneos.html">Administrar torneos</a><a class="btn" href="planilla_general.html">Planilla general</a><a class="btn" href="alertas.html">Alertas</a><button class="secondary" id="cerrar">Cerrar sesión</button></div>
+
+<section class="card">
+<h1>Administración general</h1>
+<p class="muted">Vista global del sistema. Solo el Administrador General autoriza quién puede <b>crear, modificar y administrar torneos</b>. La eliminación definitiva también queda reservada al Administrador General.</p>
+<div id="msg" class="note">Cargando datos reales de Supabase…</div>
+</section>
+
+<section class="card">
+<div class="sectionTitle"><h2>Resumen del sistema</h2><span class="muted">Datos actuales</span></div>
+<div class="stats" id="stats"><div class="loading">Cargando…</div></div>
+</section>
+
+<section class="card">
+<div class="sectionTitle"><h2>Usuarios</h2><span class="muted">Perfiles creados en Authentication</span></div>
+<div class="note warn"><b>Una sola cuenta por persona:</b> cada usuario se registra desde TorNewcom y no elige su rol. Vos decidís únicamente quién puede crear torneos. Las asignaciones de Organizador y Responsable se muestran por torneo; una misma persona puede tener ambas en torneos distintos.</div>
+<div id="usuarios"><div class="loading">Cargando usuarios…</div></div>
+</section>
+
+<section class="card">
+<div class="sectionTitle"><h2>Torneos del sistema</h2><a class="btn" href="torneos.html">Abrir administración completa</a></div><div class="note"><b>Nueva función:</b> podés crear vos un torneo y después asignarlo a cualquier usuario autorizado como Organizador. También podés cambiarlo más adelante sin borrar el torneo.</div>
+<div id="torneos"><div class="loading">Cargando torneos…</div></div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script src="roles_v12_24.js?v=12.35"></script>
+<script>
+const sesion=NewcomRoles.exigir(['ADMIN_GENERAL']);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let perfiles=[],membresias=[],torneos=[];
+function setMsg(txt,tipo='note'){const m=$('msg');m.className=tipo;m.textContent=txt}
+function asignacionesDe(p){
+ const ms=membresias.filter(x=>x.usuario_id===p.id&&x.activo!==false);
+ if(!ms.length)return '<span class="pill">SIN ASIGNACIONES</span>';
+ return ms.map(m=>{
+   const tn=m.torneos?.nombre||torneos.find(t=>t.id===m.torneo_id)?.nombre||'Torneo';
+   if(m.rol==='ORGANIZADOR')return `<div style="margin:3px 0"><span class="pill org">ORGANIZADOR</span> ${esc(tn)}</div>`;
+   const ins=m.instituciones?.nombre||'Institución';
+   return `<div style="margin:3px 0"><span class="pill resp">RESPONSABLE</span> ${esc(tn)} · ${esc(ins)}</div>`;
+ }).join('');
+}
+function renderUsuarios(){
+ if(!perfiles.length){$('usuarios').innerHTML='<div class="loading">No hay perfiles.</div>';return}
+ $('usuarios').innerHTML=`<div class="scroll"><table><thead><tr>
+ <th>Usuario</th><th>Asignaciones por torneo</th><th>Puede crear torneos</th><th>Acción Admin</th>
+ </tr></thead><tbody>${perfiles.map(p=>{
+   const adm=!!p.es_admin_general,hab=!!p.puede_crear_torneos;
+   return `<tr>
+    <td><b>${esc(p.nombre||'—')}</b><br><span class="muted">${esc(p.email||'—')}</span>${adm?'<br><span class="pill admin">ADMIN GENERAL</span>':''}</td>
+    <td>${asignacionesDe(p)}</td>
+    <td>${adm?'Sí — Admin General':(hab?'<span class="pill org">SÍ · AUTORIZADO</span>':'No')}</td>
+    <td>${adm?'<span class="muted">Protegido</span>':`<button class="${hab?'orange':'green'}" onclick="configurarOrganizador('${p.id}',${hab?'false':'true'})">${hab?'Suspender creación/administración':'Autorizar a crear torneos'}</button>`}</td>
+   </tr>`
+ }).join('')}</tbody></table></div>`;
+}
+function organizadorActivoDe(torneoId){
+ const m=membresias.find(x=>x.torneo_id===torneoId&&x.rol==='ORGANIZADOR'&&x.activo!==false);
+ return m?perfiles.find(p=>p.id===m.usuario_id)||null:null;
+}
+function opcionesOrganizador(torneoId){
+ const actual=organizadorActivoDe(torneoId);
+ const disponibles=perfiles.filter(p=>p.es_admin_general||p.puede_crear_torneos);
+ return `<select id="org_${torneoId}" style="min-width:220px;padding:8px;border:1px solid #cbd8e0;border-radius:8px">
+   <option value="">Seleccionar Organizador…</option>
+   ${disponibles.map(p=>`<option value="${p.id}" ${actual&&actual.id===p.id?'selected':''}>${esc(p.nombre||p.email)}${p.es_admin_general?' · Admin General':''}</option>`).join('')}
+ </select>`;
+}
+function renderTorneos(){
+ if(!torneos.length){$('torneos').innerHTML='<div class="loading">Todavía no hay torneos.</div>';return}
+ const mapa=new Map(perfiles.map(p=>[p.id,p]));
+ $('torneos').innerHTML=`<div class="scroll"><table><thead><tr><th>Torneo</th><th>Estado</th><th>Organizador asignado</th><th>Creado por</th><th>Asignar / cambiar</th><th>Acción</th></tr></thead><tbody>${torneos.map(t=>{
+   const creador=mapa.get(t.creado_por);
+   const org=organizadorActivoDe(t.id);
+   return `<tr>
+    <td><b>${esc(t.nombre)}</b></td>
+    <td>${esc(t.estado||'—')}</td>
+    <td>${org?`<b>${esc(org.nombre||'—')}</b><br><span class="muted">${esc(org.email||'')}</span>`:'<span class="muted">Sin Organizador asignado</span>'}</td>
+    <td>${creador?`${esc(creador.nombre||'—')}<br><span class="muted">${esc(creador.email||'')}</span>`:'<span class="muted">—</span>'}<br><span class="muted">${t.creado_en?new Date(t.creado_en).toLocaleString('es-AR'):'—'}</span></td>
+    <td><div class="actions">${opcionesOrganizador(t.id)}<button onclick="asignarOrganizador('${t.id}')">${org?'Cambiar':'Asignar'}</button></div></td>
+    <td><div class="actions"><a class="btn" href="equipos.html?torneo=${encodeURIComponent(t.id)}">Entrar</a><a class="btn secondary" href="planilla_general.html?torneo=${encodeURIComponent(t.id)}">Planilla general</a><a class="btn secondary" href="torneos.html">Publicar / eliminar</a></div></td>
+   </tr>`;
+ }).join('')}</tbody></table></div>`;
+}
+async function asignarOrganizador(torneoId){
+ const sel=document.getElementById('org_'+torneoId);
+ const usuarioId=sel?.value||'';
+ if(!usuarioId){setMsg('Seleccioná un Organizador para ese torneo.','error');return}
+ const t=torneos.find(x=>x.id===torneoId);
+ const p=perfiles.find(x=>x.id===usuarioId);
+ if(!t||!p)return;
+ if(!confirm(`¿Asignar "${t.nombre}" a ${p.nombre||p.email} como Organizador?\n\nSi había otro Organizador asignado, quedará reemplazado. El creador original del torneo se conserva como dato histórico.`))return;
+ const r=await NewcomSupabase.adminAsignarOrganizadorTorneo(torneoId,usuarioId);
+ if(!r.ok){setMsg('No se pudo asignar: '+r.error,'error');return}
+ setMsg(`Listo: ${p.nombre||p.email} quedó como Organizador de "${t.nombre}".`);
+ await cargar();
+}
+async function configurarOrganizador(id,habilitar){
+ const p=perfiles.find(x=>x.id===id);if(!p)return;
+ const accion=habilitar?'habilitar':'quitar la habilitación de';
+ if(!confirm(habilitar
+   ? `¿Autorizar a ${p.nombre||p.email} para crear nuevos torneos y administrar aquellos donde figure como Organizador?`
+   : `¿Suspender a ${p.nombre||p.email}? No podrá crear ni modificar torneos hasta que lo vuelvas a autorizar. Los datos existentes no se borran.`))return;
+ const r=await NewcomSupabase.adminConfigurarOrganizador(id,habilitar);if(!r.ok){setMsg('No se pudo actualizar: '+r.error,'error');return}setMsg(habilitar?'Usuario autorizado para crear torneos. Cada torneo que cree lo vinculará como Organizador.':'Organizador suspendido. Sus torneos y datos se conservaron, pero ya no puede administrarlos.');await cargar();
+}
+async function cargar(){
+ setMsg('Actualizando información…');
+ const [rr,rp,rm,rt]=await Promise.all([NewcomSupabase.adminResumen(),NewcomSupabase.adminListarPerfiles(),NewcomSupabase.adminListarMembresias(),NewcomSupabase.listarTorneos()]);
+ const fallo=[rr,rp,rm,rt].find(x=>!x.ok);if(fallo){setMsg('Error: '+fallo.error,'error');return}
+ perfiles=rp.data||[];membresias=rm.data||[];torneos=rt.data||[];
+ const x=rr.data;$('stats').innerHTML=`<div class="stat"><span>TORNEOS</span><b>${x.torneos}</b></div><div class="stat"><span>INSTITUCIONES</span><b>${x.instituciones}</b></div><div class="stat"><span>EQUIPOS</span><b>${x.equipos}</b></div><div class="stat"><span>JUGADORES</span><b>${x.jugadores}</b></div><div class="stat"><span>PARTIDOS</span><b>${x.partidos}</b></div><div class="stat"><span>ALERTAS PENDIENTES</span><b>${x.alertas}</b></div>`;
+ renderUsuarios();renderTorneos();setMsg('Panel actualizado con datos reales de Supabase.');
+}
+if(sesion){$('quien').textContent=`${sesion.nombre} · Administrador General`;$('cerrar').onclick=()=>NewcomRoles.salir();cargar()}
+</script><script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

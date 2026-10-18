@@ -1,0 +1,29 @@
+TORNEWCOM V12.37.1 - REPARACIONES 1
+Base: V12.37 candidata validada por STRESS TEST.
+
+CAMBIOS DE ESTE BLOQUE
+1) DNI en Mis jugadores:
+   - si contiene letras u otros caracteres no permitidos, NO guarda;
+   - permite puntos o espacios como separadores y los normaliza sin cambiar los dígitos.
+2) Fecha de nacimiento:
+   - obligatoria;
+   - no futura;
+   - máximo 100 años;
+   - el selector queda limitado visualmente al rango válido.
+3) Fecha de jornada:
+   - si se informa, debe estar entre 01/01/2000 y 31/12/2100.
+4) SQL de protección adicional para Supabase incluido.
+
+NO SE TOCARON
+- acceso / login / sesiones;
+- permisos / roles;
+- listas / solicitudes;
+- documentación;
+- mensajería.
+
+PRUEBAS SUGERIDAS
+A. DNI 22285A369 -> debe rechazar.
+B. DNI 22.285.369 -> debe guardar como 22285369.
+C. nacimiento futuro -> debe rechazar.
+D. nacimiento de más de 100 años -> debe rechazar.
+E. jornada año 0003 -> debe rechazar.

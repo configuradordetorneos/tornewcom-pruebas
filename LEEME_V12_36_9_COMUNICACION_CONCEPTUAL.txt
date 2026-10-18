@@ -1,0 +1,15 @@
+TORNEWCOM V12.36.9 LOCAL — COMUNICACIÓN CONCEPTUAL
+
+Base: V12.36.8.
+
+Cambios únicamente de textos/presentación:
+- Responsable: “Mis instituciones asignadas” -> “Mis instituciones”.
+- Responsable: “Mis partidos” -> “Mis partidos jugados”.
+- Responsable: “Tabla” -> “Tabla de posiciones”.
+- Responsable / Equipos: “Estructura del torneo” -> “Mis equipos para este torneo”.
+- Responsable / Plantel: “Plantel de la institución” -> “Mi plantel”.
+- Recuperación: tras guardar, el botón muestra “Contraseña actualizada ✓” y mantiene visible la confirmación.
+- Se actualiza la versión visible en las pantallas tocadas.
+
+NO cambia navegación, permisos, consultas, tablas de Supabase ni datos.
+“Mis jornadas” NO se agrega en esta versión; queda como bloque funcional separado.

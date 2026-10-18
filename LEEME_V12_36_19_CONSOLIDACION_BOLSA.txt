@@ -1,0 +1,24 @@
+TORNEWCOM V12.36.19 CANDIDATA — CONSOLIDACIÓN BOLSA / LISTA DE PARTICIPACIÓN
+
+Objetivo: unificar el modelo sin nuevos cambios SQL.
+
+REGLA ÚNICA
+- Mis jugadores = Bolsa permanente del Responsable.
+- Los jugadores nuevos se crean únicamente en Mis jugadores.
+- Lista de participación muestra únicamente jugadores efectivamente asignados a un equipo del torneo.
+- Lista abierta: ALTA directa desde la Bolsa.
+- Lista cerrada: ALTA por solicitud desde la Bolsa.
+- BAJA / REASIGNACIÓN: desde Lista de participación; si la lista está cerrada, por solicitud.
+- Una BAJA nunca elimina al jugador de la Bolsa.
+
+CAMBIOS UX
+- Se desactiva visualmente el formulario antiguo de alta directa en jugadores.html.
+- Se agrega candado 🔒 en encabezados de equipos con lista cerrada.
+- La Bolsa siempre muestra todos los jugadores; en contexto de torneo marca cuáles ya participan y cuáles están disponibles para ALTA.
+- Se amplía la Lista de participación y se acomodan acciones.
+- Se evita el botón Cerrar sesión duplicado.
+- Terminología visible unificada a Bolsa de jugadores / Lista de participación.
+
+SQL
+- NO ejecutar SQL nuevo para esta consolidación.
+- Se apoya en el SQL V12.36.19 ya aplicado en tornewcom-test.

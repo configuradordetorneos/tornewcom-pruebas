@@ -1,0 +1,37 @@
+TORNEWCOM — V12.36.19 CANDIDATA (AFINADO DE LISTAS)
+
+Esta candidata mantiene el MISMO número de versión para poder superponerla en la carpeta local de VS Code.
+
+CAMBIOS PRINCIPALES
+1. Se unifica el circuito visible de solicitudes de listas cerradas.
+   - ALTA toma jugadores desde "Mis jugadores".
+   - BAJA toma jugadores ya incluidos en la lista del torneo/equipo.
+   - REASIGNACIÓN reemplaza el nombre "MODIFICACIÓN" en la interfaz.
+   - Se elimina el buscador redundante de la pantalla de nueva solicitud.
+   - La selección del jugador se muestra como lista visible.
+
+2. Terminología unificada.
+   - "Mis jugadores" = bolsa permanente del Responsable.
+   - "Lista del torneo" / "Lista de participación" = jugadores inscriptos en ese torneo.
+   - Estados: "LISTA DEL TORNEO ABIERTA / CERRADA" o "LISTA ABIERTA / CERRADA".
+   - Se reemplaza "el Organizador deberá autorizarlo" por "el Organizador resolverá la situación informada".
+
+3. En la vista Responsable, la carga de jugadores nuevos se concentra en "Mis jugadores".
+   La pantalla de lista del torneo deja de mostrar el formulario paralelo de alta directa.
+
+4. Botón global "Cerrar sesión" en las pantallas privadas.
+
+5. Se conservan los tooltips de ayuda de V12.36.19.
+
+SQL NECESARIO EN tornewcom-test
+Ejecutar una sola vez:
+SQL_AJUSTE_V12_36_19_UNIFICAR_LISTAS.sql
+
+Es un ajuste aditivo: no borra jugadores ni solicitudes existentes.
+Amplía solicitudes_lista_cerrada para que una ALTA pueda nacer directamente desde "Mis jugadores" y seguir el mismo circuito bilateral.
+
+DESPUÉS DEL SQL
+Superponer todos los archivos web de este ZIP sobre la carpeta local y dejar que Go Live recargue.
+Retomar las pruebas desde PRUEBA 3: ALTA con lista cerrada.
+
+Ajuste adicional de pruebas: Lista de participación muestra solo jugadores efectivamente asignados; Mis jugadores filtra mediante consulta de participantes reales; acciones renombradas para distinguir edición directa de solicitudes; se elimina cierre de sesión duplicado en Inicio.

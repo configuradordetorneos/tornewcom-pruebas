@@ -1,0 +1,28 @@
+TORNEWCOM — V12.36.19 CANDIDATA LOCAL
+NORMALIZACIÓN VISUAL GLOBAL DE ICONOS Y TOOLTIPS
+
+Alcance:
+- Administrador General
+- Organizador
+- Responsable
+
+Criterio:
+- Misma acción = mismo icono + mismo tooltip en todo el sistema.
+- En botones con espacio: icono + texto.
+- En tablas angostas: icono compacto con tooltip y aria-label.
+- Estados principales: ⏳ Pendiente, ✅ Aprobada, ❌ Rechazada, 🔒 Lista cerrada, 🔓 Lista abierta.
+- Acciones principales: ➕ Alta/Agregar, ➖ Baja/Quitar, 🔄 Reasignación, ✏️ Editar, 🗑️ Eliminar, 💾 Guardar, 👁️ Ver, 📤 Enviar.
+
+Cambios incluidos:
+1. Nuevo tornewcom_icons.js reutilizable en las vistas privadas.
+2. Tooltips ampliados para iconos y estados, incluyendo elementos compactos no-button.
+3. Iconos aplicados a botones y acciones dinámicas en vistas de Admin General, Organizador y Responsable.
+4. Solicitudes de cambios: Acción y Solicitó pasan a iconos compactos con tooltip, liberando ancho de tabla.
+5. Estados de solicitudes conservan texto y suman icono visual consistente.
+6. No se modificó SQL ni autenticación/Supabase.
+
+Prueba recomendada:
+- Admin General: botones de administración, alertas, asignación, editar/eliminar.
+- Organizador: equipos, listas, solicitudes, jornadas, partidos.
+- Responsable: Mis jugadores, lista de participación y solicitudes.
+- En Solicitudes de cambios, pasar el mouse por los iconos de Acción y Solicitó para verificar tooltip.

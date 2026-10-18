@@ -1,0 +1,21 @@
+// TORNEWCOM — ENTORNO DE PRUEBA (tornewcom-test)
+// Clon del frontend V12.35. NO apunta a producción.
+window.NEWCOM_SUPABASE = {
+  url: "https://jttfzpdmwpdfilzezawl.supabase.co",
+  anonKey: "sb_publishable_18_odMjcw-x1zcEiIsqTww_bP0zv03g"
+};
+window.NEWCOM_ENTORNO = "TEST";
+
+// Señal visual para no confundir este clon con producción.
+(function(){
+  function ponerMarcaTest(){
+    if (document.getElementById('tornewcom-test-badge')) return;
+    const badge=document.createElement('div');
+    badge.id='tornewcom-test-badge';
+    badge.textContent='ENTORNO DE PRUEBA';
+    badge.style.cssText='position:fixed;right:10px;bottom:10px;z-index:99999;background:#8b1e1e;color:#fff;padding:7px 10px;border-radius:999px;font:700 11px/1 Arial,sans-serif;letter-spacing:.4px;box-shadow:0 2px 8px rgba(0,0,0,.22);opacity:.92;pointer-events:none';
+    document.body.appendChild(badge);
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',ponerMarcaTest);
+  else ponerMarcaTest();
+})();

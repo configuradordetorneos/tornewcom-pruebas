@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Alertas del torneo — Sistema de Torneos Newcom</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}.topbar{background:#2F5D7E;color:white;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.brand h1{margin:0;font-size:24px}.brand small{opacity:.9}.wrap{max-width:1050px;margin:32px auto;padding:0 18px}.panel{background:white;border-radius:18px;padding:26px;box-shadow:0 7px 24px rgba(32,72,98,.10);margin-bottom:22px}.panel h2{margin:0 0 8px;font-size:28px}.panel p{color:#587080}.btn{display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px;font-weight:700;font-size:14px;border:none;cursor:pointer}.primary{background:#4A90C2;color:white}.accept{background:#2e7d4f;color:#fff}.reject{background:#a24444;color:#fff}.secondary{background:#EEF2F5;color:#2F5D7E}.back{display:inline-block;margin-bottom:16px;color:#2F5D7E;text-decoration:none;font-weight:700}.note{padding:14px 16px;border-radius:12px;background:#DCEEF8;color:#2F5D7E;font-size:14px}.alert-card{background:#fff;border:1px solid #d9e4eb;border-left:5px solid #78909c;border-radius:14px;padding:18px;margin-top:14px}.alert-card.pending{border-color:#ead4d4;border-left-color:#b42318}.alert-card.accepted{border-left-color:#2e7d4f}.alert-card.rejected{border-left-color:#a24444}.alert-card h3{margin:0 0 9px;color:#2f4f63}.alert-card.pending h3{color:#9d2f27}.alert-card p{margin:6px 0;color:#415966}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.chip{background:#eef4f7;color:#2F5D7E;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}.estado{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}.estado.pending{background:#fff3d7;color:#7a5a13}.estado.accepted{background:#e7f4ec;color:#24623f}.estado.rejected{background:#fdecec;color:#8c2929}.resuelta{font-size:12px;color:#718592;margin-top:10px}.decision{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}.msg{padding:12px;border-radius:10px;margin-top:12px}.err{background:#faecec;color:#7b2c2c}.ok{background:#e8f5ee;color:#245d39}.footer{margin-top:38px;background:#eaf1f5;padding:22px 18px;text-align:center;color:#516a79;font-size:14px}@media(max-width:650px){.decision .btn{flex:1}}
+</style>
+<script src="legal_v12_33.js?v=12.35" defer></script>
+</head>
+<body>
+<script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);</script>
+<header class="topbar"><div class="brand"><h1>Sistema de Torneos Newcom</h1><small>V12.37.30 CANDIDATA · Control flexible de reglas</small></div></header>
+<main class="wrap">
+<a class="back" href="index.html">← Volver al inicio</a>
+<section class="panel">
+<h2>⚠ Alertas del sistema</h2>
+<p>Acá se concentran las alertas y notificaciones automáticas de TorNewcom.</p><div id="msg"></div><h3>🔔 Notificaciones</h3><div id="notificaciones-box"><div class="note">Cargando notificaciones…</div></div><div id="plantelSection"><h3 style="margin-top:26px">⚠ Alertas de plantel</h3><div id="alertas-box"><div class="note">Cargando alertas…</div></div></div>
+</section>
+</main>
+<footer class="footer"><strong>Creado por Gabriel Prozzillo</strong> · Proyecto Newcom</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script>
+const box=document.getElementById('alertas-box'),nbox=document.getElementById('notificaciones-box'),msg=document.getElementById('msg'),sesion=NewcomRoles.sesion();
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function aviso(t,tipo=''){msg.className='msg '+tipo;msg.textContent=t}
+function fmtFechaHora(v){
+ if(!v)return '';
+ const d=new Date(v);if(Number.isNaN(d.getTime()))return '';
+ return d.toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function estadoUI(estado){
+ const e=String(estado||'PENDIENTE').toUpperCase();
+ if(e==='ACEPTADA')return{txt:'ACEPTADA',cls:'accepted'};
+ if(e==='RECHAZADA')return{txt:'NO ACEPTADA',cls:'rejected'};
+ return{txt:'PENDIENTE',cls:'pending'};
+}
+async function cargarNotificaciones(){const r=await NewcomSupabase.listarNotificacionesSistema();if(!r.ok){nbox.innerHTML='<div class="msg err">'+esc(r.error)+'</div>';return}const ns=r.data||[];if(!ns.length){nbox.innerHTML='<div class="note">No tenés notificaciones automáticas.</div>';return}nbox.innerHTML=ns.map(n=>{const c=n.cambios||{},a=c.antes||{},d=c.despues||{};const cambios=[];for(const k of ['equipo_a','equipo_b','fecha','hora','sede_id','cancha'])if(String(a[k]??'')!==String(d[k]??'')&&(a[k]!=null||d[k]!=null))cambios.push(`<li><b>${esc(k.replace('_',' '))}:</b> ${esc(a[k]??'—')} → ${esc(d[k]??'—')}</li>`);return `<article class="alert-card ${n.leida?'accepted':'pending'}"><h3>${esc(n.titulo)}</h3><div class="meta"><span class="chip">${esc(n.torneos?.nombre||'Torneo')}</span><span class="chip">${esc(fmtFechaHora(n.creado_en))}</span>${n.leida?'<span class="estado accepted">LEÍDA</span>':'<span class="estado pending">NUEVA</span>'}</div><p>${esc(n.detalle)}</p>${cambios.length?'<ul>'+cambios.join('')+'</ul>':''}${!n.leida?`<button class="btn primary" onclick="leerNotificacion('${n.id}')">Marcar como leída</button>`:''}</article>`}).join('')}
+window.leerNotificacion=async id=>{const r=await NewcomSupabase.marcarNotificacionLeida(id);if(!r.ok){aviso(r.error,'err');return}await cargarNotificaciones()};
+async function cargarAlertas(){
+ msg.className='';msg.textContent='';box.innerHTML='<div class="note">Cargando alertas…</div>';
+ const r=await NewcomSupabase.listarAlertasPlantel();
+ if(!r.ok){box.innerHTML='<div class="msg err">'+esc(r.error)+'</div>';return}
+ const alertas=r.data||[];
+ if(!alertas.length){box.innerHTML='<div class="note">Todavía no hay alertas registradas.</div>';return}
+ box.innerHTML=alertas.map(a=>{
+   const eu=estadoUI(a.estado);
+   const acciones=eu.cls==='pending'?`<div class="decision"><button class="btn accept" onclick="resolver('${a.id}','ACEPTADA')">ACEPTAR</button><button class="btn reject" onclick="resolver('${a.id}','RECHAZADA')">NO ACEPTAR</button></div>`:'';
+   const resuelta=eu.cls==='pending'?'':`<div class="resuelta">Resuelta${a.resuelto_en?' el '+esc(fmtFechaHora(a.resuelto_en)):''}.</div>`;
+   return `<article class="alert-card ${eu.cls}">
+   <h3>Jugador fuera de la regla configurada</h3>
+   <div class="meta"><span class="estado ${eu.cls}">${eu.txt}</span><span class="chip">${esc(a.torneos?.nombre||'Torneo')}</span><span class="chip">${esc(a.equipos_competitivos?.categoria||'')} · ${esc(a.equipos_competitivos?.modalidad||'')}</span></div>
+   <p><b>Institución:</b> ${esc(a.instituciones?.nombre||'—')}</p>
+   <p><b>Equipo:</b> ${esc(a.equipos_competitivos?.nombre||'—')}</p>
+   <p><b>Jugador:</b> ${esc(a.jugadores?.nombre_apellido||'—')} ${a.edad_calculada!=null?'· '+esc(a.edad_calculada)+' años':''}</p>
+   <p><b>Situación:</b> ${esc(a.detalle)}</p>
+   <p><b>Regla:</b> ${esc(a.regla_resumen||'—')}</p>
+   ${resuelta}${acciones}
+ </article>`;
+ }).join('');
+}
+window.resolver=async(id,decision)=>{
+ const texto=decision==='ACEPTADA'?'ACEPTAR esta inscripción':'NO ACEPTAR esta inscripción y quitar al jugador de ese equipo';
+ if(!confirm('¿'+texto+'?'))return;
+ const r=await NewcomSupabase.resolverAlertaPlantel(id,decision);
+ if(!r.ok){aviso(r.error,'err');return}
+ aviso(decision==='ACEPTADA'?'Inscripción aceptada.':'Inscripción no aceptada. El jugador fue quitado de ese equipo.','ok');
+ await cargarNotificaciones();if(sesion.es_admin_general||sesion.puede_crear_torneos||sesion.tiene_asignaciones_organizador)cargarAlertas();else document.getElementById('plantelSection').style.display='none';
+};
+cargarNotificaciones();if(sesion.es_admin_general||sesion.puede_crear_torneos||sesion.tiene_asignaciones_organizador)cargarAlertas();else document.getElementById('plantelSection').style.display='none';
+</script>
+<script src="guia_organizador_v12_35.js?v=12.35"></script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

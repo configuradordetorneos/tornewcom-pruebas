@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Torneos — Sistema de Torneos Newcom</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f3f7fa;
+  color:#243746;
+  margin:0
+}
+
+.top{
+  background:#2F5D7E;
+  color:#fff;
+  padding:18px 24px
+}
+
+.wrap{
+  max-width:1180px;
+  margin:28px auto;
+  padding:0 16px
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:24px
+}
+
+.btn{
+  display:inline-block;
+  background:#4A90C2;
+  color:#fff;
+  padding:9px 12px;
+  border-radius:9px;
+  text-decoration:none;
+  font-weight:bold;
+  border:0;
+  cursor:pointer;
+  font-size:13px
+}
+
+.secondary{background:#6c7f8d}
+.green{background:#338a64}
+.red{background:#9a4545}
+.mutedbtn{background:#eef2f5;color:#315b77}
+.orange{background:#b57a24}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:18px;
+  min-width:1040px
+}
+
+th,td{
+  padding:11px;
+  border-bottom:1px solid #dbe5eb;
+  text-align:left;
+  vertical-align:top
+}
+
+th{
+  background:#2F5D7E;
+  color:#fff
+}
+
+tbody tr:nth-child(even){
+  background:#EAF4FB
+}
+
+.estado{font-weight:bold}
+
+.msg{
+  padding:14px;
+  background:#EAF4FB;
+  border-radius:10px
+}
+
+.actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap
+}
+
+.scroll{overflow:auto}
+
+.pub{font-weight:700}
+.si{color:#2d7655}
+.no{color:#8b5f26}
+
+.hint{
+  font-size:12px;
+  color:#6e818e;
+  margin-top:6px
+}
+
+@media(max-width:760px){
+  .wrap{padding:0 10px}
+  .card{padding:16px}
+  .btn{padding:8px 10px}
+}
+</style>
+
+<script src="legal_v12_33.js?v=12.35" defer></script>
+</head>
+
+<body>
+
+<script src="roles_v12_24.js?v=12.35"></script>
+<script>
+NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);
+</script>
+
+<div class="top">
+  <b>TORNEWCOM — V12.37.30 CANDIDATA</b>
+</div>
+
+<main class="wrap">
+
+<p>
+  <a class="btn secondary" href="index.html">← Panel</a>
+  <a class="btn" href="crear_torneo.html">+ Crear torneo</a>
+  <a class="btn green" href="publico.html" target="_blank">👁 Vista pública</a>
+</p>
+
+<div class="card">
+  <h1>Torneos</h1>
+
+  <p>
+    Administración de torneos. El Organizador administra;
+    el envío a Papelera y la eliminación definitiva quedan reservados al Administrador General.
+  </p>
+
+  <div id="contenido">
+    <div class="msg">Cargando torneos…</div>
+  </div>
+</div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+
+<script>
+
+const esc=v=>String(v??'').replace(
+  /[&<>"']/g,
+  m=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[m])
+);
+
+let torneos=[];
+
+const sesion=JSON.parse(
+  localStorage.getItem('sesionNewcom')||'null'
+);
+
+const esAdmin=sesion?.rol==='ADMIN_GENERAL';
+
+
+async function cambiarPublicacion(id,tipo){
+
+  const t=torneos.find(
+    x=>String(x.id)===String(id)
+  );
+
+  if(!t)return;
+
+  let publicado=!!t.publicado;
+  let programacion=!!t.publicar_programacion;
+
+  if(tipo==='publicado'){
+    publicado=!publicado;
+  }
+
+  if(tipo==='programacion'){
+
+    if(!publicado){
+      alert('Primero publicá el torneo.');
+      return;
+    }
+
+    programacion=!programacion;
+  }
+
+  const r=
+    await NewcomSupabase.actualizarPublicacionTorneo(
+      id,
+      publicado,
+      programacion
+    );
+
+  if(!r.ok){
+    alert('No se pudo actualizar: '+r.error);
+    return;
+  }
+
+  await cargar();
+}
+
+
+/* =========================================================
+   ENVIAR TORNEO A PAPELERA
+   Solo Administrador General.
+   NO elimina datos.
+   ========================================================= */
+
+async function enviarAPapelera(id,nombre){
+
+  if(!esAdmin)return;
+
+  const escrito=prompt(
+    'ENVIAR A PAPELERA.\n\nPara confirmar, escribí exactamente el nombre del torneo:\n\n'+nombre
+  );
+
+  if(escrito===null)return;
+
+  if(escrito.trim()!==nombre){
+    alert('El nombre no coincide. No se realizó ningún cambio.');
+    return;
+  }
+
+  if(!confirm(
+    'El torneo se ocultará y será enviado a PAPELERA.\n\nPodrás restaurarlo posteriormente.\n\n¿Continuar?'
+  ))return;
+
+  try{
+
+    const cfg=window.NEWCOM_SUPABASE||{};
+
+    if(!cfg.url||!cfg.anonKey){
+      alert('No está disponible la configuración de Supabase.');
+      return;
+    }
+
+    const respaldo=JSON.parse(
+      localStorage.getItem('tornewcomSupabaseSession')||'null'
+    );
+
+    if(!respaldo?.access_token){
+      alert('No se encontró una sesión válida. Cerrá sesión y volvé a ingresar.');
+      return;
+    }
+
+    const cliente=window.supabase.createClient(
+      cfg.url,
+      cfg.anonKey,
+      {
+        auth:{
+          persistSession:false,
+          autoRefreshToken:false,
+          detectSessionInUrl:false
+        },
+        global:{
+          headers:{
+            Authorization:'Bearer '+respaldo.access_token
+          }
+        }
+      }
+    );
+
+    const {data,error}=await cliente.rpc(
+      'admin_enviar_torneo_papelera',
+      {
+        p_torneo:id,
+        p_nombre_confirmacion:nombre
+      }
+    );
+
+    if(error){
+      alert('No se pudo enviar a Papelera: '+error.message);
+      return;
+    }
+
+    alert(
+      'Torneo enviado a PAPELERA correctamente.\n\n' +
+      'Podés restaurarlo desde el panel principal del Administrador General.'
+    );
+
+    await cargar();
+
+  }catch(e){
+
+    alert(
+      'No se pudo enviar a Papelera: '+
+      (e?.message||String(e))
+    );
+
+  }
+}
+
+
+function fila(t){
+
+  const pub=!!t.publicado;
+  const prog=!!t.publicar_programacion;
+
+  return `
+  <tr>
+
+    <td>
+      <b>${esc(t.nombre)}</b>
+    </td>
+
+    <td class="estado">
+      ${esc(t.estado)}
+    </td>
+
+    <td>
+      ${new Date(t.creado_en).toLocaleString('es-AR')}
+    </td>
+
+    <td>
+
+      <span class="pub ${pub?'si':'no'}">
+        ${pub?'PUBLICADO':'PRIVADO'}
+      </span>
+
+      <div class="hint">
+        ${pub
+          ?'Visible sin iniciar sesión.'
+          :'Solo usuarios autorizados.'
+        }
+      </div>
+
+    </td>
+
+    <td>
+
+      <span class="pub ${prog?'si':'no'}">
+        ${prog?'VISIBLE':'OCULTA'}
+      </span>
+
+      <div class="hint">
+        Afecta solo partidos pendientes.
+      </div>
+
+    </td>
+
+    <td>
+
+      <div class="actions">
+
+        <button
+          class="btn ${pub?'orange':'green'}"
+          onclick="cambiarPublicacion('${t.id}','publicado')"
+        >
+          ${pub?'Ocultar torneo':'Publicar torneo'}
+        </button>
+
+        <button
+          class="btn ${prog?'orange':'mutedbtn'}"
+          onclick="cambiarPublicacion('${t.id}','programacion')"
+        >
+          ${prog?'Ocultar programación':'Publicar programación'}
+        </button>
+
+        ${
+          pub
+          ?`
+          <a
+            class="btn green"
+            href="publico.html?torneo=${encodeURIComponent(t.id)}"
+            target="_blank"
+          >
+            Ver público
+          </a>
+          `
+          :''
+        }
+
+        <a
+          class="btn"
+          href="categorias.html?torneo=${encodeURIComponent(t.id)}"
+        >
+          Editar configuración
+        </a>
+
+        <a
+          class="btn mutedbtn"
+          href="categorias.html?torneo=${encodeURIComponent(t.id)}#cierre-listas"
+        >
+          Cierre de listas
+        </a>
+
+        <a
+          class="btn"
+          href="equipos.html?torneo=${encodeURIComponent(t.id)}"
+        >
+          Equipos
+        </a>
+
+        <a
+          class="btn"
+          href="jornadas.html?torneo=${encodeURIComponent(t.id)}"
+        >
+          Jornadas
+        </a>
+
+        <a
+          class="btn"
+          href="partidos.html?torneo=${encodeURIComponent(t.id)}"
+        >
+          Partidos
+        </a>
+
+        <a
+          class="btn"
+          href="tabla.html?torneo=${encodeURIComponent(t.id)}&desde=torneos"
+        >
+          Tabla
+        </a>
+
+        <a
+          class="btn"
+          href="documentacion.html?torneo=${encodeURIComponent(t.id)}"
+        >
+          Documentación
+        </a>
+
+        ${
+          esAdmin
+          ?`
+          <button
+            class="btn red"
+            onclick="enviarAPapelera(
+              '${t.id}',
+              decodeURIComponent('${encodeURIComponent(t.nombre)}')
+            )"
+          >
+            🗑 Enviar a Papelera
+          </button>
+          `
+          :''
+        }
+
+      </div>
+
+    </td>
+
+  </tr>
+  `;
+}
+
+
+async function cargar(){
+
+  const c=document.getElementById('contenido');
+
+  const r=
+    await NewcomSupabase.listarTorneos();
+
+  if(!r.ok){
+
+    c.innerHTML=
+      `<div class="msg">
+        Error: ${esc(r.error)}
+      </div>`;
+
+    return;
+  }
+
+  /*
+    Los torneos en PAPELERA no se muestran
+    en la administración normal.
+  */
+
+  torneos=(r.data||[])
+    .filter(
+      t=>String(t.estado||'').toUpperCase()!=='PAPELERA'
+    );
+
+  if(!torneos.length){
+
+    c.innerHTML=
+      '<div class="msg">Todavía no hay torneos registrados.</div>';
+
+    return;
+  }
+
+  c.innerHTML=`
+    <div class="scroll">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Creado</th>
+            <th>Vista pública</th>
+            <th>Programación</th>
+            <th>Administrar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${torneos.map(fila).join('')}
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+}
+
+
+cargar();
+
+</script>
+
+<script src="guia_organizador_v12_35.js?v=12.35"></script>
+<script src="tornewcom_icons.js?v=12.36.19"></script>
+<script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+
+</body>
+</html>

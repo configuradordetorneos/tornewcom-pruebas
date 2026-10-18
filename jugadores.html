@@ -1,0 +1,201 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lista de participación / Jugadores — Sistema de Torneos Newcom</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7fa;color:#243746}.top{background:#2F5D7E;color:white;padding:18px 24px}.wrap{max-width:1380px;margin:28px auto;padding:0 16px}.card{background:white;border-radius:16px;padding:22px;margin-bottom:18px}.btn,button{border:0;border-radius:9px;padding:10px 14px;background:#4A90C2;color:white;font-weight:bold;text-decoration:none;cursor:pointer;display:inline-block}.secondary{background:#6c7f8d}.danger{background:#8b4b4b}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.grid{display:grid;grid-template-columns:2fr 1fr 1.2fr 1.1fr;gap:12px;align-items:end}label{display:block;font-size:12px;font-weight:bold;color:#2F5D7E;margin-bottom:5px}input,select{width:100%;padding:10px;border:1px solid #bdcbd5;border-radius:8px}.msg{padding:12px;border-radius:9px;background:#EAF4FB;margin-top:12px}.err{background:#faecec;color:#7b2c2c}.ok{background:#e8f5ee;color:#245d39}.warn{background:#fff4dd;color:#795f22}table{width:100%;border-collapse:separate;border-spacing:0;margin-top:15px;min-width:900px;font-size:13px}th,td{padding:9px 10px;border-right:1px solid #dce5eb;border-bottom:1px solid #dce5eb;text-align:left;vertical-align:middle}th{background:#2F5D7E;color:white;position:sticky;top:0;z-index:2;white-space:nowrap}th:first-child,td:first-child{border-left:1px solid #dce5eb}thead th:first-child{border-top-left-radius:9px}thead th:last-child{border-top-right-radius:9px}tbody tr:nth-child(even){background:#f7fafc}.teamCol{text-align:center;min-width:66px;width:66px;max-width:82px;padding-left:4px;padding-right:4px}.teamHead{display:flex;flex-direction:column;gap:2px;align-items:center;line-height:1.15}.teamHead b{font-size:11px;max-width:78px;white-space:normal;overflow-wrap:anywhere}.teamHead span{font-size:9px;opacity:.9;font-weight:normal;white-space:normal}.markYes{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:#e4f4eb;color:#247044;font-weight:bold;font-size:15px}.markNo{color:#aab8c1}.sheetTitle{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap}.sheetTitle h2{margin-bottom:4px}.sheetSub{color:#6b7f8c;font-size:12px}th:nth-child(3),td:nth-child(3){min-width:105px;white-space:nowrap}.actionsCol,.actionsCell{min-width:250px;width:250px}.actionsCell{white-space:normal}.actionsCell .requestLink,.actionsCell button{margin:3px 2px;vertical-align:middle;max-width:230px;white-space:normal;line-height:1.25}.playerSearch{min-width:260px;max-width:360px}.playerSearch input{margin-top:5px}.plantelScroll{overflow:auto;max-height:72vh;border-radius:9px}.plantelScroll th{top:0}.plantelScroll th:nth-child(1),.plantelScroll td:nth-child(1){position:sticky;left:0;z-index:3;background:inherit}.plantelScroll th:nth-child(2),.plantelScroll td:nth-child(2){position:sticky;left:48px;z-index:3;background:inherit;min-width:170px}.plantelScroll th:nth-child(1),.plantelScroll th:nth-child(2){z-index:5;background:#2F5D7E}.plantelScroll tbody tr:nth-child(odd) td:nth-child(1),.plantelScroll tbody tr:nth-child(odd) td:nth-child(2){background:#fff}.plantelScroll tbody tr:nth-child(even) td:nth-child(1),.plantelScroll tbody tr:nth-child(even) td:nth-child(2){background:#f7fafc}.hidden{display:none!important}.requestLink{font-size:12px;padding:7px 9px;background:#4A90C2;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;margin:2px}.small{font-size:12px;padding:7px 9px}.role{border-left:4px solid #4A90C2;padding:10px 14px;background:#f6fafc;margin:12px 0}.count{font-size:26px;font-weight:bold;color:#2F5D7E}.locked{background:#f3f7fa}.muted{color:#6b7f8c;font-size:12px}.choiceTitle{font-size:14px;font-weight:bold;color:#243746;margin:16px 0 8px}.teamChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.teamChoice{display:block;border:2px solid #dce7ed;border-radius:12px;padding:12px;background:#f8fbfd;cursor:pointer;transition:.15s;min-height:94px;margin:0;color:#243746}.teamChoice input{width:auto;margin:0 7px 0 0}.teamChoice .teamName{font-size:15px;font-weight:bold}.teamChoice .meta{font-size:12px;color:#59717f;margin:7px 0 4px}.teamChoice .elig{font-size:12px;font-weight:bold}.teamChoice.normal{border-color:#99cdb2;background:#f0faf5}.teamChoice.normal .elig{color:#2f7253}.teamChoice.exception{border-color:#e1bd61;background:#fff9e9}.teamChoice.exception .elig{color:#8a661d}.teamChoice.blocked{border-color:#e1b1b1;background:#fff5f5;cursor:not-allowed;opacity:.78}.teamChoice.blocked .elig{color:#8b4242}.teamChoice.warning{border-color:#e7a5a5;background:#fff3f3}.teamChoice.warning .elig{color:#a43b3b}.teamChoice.wait{border-color:#dce7ed;background:#f8fbfd}.teamChoice.wait .elig{color:#687c89}.teamChoice.selected{box-shadow:0 0 0 3px rgba(74,144,194,.18);border-color:#4A90C2}.selectionSummary{margin-top:8px;font-size:12px;color:#607887}.ageRef{font-size:11px;color:#718590;margin-top:4px}.emptyChoices{padding:12px;background:#f8fbfd;border-radius:10px;color:#607887}.statusPill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:bold;background:#e8f2f8;color:#2F5D7E}.dateParts{display:grid;grid-template-columns:.8fr 1.25fr 1fr;gap:6px}.dateParts select{padding:10px 7px}.dateHint{font-size:11px;color:#718590;margin-top:5px;line-height:1.35}dialog{border:0;border-radius:16px;padding:0;max-width:760px;width:calc(100% - 30px);box-shadow:0 20px 60px rgba(0,0,0,.25)}dialog::backdrop{background:rgba(26,44,57,.45)}.dialogInner{padding:22px}.dialogActions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+
+.printHeader{display:none}.sheetTools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+@media print{
+  @page{size:landscape;margin:10mm}
+  body{background:#fff!important;color:#000!important}
+  .top,.nav,.formCard,dialog,.noPrint{display:none!important}
+  .wrap{max-width:none!important;margin:0!important;padding:0!important}
+  .plantelCard{display:block!important;padding:0!important;margin:0!important;border-radius:0!important;box-shadow:none!important}
+  .printHeader{display:block!important;margin:0 0 12px 0}
+  .printHeader h1{margin:0 0 6px 0;font-size:22px}.printMeta{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;font-size:11px;margin-bottom:10px}
+  .sheetTitle{display:none!important}
+  #plantelScroll{overflow:visible!important}
+  table{min-width:0!important;width:100%!important;margin-top:0!important;font-size:9px!important;border-collapse:collapse!important}
+  th,td{padding:4px 5px!important;border:1px solid #999!important;vertical-align:middle!important}
+  th{position:static!important;background:#eee!important;color:#000!important;white-space:normal!important}
+  .teamCol{min-width:0!important}.teamHead b{font-size:9px!important}.teamHead span{font-size:8px!important}
+  .markYes{width:auto!important;height:auto!important;border-radius:0!important;background:none!important;color:#000!important;font-size:11px!important}.markNo{color:#666!important}
+  .actionsCol,.actionsCell{display:none!important}
+  tr{break-inside:avoid}
+}
+@media(max-width:900px){.teamChoices{grid-template-columns:1fr 1fr}}@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.grid,.teamChoices{grid-template-columns:1fr}}
+.sheetTools{margin-left:auto;justify-content:flex-end}.playerSearch{margin-left:auto;min-width:270px;text-align:left}.playerSearch label{display:block;margin-bottom:5px}.searchBox{display:flex;align-items:center;gap:7px;border:1px solid #b9cbd6;border-radius:9px;background:#fff;padding:0 10px}.searchBox input{border:0!important;outline:0;box-shadow:none!important;margin:0!important;padding:10px 2px!important;min-width:0}.searchBox span{font-size:16px}@media(max-width:760px){.sheetTools{margin-left:0;width:100%}.playerSearch{margin-left:0;width:100%;min-width:0}}</style><script src="legal_v12_33.js?v=12.35" defer></script>
+</head><body><div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA</b></div><div class="wrap">
+<div class="nav"><a class="btn secondary" href="index.html">← Inicio</a><a class="btn" id="irEquipos" href="equipos.html">Equipos</a><a class="btn" id="irMisJugadores" href="mis_jugadores.html">Bolsa de jugadores</a><a class="btn secondary" id="irSolicitudes" href="solicitudes_lista.html">Solicitudes de cambios</a><a class="btn" id="irTabla" href="tabla.html">Tabla</a></div>
+<div class="card formCard"><h1 id="plantelEncabezado">Lista de participación / Jugadores</h1><div class="role" id="roleNote"></div>
+<div class="grid"><div><label>Torneo</label><select id="torneo"></select></div><div><label>Institución</label><select id="inst"></select></div><div><label>Responsable</label><input id="resp" disabled></div><div><label>Jugadores</label><div class="count" id="cant">0</div></div></div></div>
+<div class="card formCard hidden" id="altaTorneoCard"><h2>Agregar jugador a la lista de participación</h2><div class="grid"><div><label>Nombre y apellido</label><input id="nombre"></div><div><label>DNI</label><input id="dni" inputmode="numeric"></div><div><label>Fecha de nacimiento</label><input id="nac" type="hidden"><div class="dateParts"><select id="nacDia" aria-label="Día"><option value="">Día</option></select><select id="nacMes" aria-label="Mes"><option value="">Mes</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select><select id="nacAnio" aria-label="Año"><option value="">Año</option></select></div><div class="dateHint" id="nacHint">Los años se preparan según las categorías y edades del torneo.</div></div><div><label>Edad</label><input id="edadCalc" disabled placeholder="Se calcula sola"></div></div><div class="grid" style="margin-top:12px;grid-template-columns:1.2fr 2.8fr"><div><label>Posición</label><select id="pos"><option>Zaguero</option><option>Delantero</option><option>Líbero</option></select></div><div></div></div>
+<div class="choiceTitle">¿En qué equipo participa?</div><div id="equiposChecks" class="teamChoices"><div class="emptyChoices">Cargando equipos…</div></div><div id="selResumen" class="selectionSummary"></div>
+<p><button id="guardar">Guardar jugador</button></p><div id="msg"></div></div>
+<div class="card plantelCard"><div id="closedGuide" class="msg warn hidden noPrint"></div><div id="printHeader" class="printHeader"><h1>Lista de participación del torneo</h1><div class="printMeta"><div><b>Torneo:</b> <span id="printTorneo"></span></div><div><b>Institución:</b> <span id="printInstitucion"></span></div><div><b>Responsable:</b> <span id="printResponsable"></span></div><div><b>Jugadores:</b> <span id="printCantidad"></span></div></div></div><div class="sheetTitle"><div><h2 id="plantelTitulo">Lista de participación de la institución</h2><div class="sheetSub" id="plantelContexto">Cada jugador aparece una sola vez. Las columnas indican en qué equipo competitivo participa.</div></div><div class="sheetTools"><div class="sheetSub" id="sheetInst"></div><div class="playerSearch noPrint"><label for="buscarJugador">👤 Buscar jugador</label><div class="searchBox"><span aria-hidden="true">🔎</span><input id="buscarJugador" type="search" placeholder="Nombre o DNI" autocomplete="off"></div></div><button id="imprimirPlantel" class="secondary noPrint" type="button">Imprimir / Guardar PDF</button></div></div><div id="plantelScroll" class="plantelScroll"><table><thead id="headPlantel"></thead><tbody id="body"></tbody></table></div></div>
+</div>
+<dialog id="dlgAsignar"><div class="dialogInner"><h2 id="dlgTitulo">Asignar equipos</h2><p class="muted">La edad se controla automáticamente. Si una asignación queda fuera de la regla, se permite guardar y se envía una alerta al Organizador.</p><div id="dlgChoices" class="teamChoices"></div><div id="dlgMsg"></div><div class="dialogActions"><button class="secondary" id="dlgCancelar">Cancelar</button><button id="dlgGuardar">Guardar asignación</button></div></div></dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script src="roles_v12_24.js?v=12.35"></script><script src="autosave_v12_26.js"></script><script>
+const $=x=>document.getElementById(x),qs=new URLSearchParams(location.search);let sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);let torneoId=qs.get('torneo')||'',instId=qs.get('institucion')||'',instituciones=[],equiposInstitucion=[],jugadores=[],asignaciones=[],reglas=[],jugadorEdicion=null;const borradoresVistos=new Set();
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function aviso(t,tipo=''){let m=$('msg');m.className='msg '+tipo;m.textContent=t}
+function edadEn(f,ref){if(!f||!ref)return'';let n=new Date(f+'T12:00:00'),h=new Date(ref+'T12:00:00');if(Number.isNaN(n.getTime())||Number.isNaN(h.getTime()))return'';let e=h.getFullYear()-n.getFullYear();if(h.getMonth()<n.getMonth()||(h.getMonth()===n.getMonth()&&h.getDate()<n.getDate()))e--;return e}
+function edad(f){return edadEn(f,new Date().toISOString().slice(0,10))}
+function actualizarEdad(){const e=edad($('nac').value);$('edadCalc').value=(e!==''&&e>=0&&e<=120)?e+' años':'';renderOpcionesNuevo()}
+function pad2(n){return String(n).padStart(2,'0')}
+function diasDelMes(anio,mes){if(!anio||!mes)return 31;return new Date(Number(anio),Number(mes),0).getDate()}
+function poblarDiasNacimiento(preservar=true){
+ const sel=$('nacDia'),actual=preservar?sel.value:'';const max=diasDelMes($('nacAnio').value,$('nacMes').value);
+ sel.innerHTML='<option value="">Día</option>'+Array.from({length:max},(_,i)=>i+1).map(d=>`<option value="${d}">${d}</option>`).join('');
+ if(actual&&Number(actual)<=max)sel.value=actual;
+}
+function reglasParaSugerenciaNacimiento(){
+ const marcados=new Set([...document.querySelectorAll('input[name=eq]:checked')].map(x=>x.value));
+ const eqs=marcados.size?equiposInstitucion.filter(e=>marcados.has(e.id)):equiposInstitucion;
+ return eqs.map(reglaDeEquipo).filter(Boolean);
+}
+function poblarAniosNacimiento(preservar=true){
+ const sel=$('nacAnio');if(!sel)return;const actual=preservar?(sel.value||($('nac').value||'').slice(0,4)):'';
+ const hoy=new Date(),maxYear=hoy.getFullYear(),minYear=hoy.getFullYear()-100;
+ const years=[];for(let y=maxYear;y>=minYear;y--)years.push(y);
+ if(actual&&/^\d{4}$/.test(actual)&&!years.includes(Number(actual)))years.push(Number(actual));
+ years.sort((a,b)=>b-a);
+ sel.innerHTML='<option value="">Año</option>'+years.map(y=>`<option value="${y}">${y}</option>`).join('');
+ if(actual&&years.includes(Number(actual)))sel.value=actual;
+ $('nacHint').textContent='Podés ingresar cualquier fecha de nacimiento válida. Si la edad no cumple la regla de la categoría, el sistema lo advertirá y podrá generar una alerta al Organizador.';
+ poblarDiasNacimiento(true);
+}
+function sincronizarNacDesdeSelects(){
+ poblarDiasNacimiento(true);const d=$('nacDia').value,m=$('nacMes').value,y=$('nacAnio').value;
+ if(!(d&&m&&y)){$('nac').value='';actualizarEdad();guardarLocalJugador();return}
+ const valor=`${y}-${pad2(m)}-${pad2(d)}`,dt=new Date(valor+'T12:00:00');
+ if(Number.isNaN(dt.getTime())||dt.getFullYear()!=Number(y)||dt.getMonth()+1!=Number(m)||dt.getDate()!=Number(d)){$('nac').value='';actualizarEdad();return}
+ $('nac').value=valor;actualizarEdad();guardarLocalJugador();
+}
+function cargarFechaEnSelects(valor){
+ const m=String(valor||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m){$('nac').value='';$('nacDia').value=$('nacMes').value=$('nacAnio').value='';poblarAniosNacimiento(false);return}
+ $('nac').value=valor;poblarAniosNacimiento(false);
+ if(![...$('nacAnio').options].some(o=>o.value===m[1]))$('nacAnio').add(new Option(m[1],m[1]),1);
+ $('nacAnio').value=m[1];$('nacMes').value=String(Number(m[2]));poblarDiasNacimiento(false);$('nacDia').value=String(Number(m[3]));actualizarEdad();
+}
+function limpiarFechaNacimiento(){$('nac').value='';$('nacDia').value='';$('nacMes').value='';poblarAniosNacimiento(false);$('edadCalc').value=''}
+function esResponsable(){
+ const modo=qs.get('modo');
+ if(modo==='responsable')return NewcomRoles.tieneResponsabilidades(sesion);
+ if(torneoId&&NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR'))return false;
+ return !NewcomRoles.organizadorHabilitado(sesion)&&NewcomRoles.tieneResponsabilidades(sesion);
+}
+function claveBorradorJugador(){return NewcomAutosave.key('jugador',{torneo:torneoId,institucion:instId})}
+function datosBorradorJugador(){
+ const equipos=[...document.querySelectorAll('input[name=eq]:checked')].map(x=>x.value);
+ const d={nombre:$('nombre').value,dni:$('dni').value,nac:$('nac').value,pos:$('pos').value,equipos};
+ if(!d.nombre&&!d.dni&&!d.nac&&!equipos.length)return{__empty:true};
+ return d;
+}
+function guardarLocalJugador(){if(torneoId&&instId)NewcomAutosave.schedule(claveBorradorJugador(),datosBorradorJugador)}
+function recuperarLocalJugador(){
+ if(!torneoId||!instId)return;const k=claveBorradorJugador();if(borradoresVistos.has(k))return;borradoresVistos.add(k);
+ const d=NewcomAutosave.offer(k,'una carga de jugador');if(!d)return;
+ $('nombre').value=d.nombre||'';$('dni').value=d.dni||'';$('pos').value=d.pos||'Zaguero';cargarFechaEnSelects(d.nac||'');
+ const ids=new Set(d.equipos||[]);document.querySelectorAll('input[name=eq]').forEach(x=>{x.checked=ids.has(x.value);x.closest('.teamChoice')?.classList.toggle('selected',x.checked)});actualizarResumen();
+ aviso('Carga recuperada desde el autoguardado local.','warn');
+}
+
+function reglaDeEquipo(eq){return reglas.find(r=>r.id===eq.categoria_torneo_id)||reglas.find(r=>String(r.categoria).trim().toLowerCase()===String(eq.categoria).trim().toLowerCase()&&String(r.modalidad).trim().toLowerCase()===String(eq.modalidad).trim().toLowerCase())}
+function equipoCerrado(eq){const r=reglaDeEquipo(eq);return !!(r?.cierre_plantel_en&&new Date()>=new Date(r.cierre_plantel_en))}
+function esExcepcionEtaria(j,regla){const e=edadEn(j.fecha_nacimiento,regla.fecha_referencia),minExc=Number(regla.edad_minima_excepcion);return !!regla.excepcion_edad_habilitada&&e!==''&&Number.isFinite(minExc)&&e<regla.edad_minima&&e>=minExc}
+function cuposUsados(eq,regla,excluirJugador=''){return jugadores.filter(j=>j.id!==excluirJugador&&(j.jugador_equipos||[]).some(a=>a.equipo_competitivo_id===eq.id)&&esExcepcionEtaria(j,regla)).length}
+function evaluar(eq,nacimiento,excluirJugador=''){const r=reglaDeEquipo(eq);if(!r)return{tipo:'warning',habilitado:true,requiereRevision:true,texto:'⚠ Sin regla de edad configurada',detalle:'Se puede cargar; el Organizador deberá revisarlo.'};if(!nacimiento)return{tipo:'wait',habilitado:true,requiereRevision:false,texto:'Ingresá la fecha de nacimiento para validar',detalle:`Edad mínima ${r.edad_minima}`};const e=edadEn(nacimiento,r.fecha_referencia);if(e===''||e<0)return{tipo:'blocked',habilitado:false,requiereRevision:false,texto:'Fecha de nacimiento inválida',detalle:''};const base=`${e} años al ${r.fecha_referencia}`;if(e>=r.edad_minima)return{tipo:'normal',habilitado:true,requiereRevision:false,texto:'✓ Cumple la edad',detalle:base};const exc=!!r.excepcion_edad_habilitada,minExc=Number(r.edad_minima_excepcion),permitidos=Number(r.menores_permitidos||0);if(exc&&permitidos>0&&Number.isFinite(minExc)&&e>=minExc){const usados=cuposUsados(eq,r,excluirJugador);if(usados<permitidos)return{tipo:'exception',habilitado:true,requiereRevision:false,texto:`✓ Excepción habilitada (${usados}/${permitidos} usados)`,detalle:`${base} · mínimo excepcional ${minExc}`};return{tipo:'warning',habilitado:true,requiereRevision:true,texto:`⚠ Cupo excepcional completo (${usados}/${permitidos})`,detalle:`${base} · se puede cargar y quedará pendiente de decisión`}}return{tipo:'warning',habilitado:true,requiereRevision:true,texto:`⚠ Fuera de la regla de edad (+${r.edad_minima})`,detalle:exc?`${base} · mínimo excepcional ${minExc}`:`${base} · excepción no habilitada por el Organizador`}}
+function tarjetaEquipo(eq,ev,checked=false,prefix='eq'){const cerradoBloqueado=equipoCerrado(eq);const disabled=!ev.habilitado||cerradoBloqueado;const texto=cerradoBloqueado?'🔒 Lista cerrada — cambios solo por solicitud':ev.texto;const detalle=cerradoBloqueado?'Para ALTA usá Mis jugadores. Para BAJA o REASIGNACIÓN usá los cambios de la lista.':(ev.detalle||'');return `<label class="teamChoice ${cerradoBloqueado?'blocked':ev.tipo}${checked?' selected':''}"><div><input type="checkbox" name="${prefix}" value="${eq.id}" ${checked?'checked':''} ${disabled?'disabled':''}><span class="teamName">${esc(eq.nombre)}</span></div><div class="meta"><span class="statusPill">${esc(eq.categoria)} · ${esc(eq.modalidad)}</span></div><div class="elig">${esc(texto)}</div><div class="ageRef">${esc(detalle)}</div></label>`}
+function activarSeleccion(contenedor,nombre){contenedor.querySelectorAll(`input[name=${nombre}]`).forEach(ch=>ch.onchange=()=>{ch.closest('.teamChoice')?.classList.toggle('selected',ch.checked);actualizarResumen()})}
+function actualizarResumen(){const n=document.querySelectorAll('input[name=eq]:checked').length;$('selResumen').textContent=n?`${n} equipo${n===1?'':'s'} seleccionado${n===1?'':'s'}.`:'Seleccioná al menos un equipo.'}
+function renderOpcionesNuevo(){if(!equiposInstitucion.length){$('equiposChecks').innerHTML=`<div class="emptyChoices">No hay equipos cargados. <a href="equipos.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}">Ir a Mis equipos</a></div>`;$('selResumen').textContent='';return}const nac=$('nac').value;const actuales=new Set([...document.querySelectorAll('input[name=eq]:checked')].map(x=>x.value));$('equiposChecks').innerHTML=equiposInstitucion.map(eq=>{const ev=evaluar(eq,nac);return tarjetaEquipo(eq,ev,ev.habilitado&&actuales.has(eq.id),'eq')}).join('');activarSeleccion($('equiposChecks'),'eq');actualizarResumen()}
+async function cargarDatosInstitucion(){const [re,rr,rj]=await Promise.all([NewcomSupabase.listarEquiposCompetitivos(torneoId,instId),NewcomSupabase.listarCategoriasTorneo(torneoId),NewcomSupabase.listarJugadoresInstitucion(torneoId,instId)]);if(!re.ok){aviso('Error al consultar equipos: '+re.error,'err');equiposInstitucion=[]}else equiposInstitucion=re.data||[];if(!rr.ok){aviso('Error al consultar reglas de edad: '+rr.error,'err');reglas=[]}else reglas=rr.data||[];if(!rj.ok){aviso(rj.error,'err');jugadores=[]}else jugadores=rj.data||[];poblarAniosNacimiento(true);renderOpcionesNuevo();renderPlantel();recuperarLocalJugador()}
+function linkSolicitudLista(eq,jugadorId=''){const rol=esResponsable()?'RESPONSABLE':'ORGANIZADOR';return `solicitudes_lista.html?nuevo=1&solicitante=${encodeURIComponent(rol)}&torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}&equipo=${encodeURIComponent(eq.id)}${jugadorId?`&jugador=${encodeURIComponent(jugadorId)}&accion=BAJA`:''}`}
+function accionesJugador(j){
+  const ids=new Set((j.jugador_equipos||[]).map(a=>a.equipo_competitivo_id));
+  const asignados=equiposInstitucion.filter(eq=>ids.has(eq.id));
+  const cerrados=asignados.filter(equipoCerrado);
+  const abiertos=asignados.filter(eq=>!equipoCerrado(eq));
+  const rolOperativo=esResponsable()||NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR');
+  const partes=[];
+  if(rolOperativo&&cerrados.length){
+    partes.push(...cerrados.map(eq=>`<a class="requestLink" href="${linkSolicitudLista(eq,j.id)}" title="Solicitar baja o reasignación en ${esc(eq.nombre)}">Solicitar BAJA / REASIGNACIÓN${cerrados.length>1?' · '+esc(eq.nombre):''}</a>`));
+  }
+  if(abiertos.length||!cerrados.length){
+    partes.push(`<button class="small secondary" onclick="asignar('${j.id}')">${cerrados.length?'Editar asignaciones abiertas':'Editar asignación'}</button>`);
+  }
+  if(!cerrados.length){
+    partes.push(`<button class="small danger" onclick="borrar('${j.id}')">Quitar de la lista</button>`);
+  }
+  return partes.join(' ');
+}
+function renderPlantel(){
+  const todosParticipantes=jugadores.filter(j=>(j.jugador_equipos||[]).length>0);
+  const q=String($('buscarJugador')?.value||'').trim().toLocaleLowerCase('es');
+  const participantes=q?todosParticipantes.filter(j=>String(j.nombre_apellido||'').toLocaleLowerCase('es').includes(q)||String(j.dni||'').toLocaleLowerCase('es').includes(q)):todosParticipantes;
+  $('cant').textContent=participantes.length;
+  const inst=instituciones.find(x=>x.id===instId);
+  const instNombre=inst?.nombre||'Institución';
+  const torneoNombre=$('torneo')?.selectedOptions?.[0]?.textContent?.trim()||'Torneo';
+  if(esResponsable()){
+    $('plantelEncabezado').textContent=`Lista de participación — ${instNombre}`;
+    $('plantelTitulo').textContent=`Lista de participación — ${instNombre}`;
+    $('plantelContexto').textContent=`Torneo actual: ${torneoNombre}. Cada jugador aparece una sola vez; las columnas indican en qué equipo competitivo participa.`;
+  }
+  const hayCerrados=equiposInstitucion.some(equipoCerrado),guia=$('closedGuide');
+  if(guia){
+    if(hayCerrados&&(esResponsable()||NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR'))){
+      const otro=esResponsable()?'el Organizador':'el Responsable';
+      guia.innerHTML=`<b>Hay listas cerradas.</b> No se modifican directamente. Para ALTA usá <b>Mis jugadores</b>; para BAJA o REASIGNACIÓN usá los botones de cambios. ${otro} resolverá la situación informada.`;
+      guia.classList.remove('hidden');
+    }else guia.classList.add('hidden');
+  }
+  $('sheetInst').innerHTML=inst?`<b>${esc(inst.nombre)}</b> · ${participantes.length}${q?' de '+todosParticipantes.length:''} jugador${participantes.length===1?'':'es'}`:'';
+  const equipos=[...equiposInstitucion].sort((a,b)=>`${a.categoria} ${a.modalidad} ${a.nombre}`.localeCompare(`${b.categoria} ${b.modalidad} ${b.nombre}`,'es'));
+  $('headPlantel').innerHTML=`<tr><th>N°</th><th>Jugador</th><th>DNI</th><th>Nacimiento</th><th>Edad</th><th>Posición</th>${equipos.map(e=>`<th class="teamCol"><div class="teamHead"><b>${esc(e.nombre)}</b><span>${esc(e.categoria)} · ${esc(e.modalidad)}</span></div></th>`).join('')}<th class="actionsCol">Acciones</th></tr>`;
+  const cols=7+equipos.length;
+  if(!participantes.length){const texto=q?`🔎 No se encontraron jugadores que coincidan con “${esc($('buscarJugador').value.trim())}”.`:'Todavía no hay jugadores en la lista de participación.';$('body').innerHTML=`<tr><td colspan="${cols}">${texto}</td></tr>`;return}
+  $('body').innerHTML=participantes.map((j,idx)=>{
+    const ids=new Set((j.jugador_equipos||[]).map(a=>a.equipo_competitivo_id));
+    const marcas=equipos.map(e=>`<td class="teamCol" title="${equipoCerrado(e)?'LISTA CERRADA':'LISTA ABIERTA'} · ${esc(e.nombre)} · ${esc(e.categoria)} ${esc(e.modalidad)}">${ids.has(e.id)?'<span class="markYes">✓</span>':'<span class="markNo">—</span>'}</td>`).join('');
+    return `<tr><td>${idx+1}</td><td><b>${esc(j.nombre_apellido)}</b></td><td>${esc(j.dni)}</td><td>${esc(j.fecha_nacimiento)}</td><td>${edad(j.fecha_nacimiento)}</td><td>${esc(j.posicion)}</td>${marcas}<td class="actionsCell">${accionesJugador(j)}</td></tr>`
+  }).join('');
+}
+function prepararImpresionPlantel(){
+  const torneoNombre=$('torneo')?.selectedOptions?.[0]?.textContent?.trim()||'';
+  const instNombre=$('inst')?.selectedOptions?.[0]?.textContent?.trim()||'';
+  $('printTorneo').textContent=torneoNombre;
+  $('printInstitucion').textContent=instNombre;
+  $('printResponsable').textContent=$('resp')?.value||'';
+  $('printCantidad').textContent=String(jugadores.filter(j=>(j.jugador_equipos||[]).length>0).length);
+}
+let tituloAntesImprimir='';
+function imprimirPlantel(){
+  if(!sesion||!NewcomRoles.es('ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE'))return;
+  prepararImpresionPlantel();
+  tituloAntesImprimir=document.title;
+  const t=($('torneo')?.selectedOptions?.[0]?.textContent||'Torneo').trim().replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ _-]+/g,'');
+  const i=($('inst')?.selectedOptions?.[0]?.textContent||'Institucion').trim().replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ _-]+/g,'');
+  document.title=`Lista de participación - ${i} - ${t}`;
+  window.print();
+}
+window.addEventListener('beforeprint',prepararImpresionPlantel);
+window.addEventListener('afterprint',()=>{if(tituloAntesImprimir){document.title=tituloAntesImprimir;tituloAntesImprimir=''}});
+async function inicio(){if(!sesion)return;if(esResponsable())await inicioResponsable();else await inicioOrganizador()}
+async function inicioOrganizador(){$('plantelTitulo').textContent='Lista de participación de la institución';$('irEquipos').textContent='Equipos';$('irMisJugadores').style.display='none';$('roleNote').innerHTML='<b>Área de listas del torneo.</b> El Organizador consulta quién participa y en qué equipo. Las altas nacen en la Bolsa de jugadores del Responsable; las listas cerradas se modifican por solicitud.';const rt=await NewcomSupabase.listarTorneos();if(!rt.ok){aviso(rt.error,'err');return}$('torneo').innerHTML=rt.data.map(t=>`<option value="${t.id}">${esc(t.nombre)}</option>`).join('');if(torneoId&&rt.data.some(t=>t.id===torneoId))$('torneo').value=torneoId;else torneoId=$('torneo').value||'';await cargarInstitucionesOrg()}
+async function cargarInstitucionesOrg(){torneoId=$('torneo').value;const r=await NewcomSupabase.listarInstituciones(torneoId);if(!r.ok){aviso(r.error,'err');return}instituciones=r.data||[];$('inst').innerHTML=instituciones.map(i=>`<option value="${i.id}">${esc(i.nombre)}</option>`).join('');if(instId&&instituciones.some(i=>i.id===instId))$('inst').value=instId;else instId=$('inst').value||'';await cambiarInstitucion()}
+async function inicioResponsable(){$('plantelTitulo').textContent='Mi lista de participación';$('altaTorneoCard').classList.add('hidden');$('irEquipos').textContent='Mis equipos';$('irMisJugadores').style.display='inline-block';$('irMisJugadores').textContent='Bolsa de jugadores';$('roleNote').innerHTML='<b>Lista de participación.</b> Acá aparecen únicamente los jugadores efectivamente asignados a equipos de este torneo. Las ALTAS se hacen desde tu <b>Bolsa de jugadores</b>.';$('irTabla').style.display='none';const r=await NewcomSupabase.listarAsignacionesResponsable(sesion.email);if(!r.ok){aviso(r.error,'err');return}asignaciones=r.data||[];if(!asignaciones.length){$('torneo').innerHTML='<option>Sin asignación</option>';$('inst').innerHTML='<option>Sin asignación</option>';$('torneo').disabled=$('inst').disabled=true;$('equiposChecks').innerHTML='<div class="emptyChoices">El Organizador todavía no te asignó una institución.</div>';$('headPlantel').innerHTML='<tr><th>Lista de participación</th></tr>';$('body').innerHTML='<tr><td>Sin institución asignada.</td></tr>';return}const torneosPropios=[...new Map(asignaciones.map(a=>[a.torneo_id,a.torneo])).entries()].map(([id,t])=>({id,nombre:t?.nombre||'Torneo'}));$('torneo').innerHTML=torneosPropios.map(t=>`<option value="${t.id}">${esc(t.nombre)}</option>`).join('');if(torneoId&&torneosPropios.some(t=>t.id===torneoId))$('torneo').value=torneoId;else torneoId=$('torneo').value||torneosPropios[0].id;await cargarInstitucionesResp();if(torneosPropios.length===1)$('torneo').disabled=true}
+async function cargarInstitucionesResp(){torneoId=$('torneo').value||torneoId;instituciones=asignaciones.filter(a=>a.torneo_id===torneoId);$('inst').innerHTML=instituciones.map(i=>`<option value="${i.id}">${esc(i.nombre)}</option>`).join('');if(instId&&instituciones.some(i=>i.id===instId))$('inst').value=instId;else instId=$('inst').value||'';$('inst').disabled=instituciones.length===1;await cambiarInstitucion()}
+async function cambiarInstitucion(){instId=$('inst').value;if(esResponsable()){const propia=instituciones.find(x=>x.id===instId&&String(x.responsable_email||'').toLowerCase()===String(sesion.email||'').toLowerCase());if(!propia){aviso('No tenés permiso para ver esa institución.','err');return}}const i=instituciones.find(x=>x.id===instId);$('resp').value=i?.responsable_nombre||'';$('irEquipos').href=`equipos.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`;$('irMisJugadores').href=`mis_jugadores.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`;$('irSolicitudes').href=`solicitudes_lista.html?${esResponsable()?'modo=responsable&':''}torneo=${encodeURIComponent(torneoId)}`;$('irTabla').href=`tabla.html?torneo=${encodeURIComponent(torneoId)}&desde=torneos`;history.replaceState(null,'',`jugadores.html?torneo=${encodeURIComponent(torneoId)}&institucion=${encodeURIComponent(instId)}`);await cargarDatosInstitucion()}
+['nombre','dni'].forEach(x=>$(x).addEventListener('input',guardarLocalJugador));$('pos').addEventListener('change',guardarLocalJugador);$('equiposChecks').addEventListener('change',()=>{guardarLocalJugador();poblarAniosNacimiento(true)});
+['nacDia','nacMes','nacAnio'].forEach(x=>$(x).addEventListener('change',sincronizarNacDesdeSelects));
+$('torneo').onchange=async()=>{torneoId=$('torneo').value;instId='';if(esResponsable())await cargarInstitucionesResp();else await cargarInstitucionesOrg()};$('inst').onchange=cambiarInstitucion;poblarDiasNacimiento(false);poblarAniosNacimiento(false);
+$('guardar').onclick=async()=>{const nombre=$('nombre').value.trim(),dni=$('dni').value.trim(),nac=$('nac').value,pos=$('pos').value;const equipos=[...document.querySelectorAll('input[name=eq]:checked')].map(x=>x.value);if(!nombre||!dni||!nac){aviso('Completá nombre y apellido, DNI y fecha de nacimiento.','err');return}const e=edad(nac);if(e===''||e<0||e>120){aviso('Revisá la fecha de nacimiento: la edad calculada no es válida.','err');return}if(!equiposInstitucion.length){aviso('Primero cargá al menos un equipo desde Equipos.','err');return}if(!equipos.length){aviso('Seleccioná al menos un equipo.','err');return}const cerrados=equipos.map(id=>equiposInstitucion.find(x=>x.id===id)).filter(Boolean).filter(equipoCerrado);if(cerrados.length){aviso('La lista de ese equipo está cerrada. Para ALTA usá Mis jugadores; para BAJA o REASIGNACIÓN usá los cambios de la lista.','err');return}const observados=equipos.map(id=>{const eq=equiposInstitucion.find(x=>x.id===id),ev=evaluar(eq,nac);return{eq,ev}}).filter(x=>x.ev.requiereRevision);if(observados.length&&!confirm('Hay '+observados.length+' asignación(es) fuera de la regla configurada. Se guardarán igualmente y se enviará una alerta al Organizador para que decida ACEPTAR o NO ACEPTAR. ¿Continuar?'))return;const r=await NewcomSupabase.guardarJugador({torneo_id:torneoId,institucion_id:instId,nombre_apellido:nombre,dni,fecha_nacimiento:nac,posicion:pos,equipos});if(!r.ok){aviso(r.error,'err');return}NewcomAutosave.clear(claveBorradorJugador());['nombre','dni'].forEach(x=>$(x).value='');limpiarFechaNacimiento();aviso('Jugador guardado.','ok');await cargarDatosInstitucion()};
+window.asignar=id=>{const j=jugadores.find(x=>x.id===id);if(!j)return;jugadorEdicion=j;const actuales=new Set((j.jugador_equipos||[]).map(a=>a.equipo_competitivo_id));$('dlgTitulo').textContent='Asignar equipos — '+j.nombre_apellido;$('dlgChoices').innerHTML=equiposInstitucion.map(eq=>{const ev=evaluar(eq,j.fecha_nacimiento,j.id);return tarjetaEquipo(eq,ev,actuales.has(eq.id),'dlgEq')}).join('');$('dlgMsg').innerHTML='';activarSeleccion($('dlgChoices'),'dlgEq');$('dlgAsignar').showModal()};
+$('dlgCancelar').onclick=()=>$('dlgAsignar').close();$('dlgGuardar').onclick=async()=>{if(!jugadorEdicion)return;const ids=[...document.querySelectorAll('input[name=dlgEq]:checked')].map(x=>x.value);if(!ids.length){$('dlgMsg').innerHTML='<div class="msg err">El jugador debe quedar asignado al menos a un equipo.</div>';return}const anteriores=new Set((jugadorEdicion.jugador_equipos||[]).map(a=>a.equipo_competitivo_id));const cambiados=equiposInstitucion.filter(eq=>anteriores.has(eq.id)!==ids.includes(eq.id));if(cambiados.some(equipoCerrado)){$('dlgMsg').innerHTML='<div class="msg err">Hay una lista cerrada. No se modifica directamente: para ALTA usá Mis jugadores y para BAJA o REASIGNACIÓN usá los cambios de la lista.</div>';return}const observados=ids.map(id=>{const eq=equiposInstitucion.find(x=>x.id===id),ev=evaluar(eq,jugadorEdicion.fecha_nacimiento,jugadorEdicion.id);return{eq,ev}}).filter(x=>x.ev.requiereRevision);if(observados.length&&!confirm('Hay '+observados.length+' asignación(es) fuera de la regla. Se guardarán y quedarán pendientes de revisión del Organizador. ¿Continuar?'))return;const r=await NewcomSupabase.actualizarAsignacionesJugador(jugadorEdicion.id,ids);if(!r.ok){$('dlgMsg').innerHTML='<div class="msg err">'+esc(r.error)+'</div>';return}$('dlgAsignar').close();aviso('Asignaciones actualizadas.','ok');await cargarDatosInstitucion()};
+window.borrar=async id=>{const j=jugadores.find(x=>x.id===id);const vinculados=new Set((j?.jugador_equipos||[]).map(a=>a.equipo_competitivo_id));if(equiposInstitucion.some(eq=>vinculados.has(eq.id)&&equipoCerrado(eq))){aviso('El jugador está declarado en una lista cerrada. No se elimina directamente: solicitá la BAJA desde los cambios de la lista.','err');return}if(!confirm('¿Eliminar este jugador de la lista de participación?'))return;const r=await NewcomSupabase.eliminarJugador(id);if(!r.ok){aviso(r.error,'err');return}aviso('Jugador eliminado de la lista de participación.','ok');await cargarDatosInstitucion()};
+$('imprimirPlantel').onclick=imprimirPlantel;
+$('buscarJugador').addEventListener('input',renderPlantel);
+inicio();
+</script><script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

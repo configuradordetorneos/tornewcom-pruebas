@@ -1,0 +1,18 @@
+TORNEWCOM V12.37.26 CANDIDATA — CORRECCIÓN PUNTUAL NAVEGACIÓN MENSAJES
+
+BASE: V12.37.25 CANDIDATA.
+
+ÚNICO CAMBIO FUNCIONAL:
+- mensajes.html: se agrega un botón visible “Inicio” encima de la mensajería para volver al panel principal sin depender del botón Atrás del navegador.
+- Se evita usar texto “← Panel”/“Volver” para no disparar el tooltip global “Volver a la pantalla anterior” que había quedado superpuesto cerca de Cerrar sesión.
+
+NO SE MODIFICÓ:
+- lógica de mensajería
+- SQL / Supabase
+- permisos
+- suspensión de Organizadores
+- nomenclaturas
+- tarjetas de instituciones
+- solicitudes / listas / equipos / jugadores / jornadas / resultados / tablas
+
+V12.37.22 continúa siendo la última VALIDADA hasta completar las pruebas.

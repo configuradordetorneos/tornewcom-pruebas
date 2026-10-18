@@ -1,0 +1,12 @@
+TORNEWCOM V12.37.30 CANDIDATA — EDICIÓN DE PARTIDOS + NOTIFICACIONES
+
+REGLA DE PERMISOS CONFIRMADA:
+- ADMIN_GENERAL hereda todos los permisos del Organizador en cualquier torneo.
+- ORGANIZADOR administra únicamente sus torneos.
+- RESPONSABLE no puede editar/eliminar partidos ni corregir finalizados.
+
+Verificación de producción 17/10/2026:
+public.es_organizador_de(uuid) ya devuelve true para es_admin_actual(), por lo que las RLS existentes de partidos que usan es_organizador_de también autorizan al Admin General.
+La nueva función crear_notificaciones_cambio_partido comprueba además explícitamente: es_organizador_de(v_torneo) OR es_admin_actual().
+
+NO SUBIR A NETLIFY todavía. Requiere aplicar SQL_V12_37_30_NOTIFICACIONES_PARTIDOS.sql y desplegar la Edge Function notificar-notificacion-email antes de la prueba integral.

@@ -1,0 +1,4 @@
+V12.36.14 LOCAL
+
+Cambio único: en Mis jornadas, los encabezados se muestran como Jornada 1, Jornada 2, etc., según el orden cronológico de las fechas. No se muestran los nombres internos de las jornadas (por ejemplo Apertura/Revancha).
+No se modificó Supabase ni la lógica de datos.

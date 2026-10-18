@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentación del torneo — TorNewcom</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#243746}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:920px;margin:28px auto;padding:0 16px}.nav{margin-bottom:16px}.btn,button{border:0;border-radius:9px;padding:10px 14px;background:#4A90C2;color:#fff;font-weight:700;text-decoration:none;cursor:pointer;display:inline-block}.secondary{background:#6c7f8d}.danger{background:#974c4c}.card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 18px rgba(32,72,98,.08)}h1,h2{margin-top:0}.intro{color:#607887;line-height:1.45}.torneo{font-size:18px;font-weight:800;color:#2F5D7E;margin:6px 0 16px}.form{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.field label{display:block;font-size:13px;font-weight:800;color:#2F5D7E;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #bdcbd5;border-radius:9px;font:inherit;background:#fff}.help{font-size:12px;color:#6b7f8c}.msg{padding:12px 14px;border-radius:10px;margin-top:12px;background:#EAF4FB}.ok{background:#e8f5ee;color:#245d39}.err{background:#faecec;color:#7b2c2c}.doc{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid #e0e8ed}.doc:last-child{border-bottom:0}.docName{font-weight:800}.meta{font-size:12px;color:#6b7f8c;margin-top:4px}.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.empty{padding:14px;background:#f7fafc;border-radius:10px;color:#667c89}.hidden{display:none!important}@media(max-width:650px){.doc{align-items:flex-start;flex-direction:column}.actions{justify-content:flex-start}.btn,button{width:100%;text-align:center}}
+</style>
+<script src="legal_v12_33.js?v=12.35" defer></script>
+</head>
+<body>
+<div class="top"><b>TORNEWCOM — V12.37.30 CANDIDATA — Documentación del torneo</b></div>
+<main class="wrap">
+  <div class="nav"><a id="volver" class="btn secondary" href="index.html">← Volver</a></div>
+
+  <section class="card">
+    <h1>Documentación del torneo</h1>
+    <div id="selectorWrap" class="field hidden" style="margin:8px 0 14px"><label for="selectorTorneo">Torneo</label><select id="selectorTorneo"><option value="">Seleccioná un torneo…</option></select></div>
+    <div id="nombreTorneo" class="torneo">Cargando torneo…</div>
+    <p id="explicacion" class="intro">Cargando…</p>
+  </section>
+
+  <section id="carga" class="card hidden">
+    <h2>Cargar documento</h2>
+    <div class="form">
+      <div class="field"><label for="nombre">Nombre del documento</label><input id="nombre" placeholder="Ej.: Planilla R5"></div>
+      <div class="field"><label for="archivo">Archivo</label><input id="archivo" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></div>
+      <div class="help">PDF, Word o Excel · máximo 20 MB.</div>
+      <div><button id="subir">Cargar documento</button></div>
+    </div>
+    <div id="msgCarga"></div>
+  </section>
+
+  <section class="card">
+    <h2>Documentos disponibles</h2>
+    <div id="lista" class="empty">Cargando documentos…</div>
+  </section>
+
+  <!-- Reservado para una etapa futura: Documentación de mi equipo. No se muestra ni se activa todavía. -->
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="roles_v12_24.js?v=12.35"></script>
+<script src="documentos_v12_37.js?v=12.37"></script>
+<script>
+const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search);let torneoId=qs.get('torneo')||'';
+const sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);
+let docs=[];
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function msg(id,t,tipo=''){const e=$(id);e.className='msg '+tipo;e.textContent=t}
+function fecha(v){try{return new Date(v).toLocaleString('es-AR')}catch(_){return''}}
+function tam(n){if(!n)return'';if(n<1024*1024)return Math.max(1,Math.round(n/1024))+' KB';return (n/1024/1024).toFixed(1)+' MB'}
+function puedeGestionar(){return !!(sesion&&(NewcomRoles.esAdmin(sesion)||NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR')))}
+async function descargar(i){const d=docs[i];if(!d)return;const r=await TorNewcomDocumentos.urlDescarga(d);if(!r.ok){alert('No se pudo descargar: '+r.error);return}window.location.href=r.url}
+async function eliminarDoc(i){const d=docs[i];if(!d||!confirm(`¿Eliminar "${d.nombre_visible}"?`))return;const r=await TorNewcomDocumentos.eliminar(d);if(!r.ok){alert('No se pudo eliminar: '+r.error);return}if(r.warn)alert(r.warn);await cargarLista()}
+function render(){const b=$('lista');if(!docs.length){b.className='empty';b.textContent='Todavía no hay documentos cargados para este torneo.';return}b.className='';b.innerHTML=docs.map((d,i)=>`<div class="doc"><div><div class="docName">📄 ${esc(d.nombre_visible)}</div><div class="meta">${esc(d.archivo_nombre)}${d.tamano_bytes?' · '+tam(d.tamano_bytes):''}${d.creado_en?' · '+fecha(d.creado_en):''}</div></div><div class="actions"><button onclick="descargar(${i})">Descargar</button>${puedeGestionar()?`<button class="danger" onclick="eliminarDoc(${i})">Eliminar</button>`:''}</div></div>`).join('')}
+async function cargarLista(){const r=await TorNewcomDocumentos.listar(torneoId);if(!r.ok){$('lista').className='msg err';$('lista').textContent='No se pudieron cargar los documentos: '+r.error;return}docs=r.data||[];render()}
+async function inicio(){
+ if(!sesion)return;
+ if(!torneoId){
+   const esResp=sesion.rol==='RESPONSABLE'||sesion.tiene_responsabilidades;
+   if(esResp){
+     const ra=await NewcomSupabase.listarAsignacionesResponsable(sesion.email);
+     if(!ra.ok){$('nombreTorneo').textContent='No se pudieron cargar tus torneos';$('explicacion').textContent=ra.error;$('lista').className='empty';$('lista').textContent='';return}
+     const unicos=new Map();
+     for(const a of (ra.data||[])){if(a.torneo_id&&!unicos.has(String(a.torneo_id)))unicos.set(String(a.torneo_id),a.torneo?.nombre||'Torneo')}
+     if(!unicos.size){$('nombreTorneo').textContent='Sin torneos asignados';$('explicacion').textContent='Todavía no tenés torneos disponibles como Responsable.';$('lista').className='empty';$('lista').textContent='No hay documentos para consultar.';return}
+     $('selectorWrap').classList.remove('hidden');
+     $('selectorTorneo').innerHTML='<option value="">Seleccioná un torneo…</option>'+[...unicos.entries()].sort((a,b)=>a[1].localeCompare(b[1],'es')).map(([id,n])=>`<option value="${esc(id)}">${esc(n)}</option>`).join('');
+     $('selectorTorneo').onchange=()=>{const id=$('selectorTorneo').value;if(id)location.href='documentacion.html?torneo='+encodeURIComponent(id)};
+     $('nombreTorneo').textContent='Elegí el torneo';
+     $('explicacion').textContent='Seleccioná el torneo cuya documentación querés consultar.';
+     $('lista').className='empty';$('lista').textContent='Seleccioná un torneo para ver sus documentos.';
+     $('volver').href='index.html';
+     return;
+   }
+   $('nombreTorneo').textContent='Falta elegir un torneo';$('explicacion').textContent='Volvé al panel y elegí el torneo antes de entrar a Documentación.';$('lista').className='empty';$('lista').textContent='No hay un torneo seleccionado.';return
+ }
+ const rt=await NewcomSupabase.obtenerTorneo(torneoId);
+ if(!rt.ok){$('nombreTorneo').textContent='No se pudo abrir el torneo';$('explicacion').textContent=rt.error;return}
+ $('nombreTorneo').textContent=rt.data?.nombre||'Torneo';
+ const gest=puedeGestionar();
+ $('carga').classList.toggle('hidden',!gest);
+ $('explicacion').textContent=gest?'Escribí el nombre del documento, elegí el archivo y tocá Cargar documento.':'Descargá los documentos que el Organizador dejó disponibles para este torneo.';
+ $('volver').href=gest?'index.html':'mis_torneos.html';
+ await cargarLista();
+}
+$('subir').onclick=async()=>{const nombre=$('nombre').value.trim(),archivo=$('archivo').files[0];if(!nombre){msg('msgCarga','Escribí el nombre del documento.','err');return}if(!archivo){msg('msgCarga','Elegí un archivo.','err');return}$('subir').disabled=true;$('subir').textContent='Cargando…';const r=await TorNewcomDocumentos.subir(torneoId,nombre,archivo,sesion?.user_id||null);$('subir').disabled=false;$('subir').textContent='Cargar documento';if(!r.ok){msg('msgCarga','No se pudo cargar: '+r.error,'err');return}$('nombre').value='';$('archivo').value='';msg('msgCarga','Documento cargado correctamente.','ok');await cargarLista()};
+inicio();
+</script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

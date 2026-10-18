@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tabla de posiciones — V12.37.30 — Sistema de Torneos Newcom</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:white;padding:18px 24px}
+.wrap{max-width:1350px;margin:28px auto;background:white;padding:24px;border-radius:16px}.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-block;padding:10px 15px;border-radius:10px;text-decoration:none;background:#4A90C2;color:white;border:0;cursor:pointer}
+select{padding:10px;border:1px solid #b9c9d4;border-radius:9px;background:white}table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
+th,td{padding:9px 7px;border-bottom:1px solid #dbe5eb;text-align:center;white-space:nowrap}th{background:#2F5D7E;color:white;position:sticky;top:0}
+tbody tr:nth-child(even){background:#EAF4FB}td:nth-child(2),th:nth-child(2){text-align:left}.msg{margin-top:15px;padding:12px;border-radius:10px;background:#EAF4FB}
+.note{color:#60717f;font-size:13px}.scroll{overflow:auto}.empty{text-align:center!important;padding:25px;color:#60717f}.torneoRef{font-size:17px;margin:-10px 0 18px;color:#315b77}.torneoRef b{color:#243746}.printOnly{display:none}.teamIdentity{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;overflow:visible}.teamLogo{width:28px;height:28px;object-fit:contain;display:inline-block;flex:0 0 28px;cursor:zoom-in;position:relative;z-index:1;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;border-radius:5px}.teamLogo:hover{transform:scale(4.4);transform-origin:left center;z-index:100;background:#fff;box-shadow:0 5px 18px rgba(25,45,60,.28);padding:2px}
+@media print{
+ @page{size:A4 landscape;margin:8mm}
+ body{background:#fff;color:#000}
+ .top,.bar,.note,#msg,#titulo,#torneoRef,.noPrint{display:none!important}
+ .wrap{max-width:none;margin:0;padding:0;border-radius:0}
+ .printOnly{display:block!important}
+ .printOnly h1{margin:0 0 5px;font-size:21px}
+ .printOnly p{margin:0 0 12px;font-size:12px}
+ .scroll{overflow:visible}
+ table{margin-top:8px;font-size:8.5px;width:100%;border-collapse:collapse}
+ th,td{padding:5px 4px;border:1px solid #cfd8df;white-space:nowrap}
+ th{position:static;background:#eee!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ tbody tr:nth-child(even){background:#f7f7f7!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ tr{break-inside:avoid}
+ .teamLogo{display:none!important}
+}
+</style><script src="legal_v12_33.js?v=12.35" defer></script>
+</head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);</script>
+<div class="top">TORNEWCOM — V12.37.30 CANDIDATA</div>
+<div class="wrap">
+<div class="bar"><a class="btn" id="volver" href="torneos.html">← Volver</a><label id="torneoWrap" style="display:none">Torneo <select id="torneoSel"></select></label>
+<label>Categoría <select id="cat"><option value="">Seleccionar...</option></select></label>
+<label>Modalidad <select id="mod" disabled><option value="">Seleccionar...</option></select></label>
+<button class="btn" id="actualizar">Actualizar tabla</button><button class="btn" id="imprimirTabla" type="button">Imprimir / Guardar PDF</button></div>
+<div class="printOnly"><h1>Tabla de posiciones</h1><p id="printMeta"></p></div>
+<h1 id="titulo">Tabla de posiciones</h1>
+<div id="torneoRef" class="torneoRef"></div>
+<p class="note">Se calcula directamente desde Supabase. Sólo ingresan partidos FINALIZADOS. PENDIENTES y SUSPENDIDOS no modifican la tabla.</p>
+<div id="msg" class="msg">Cargando...</div>
+<div class="scroll"><table><thead><tr>
+<th>POS</th><th>EQUIPO</th><th>PJ</th><th>PG 2-0</th><th>PG 2-1</th><th>PP 1-2</th><th>PP 0-2</th><th>N/P</th><th>PTS</th><th>SETS +</th><th>SETS -</th><th>DIF SETS</th><th>PF</th><th>PC</th><th>DIF PTS</th>
+</tr></thead><tbody id="body"></tbody></table></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script>
+const $=x=>document.getElementById(x), qs=new URLSearchParams(location.search),sesion=NewcomRoles.sesion();
+const esResp=qs.get('modo')==='responsable'
+ ? NewcomRoles.tieneResponsabilidades(sesion)
+ : (!NewcomRoles.organizadorHabilitado(sesion)&&NewcomRoles.tieneResponsabilidades(sesion));
+let torneo=qs.get('torneo'),desde=qs.get('desde')||'torneos';
+let partidos=[],torneos=[],equiposTorneo=[],asignacionesResp=[];
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function actualizarVolver(){
+ if(esResp){$('volver').href='index.html';return}
+ if(!torneo){$('volver').href='torneos.html';return}
+ if(desde==='jornadas')$('volver').href='jornadas.html?torneo='+encodeURIComponent(torneo);
+ else if(desde==='partidos')$('volver').href='partidos.html?torneo='+encodeURIComponent(torneo);
+ else $('volver').href='torneos.html';
+}
+function actualizarReferenciaTorneo(){
+ const t=torneos.find(x=>String(x.id)===String(torneo));
+ if(t){$('titulo').textContent='Tabla de posiciones — '+t.nombre;$('torneoRef').innerHTML='<b>Torneo:</b> '+esc(t.nombre);document.title='Tabla de posiciones — '+t.nombre+' — Sistema de Torneos Newcom';}
+ else{$('titulo').textContent='Tabla de posiciones';$('torneoRef').textContent='';document.title='Tabla de posiciones — Sistema de Torneos Newcom';}
+}
+actualizarVolver();
+function actualizarEncabezadoImpresion(){
+ const t=torneos.find(x=>String(x.id)===String(torneo));
+ const torneoNombre=t?.nombre||$('torneoSel')?.selectedOptions?.[0]?.textContent?.trim()||'Torneo';
+ const cat=$('cat').value||'—', mod=$('mod').value||'—';
+ $('printMeta').textContent=`Torneo: ${torneoNombre} · Categoría: ${cat} · Modalidad: ${mod}`;
+}
+let tituloAntesImprimir='';
+function imprimirTabla(){
+ if(!$('cat').value||!$('mod').value){alert('Seleccioná una categoría y una modalidad antes de imprimir.');return;}
+ actualizarEncabezadoImpresion();
+ tituloAntesImprimir=document.title;
+ const t=(torneos.find(x=>String(x.id)===String(torneo))?.nombre||'Torneo').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ _-]+/g,'');
+ const c=($('cat').value||'Categoria').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ +_-]+/g,'');
+ const m=($('mod').value||'Modalidad').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ _-]+/g,'');
+ document.title=`Tabla - ${t} - ${c} ${m}`;
+ window.print();
+}
+window.addEventListener('beforeprint',actualizarEncabezadoImpresion);
+window.addEventListener('afterprint',()=>{if(tituloAntesImprimir){document.title=tituloAntesImprimir;tituloAntesImprimir=''}});
+function num(v){return Number(v)||0}
+function normalizarNombre(v){return String(v||'').trim().toLocaleLowerCase('es')}
+function etiquetaEquipo(e,universo=equiposTorneo){if(!e)return'';const iguales=universo.filter(x=>x.categoria===e.categoria&&x.modalidad===e.modalidad&&normalizarNombre(x.nombre)===normalizarNombre(e.nombre));return iguales.length>1&&(e.institucion||e.instituciones?.nombre)?`${e.nombre} — ${e.institucion||e.instituciones?.nombre}`:e.nombre}
+function nuevo(nombre,logoPath=''){return{equipo:nombre,logo_path:logoPath||'',pj:0,pg20:0,pg21:0,pp12:0,pp02:0,np:0,pts:0,sg:0,sp:0,pf:0,pc:0}}
+function tablaDe(lista,equiposBase=[]){
+ const M=new Map();
+ const get=(k,n,logoPath='')=>{if(!M.has(k))M.set(k,nuevo(n,logoPath));else if(logoPath&&!M.get(k).logo_path)M.get(k).logo_path=logoPath;return M.get(k)};
+ equiposBase.forEach(e=>get('id:'+e.id,etiquetaEquipo(e,equiposBase),e.logo_path||''));
+ for(const p of lista){
+   const A=get(p.equipo_a_id?'id:'+p.equipo_a_id:'nombre:'+p.equipo_a,p.equipo_a),B=get(p.equipo_b_id?'id:'+p.equipo_b_id:'nombre:'+p.equipo_b,p.equipo_b);A.pj++;B.pj++;
+   const sa=num(p.sets_a),sb=num(p.sets_b),ta=num(p.tantos_a),tb=num(p.tantos_b);
+   A.sg+=sa;A.sp+=sb;B.sg+=sb;B.sp+=sa;A.pf+=ta;A.pc+=tb;B.pf+=tb;B.pc+=ta;A.pts+=num(p.puntos_a);B.pts+=num(p.puntos_b);
+   if(p.no_presentado==='EQUIPO A'){A.np++;}
+   else if(p.no_presentado==='EQUIPO B'){B.np++;}
+   else if(p.no_presentado==='AMBOS'){A.np++;B.np++;}
+   else if(sa===2&&sb===0){A.pg20++;B.pp02++;}else if(sa===0&&sb===2){B.pg20++;A.pp02++;}
+   else if(sa===2&&sb===1){A.pg21++;B.pp12++;}else if(sa===1&&sb===2){B.pg21++;A.pp12++;}
+ }
+ const a=[...M.values()];
+ a.sort((x,y)=>y.pts-x.pts||(y.sg-y.sp)-(x.sg-x.sp)||(y.pf-y.pc)-(x.pf-x.pc)||y.pf-x.pf||x.equipo.localeCompare(y.equipo,'es',{sensitivity:'base'}));
+ return a;
+}
+function unicos(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>String(x).localeCompare(String(y),'es',{numeric:true,sensitivity:'base'}));}
+function opciones(){
+ const cats=unicos([...equiposTorneo.map(e=>e.categoria),...partidos.map(p=>p.categoria)]);
+ const cv=$('cat').value;
+ $('cat').innerHTML='<option value="">Seleccionar...</option>'+cats.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(cats.includes(cv))$('cat').value=cv;
+ actualizarModalidades();
+}
+function actualizarModalidades(){
+ const cat=$('cat').value,mv=$('mod').value;
+ const mods=cat?unicos([...equiposTorneo.filter(e=>e.categoria===cat).map(e=>e.modalidad),...partidos.filter(p=>p.categoria===cat).map(p=>p.modalidad)]):[];
+ $('mod').innerHTML='<option value="">Seleccionar...</option>'+mods.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ $('mod').disabled=!cat;
+ if(mods.includes(mv))$('mod').value=mv;else $('mod').value='';
+}
+function pintar(){
+ const cat=$('cat').value,mod=$('mod').value,b=$('body');
+ if(!cat||!mod){
+   b.innerHTML='<tr><td colspan="15" class="empty">Seleccioná una categoría y una modalidad para ver la tabla.</td></tr>';
+   $('msg').textContent='La tabla no mezcla categorías ni modalidades. Elegí la competencia que querés consultar.';
+   return;
+ }
+ const lista=partidos.filter(p=>p.categoria===cat&&p.modalidad===mod);
+ const base=equiposTorneo.filter(e=>e.categoria===cat&&e.modalidad===mod);
+ const t=tablaDe(lista,base);
+ if(!t.length){b.innerHTML='<tr><td colspan="15" class="empty">No hay equipos inscriptos en esta categoría/modalidad.</td></tr>';$('msg').textContent=`Sin equipos para ${cat} · ${mod}.`;return}
+ b.innerHTML=t.map((x,i)=>{const u=x.logo_path?NewcomSupabase.urlPublicaLogoEquipo(x.logo_path):'';const logo=u?`<img class="teamLogo" src="${esc(u)}" alt="Escudo de ${esc(x.equipo)}" loading="lazy">`:'';return `<tr><td>${i+1}</td><td><b><span class="teamIdentity">${logo}<span>${esc(x.equipo)}</span></span></b></td><td>${x.pj}</td><td>${x.pg20}</td><td>${x.pg21}</td><td>${x.pp12}</td><td>${x.pp02}</td><td>${x.np}</td><td><b>${x.pts}</b></td><td>${x.sg}</td><td>${x.sp}</td><td>${x.sg-x.sp}</td><td>${x.pf}</td><td>${x.pc}</td><td>${x.pf-x.pc}</td></tr>`}).join('');
+ $('msg').textContent=`${lista.length} partido(s) FINALIZADO(s) en ${cat} · ${mod}.`;
+}
+async function cargarTorneosPermitidos(){
+ if(esResp){
+   if(!asignacionesResp.length){const ar=await NewcomSupabase.listarAsignacionesResponsable(sesion.email);if(!ar.ok)return ar;asignacionesResp=ar.data||[];}
+   torneos=[...new Map(asignacionesResp.map(a=>[a.torneo_id,a.torneo])).entries()].map(([id,t])=>({id,nombre:t?.nombre||'Torneo',estado:t?.estado||'ACTIVO'}));
+   return{ok:true,data:torneos};
+ }
+ const rt=await NewcomSupabase.listarTorneos();if(!rt.ok)return rt;torneos=rt.data||[];return{ok:true,data:torneos};
+}
+async function cargarContexto(){
+ if(!torneos.length){const rt=await cargarTorneosPermitidos();if(!rt.ok)return rt;}
+ actualizarReferenciaTorneo();
+ const re=await NewcomSupabase.listarEquiposCompetitivos(torneo);
+ if(!re.ok)return re;
+ equiposTorneo=(re.data||[]).map(e=>({id:e.id,nombre:e.nombre,categoria:e.categoria,modalidad:e.modalidad,logo_path:e.logo_path||'',institucion:e.instituciones?.nombre||''}));
+ return{ok:true};
+}
+async function cargar(){
+ if(!torneo){
+   const rt=await cargarTorneosPermitidos();
+   if(!rt.ok){$('msg').textContent='Error: '+rt.error;return}
+   if(esResp&&torneos.length===1){torneo=torneos[0].id;history.replaceState(null,'','tabla.html?torneo='+encodeURIComponent(torneo)+'&desde=torneos');$('torneoWrap').style.display='none';actualizarVolver();}
+   else{
+     $('torneoWrap').style.display='inline-flex';
+     $('torneoSel').innerHTML='<option value="">Seleccionar torneo...</option>'+torneos.map(t=>`<option value="${esc(t.id)}">${esc(t.nombre)}</option>`).join('');
+     actualizarReferenciaTorneo();$('msg').textContent=torneos.length?'Seleccioná el torneo cuya tabla querés consultar.':'No tenés torneos asignados.';$('body').innerHTML='<tr><td colspan="15" class="empty">'+(torneos.length?'Seleccioná un torneo.':'Sin torneos asignados.')+'</td></tr>';return;
+   }
+ }
+ if(esResp){const rt=await cargarTorneosPermitidos();if(!rt.ok){$('msg').textContent='Error: '+rt.error;return}if(!torneos.some(t=>String(t.id)===String(torneo))){torneo='';$('msg').textContent='No tenés acceso a ese torneo.';$('body').innerHTML='<tr><td colspan="15" class="empty">Torneo no asignado.</td></tr>';return;}}
+ $('msg').textContent='Leyendo datos del torneo y partidos FINALIZADOS desde Supabase...';
+ const ctx=await cargarContexto();if(!ctx.ok){$('msg').textContent='Error: '+ctx.error;return;}
+ const r=await NewcomSupabase.listarPartidosFinalizados(torneo);if(!r.ok){$('msg').textContent='Error: '+r.error;return;}
+ partidos=r.data;opciones();pintar();
+}
+$('cat').onchange=()=>{actualizarModalidades();pintar();};$('mod').onchange=pintar;$('actualizar').onclick=cargar;$('imprimirTabla').onclick=imprimirTabla;
+$('torneoSel').onchange=()=>{if(!$('torneoSel').value)return;torneo=$('torneoSel').value;desde='torneos';actualizarVolver();history.replaceState(null,'','tabla.html?torneo='+encodeURIComponent(torneo)+'&desde=torneos');$('torneoWrap').style.display='none';cargar();};
+cargar();
+</script><script src="guia_organizador_v12_35.js?v=12.35"></script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

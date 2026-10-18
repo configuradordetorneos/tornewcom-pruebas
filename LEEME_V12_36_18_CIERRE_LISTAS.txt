@@ -1,0 +1,38 @@
+TORNEWCOM — V12.36.18 CANDIDATA LOCAL
+
+BASE:
+V12.36.17_SOLICITUDES_CORREGIDAS_CANDIDATA_LOCAL
+
+OBJETIVO:
+Agregar al Organizador control real del cierre de listas de participación SIN tocar nuevamente SQL.
+
+CAMBIOS:
+1. Botón/acceso “Cierre de listas” para el Organizador.
+2. Desde Editar categorías y reglas aparece el bloque “Cierre de listas de participación”.
+3. Cierre global:
+   - aplicar una fecha común a todas las categorías activas;
+   - cerrar todas ahora;
+   - reabrir todas.
+4. Cierre por categoría:
+   - guardar fecha individual;
+   - cerrar ahora;
+   - reabrir.
+5. Estados visibles:
+   - ABIERTA;
+   - Cierra el DD/MM/AAAA;
+   - CERRADA.
+6. El inicio del torneo NO cierra listas. Un torneo puede tener partidos jugados/finalizados y mantener planteles abiertos.
+7. Al vencer el cierre, se conserva el circuito V12.36.17: Responsable no modifica directamente y usa Solicitar modificación.
+8. Se agregó acceso rápido “Cierre de listas” en Partidos para Organizador/Admin. No se muestra al Responsable.
+
+BASE DE DATOS:
+NO ejecutar SQL nuevo. Esta versión usa el campo existente categorias_torneo.cierre_plantel_en y las políticas RLS ya vigentes para Organizador.
+
+PRUEBA RECOMENDADA:
+A) Abrir torneo de prueba y verificar categoría ABIERTA.
+B) Cerrar una sola categoría “ahora”.
+C) Entrar como Responsable: debe quedar bloqueada la modificación directa y aparecer Solicitar modificación.
+D) Reabrir la categoría y comprobar que vuelve la edición directa.
+E) Programar una fecha futura para una categoría.
+F) Aplicar cierre global y luego reabrir todas.
+G) Confirmar que partidos/resultados existentes no se alteran.

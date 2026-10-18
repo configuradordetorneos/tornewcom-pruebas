@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TorNewcom — Ingresar · V12.37.30</title>
+<style>
+:root{
+  --blue:#2679d6;
+  --blue2:#155ca9;
+  --ink:#123453;
+  --muted:#5d7386;
+  --glass:rgba(255,255,255,.94);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif}
+body{
+  min-height:100vh;
+  color:var(--ink);
+  background:
+    linear-gradient(rgba(5,29,53,.32),rgba(5,29,53,.46)),
+    url("tornewcom-fondo-limpio.jpg") center/cover fixed no-repeat;
+}
+.page{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:430px 320px;
+  gap:28px;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.login-card{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:22px;
+  padding:22px 28px 20px;
+  box-shadow:0 20px 50px rgba(0,16,36,.34);
+  backdrop-filter:blur(10px);
+}
+.brandmark{
+  width:46px;height:46px;border-radius:14px;
+  margin:0 auto 7px;
+  display:grid;place-items:center;
+  background:#dceeff;
+  font-size:25px;
+}
+.brand-title{
+  margin:0;text-align:center;
+  font-size:31px;line-height:1;
+  letter-spacing:1px;color:#0d4079;
+}
+.brand-sub{
+  margin:8px 0 17px;
+  text-align:center;color:#45637e;font-size:13px;
+}
+.rule{height:1px;background:#d2dce5;margin-bottom:16px}
+.login-card h2{font-size:21px;margin:0 0 4px}
+.welcome-copy{margin:0 0 14px;color:var(--muted);font-size:13px}
+.field{margin-bottom:11px}
+label{display:block;font-weight:700;color:#17446e;margin-bottom:5px;font-size:13px}
+input{
+  width:100%;height:42px;padding:9px 12px;
+  border:1px solid #b9cad9;border-radius:9px;
+  font-size:14px;background:white;color:#17324d;outline:none
+}
+input:focus{border-color:#2a78c5;box-shadow:0 0 0 3px rgba(42,120,197,.11)}
+.show-pass{
+  display:flex;align-items:center;gap:7px;
+  margin-top:7px;font-size:12px;color:#536d84;font-weight:600
+}
+.show-pass input{width:auto;height:auto;margin:0}
+.btn{
+  width:100%;min-height:42px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  border:none;font-weight:800;font-size:14px;
+  text-decoration:none;cursor:pointer
+}
+.primary{
+  margin-top:13px;color:white;
+  background:linear-gradient(90deg,var(--blue),var(--blue2));
+  box-shadow:0 7px 16px rgba(22,91,166,.22)
+}
+.results{margin-top:10px;color:#155ca9;background:#fff;border:1px solid #2a73bd}
+.error{
+  display:none;margin-top:10px;padding:9px 11px;border-radius:9px;
+  background:#fdecec;color:#9a2626;font-size:13px;font-weight:700
+}
+.side{display:flex;flex-direction:column;gap:12px}
+.side-title{
+  color:#fff;font-size:11px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1.2px;padding-left:3px
+}
+.side-link{
+  display:grid;grid-template-columns:44px 1fr 16px;
+  gap:11px;align-items:center;text-decoration:none;color:white;
+  padding:15px 14px;border-radius:15px;
+  background:rgba(7,52,91,.80);
+  border:1px solid rgba(151,199,239,.29);
+  box-shadow:0 12px 26px rgba(0,13,31,.22)
+}
+.side-icon{
+  width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;background:#2778d5;font-size:21px
+}
+.side-link strong{display:block;font-size:16px;margin-bottom:2px}
+.side-link small{font-size:11px;color:#dceafb;line-height:1.25}
+.chev{font-size:22px}
+.micro{text-align:center;color:rgba(255,255,255,.72);font-size:10px;margin-top:3px}
+.torneo-contacto{margin-top:13px;padding:11px 12px;border-top:1px solid #d2dce5;text-align:center;color:#34566f;font-size:12px;line-height:1.45}
+.torneo-contacto strong{display:block;color:#173f61;margin-bottom:5px}
+.wa-link{display:inline-flex;align-items:center;gap:7px;color:#245577;text-decoration:none;font-weight:800}
+.wa-icon{width:27px;height:27px;display:inline-block;vertical-align:middle}
+@media(max-width:820px){
+  .page{grid-template-columns:minmax(290px,460px);align-items:start;padding:14px}
+  .side{display:grid;grid-template-columns:1fr 1fr}
+  .side-title{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .page{padding:10px}
+  .login-card{padding:19px 17px;border-radius:18px}
+  .brand-title{font-size:28px}
+  .side{grid-template-columns:1fr}
+  .side-title,.micro{display:none}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script>
+function alternarPassword(){const p=document.getElementById('pass'),c=document.getElementById('mostrarPass');p.type=c.checked?'text':'password';}
+function emailValido(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim().toLowerCase())}
+function mostrarErrorRecuperacion(){
+  try{
+    const q=new URLSearchParams(location.search||'');
+    const codigo=q.get('error_code')||q.get('error')||'';
+    const descripcion=q.get('error_description')||'';
+    const esRecuperacion=/otp_expired|access_denied/i.test(codigo+' '+descripcion);
+    if(!esRecuperacion)return;
+    const box=document.getElementById('error');
+    if(!box)return;
+    box.style.display='block';
+    box.innerHTML='El enlace de recuperación ya no es válido. <a href="recuperar_password.html" style="color:#8b1f1f;font-weight:800">Solicitar uno nuevo</a>.';
+    try{history.replaceState(null,'',location.pathname)}catch(_){}
+  }catch(_){}
+}
+async function ingresar(ev){
+  if(ev) ev.preventDefault();
+  const email=document.getElementById('email').value.trim().toLowerCase();
+  const pass=document.getElementById('pass').value;
+  const error=document.getElementById('error');
+  const btn=document.querySelector('button[type=submit]');
+  error.style.display='none';
+  error.textContent='';
+  if(!emailValido(email)){error.style.display='block';error.textContent='Ingresá un email válido, por ejemplo nombre@correo.com.';return false;}
+  btn.disabled=true;
+  btn.textContent='Ingresando…';
+  try{
+    if(!window.NewcomSupabase){
+      throw new Error('No se cargó el módulo de conexión con Supabase.');
+    }
+    const r=await Promise.race([
+      NewcomSupabase.iniciarSesionAuth(email,pass),
+      new Promise(resolve=>setTimeout(()=>resolve({ok:false,error:'La conexión tardó demasiado. Verificá Internet y volvé a intentar.'}),15000))
+    ]);
+    if(!r || !r.ok){
+      throw new Error(r?.error || 'No se pudo iniciar sesión.');
+    }
+    localStorage.setItem('sesionNewcom',JSON.stringify(r.data));
+    window.location.href='index.html';
+  }catch(e){
+    error.style.display='block';
+    error.textContent='No se pudo ingresar: '+(e?.message || String(e));
+    btn.disabled=false;
+    btn.textContent='Ingresar';
+  }
+  return false;
+}
+window.addEventListener('DOMContentLoaded',mostrarErrorRecuperacion);
+</script>
+</head>
+<body>
+<main class="page">
+  <section class="login-card" aria-label="Acceso a TorNewcom">
+    <div class="brandmark">🏐</div>
+    <h1 class="brand-title">TORNEWCOM</h1>
+    <p class="brand-sub">Plataforma de gestión de torneos de Newcom</p>
+    <div class="rule"></div>
+
+    <h2>Bienvenido</h2>
+    <p class="welcome-copy">Accedé a tu cuenta para gestionar torneos, equipos y planteles.</p>
+
+    <form onsubmit="ingresar(event); return false;">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="username" placeholder="tu@email.com">
+      </div>
+      <div class="field">
+        <label for="pass">Contraseña</label>
+        <input id="pass" type="password" required autocomplete="current-password" placeholder="••••••••">
+        <label class="show-pass"><input id="mostrarPass" type="checkbox" onchange="alternarPassword()"> Mostrar contraseña</label>
+        <div style="text-align:right;margin-top:7px"><a href="recuperar_password.html" style="font-size:12px;font-weight:700;color:#155ca9;text-decoration:none">¿Olvidaste tu contraseña?</a></div>
+      </div>
+      <button class="btn primary" type="submit">Ingresar</button>
+    </form>
+
+    <div id="error" class="error"></div>
+    <a class="btn results" href="activar_cuenta.html">👤&nbsp;&nbsp;Crear cuenta</a>
+    <a class="btn results" href="publico.html">🏆&nbsp;&nbsp;Ver resultados</a>
+    <div style="text-align:center;margin-top:11px;font-size:12px;color:#587080"><a href="terminos.html" target="_blank" style="color:#245577;font-weight:700">Términos y Condiciones</a> · <a href="terminos.html#privacidad" target="_blank" style="color:#245577;font-weight:700">Política de Privacidad</a></div>
+    <div class="torneo-contacto">
+      <strong>¿Querés usar este sistema en tu torneo?</strong>
+      <span>Contacto: <a class="wa-link" href="https://wa.me/5491122527681?text=Hola%20Gabriel%2C%20quiero%20usar%20TorNewcom%20en%20mi%20torneo." target="_blank" rel="noopener" aria-label="Contactar por WhatsApp" title="Contactar por WhatsApp"><svg class="wa-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#25D366"/><path fill="#fff" d="M23.7 8.3A10.8 10.8 0 0 0 6.8 21.4L5.3 27l5.7-1.5a10.8 10.8 0 0 0 12.7-17.2Zm-7.6 15.5a8.9 8.9 0 0 1-4.5-1.2l-.3-.2-3.4.9.9-3.3-.2-.3A8.9 8.9 0 1 1 16 23.8Zm4.9-6.7c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.7-.8-2.8-1.5-3.9-3.4-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-.9-2.1c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.1.2 2.4 3.7 5.8 5.2 2.2 1 3.1 1 4.2.9.7-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.2-.3-.3-.6-.4Z"/></svg></a></span>
+    </div>
+  </section>
+
+  <aside class="side">
+    <div class="side-title">Visitá también</div>
+
+    <a class="side-link" href="https://script.google.com/macros/s/AKfycbxikpnjHRjmeZglD4VhPXLeNEBG4c48tetx_duJqms_AZ8YGvlceTdmBFpf4GwEHBrRGw/exec" target="_blank" rel="noopener">
+      <div class="side-icon">📘</div>
+      <div>
+        <strong>R.I.N.</strong>
+        <small>Reglamento Interactivo de Newcom</small>
+      </div>
+      <div class="chev">›</div>
+    </a>
+
+    <a class="side-link" href="https://dondejugarnewcom.netlify.app" target="_blank" rel="noopener">
+      <div class="side-icon">📍</div>
+      <div>
+        <strong>Dónde Jugar Newcom</strong>
+        <small>Encontrá lugares y equipos para jugar.</small>
+      </div>
+      <div class="chev">›</div>
+    </a>
+
+    <div class="micro">TorNewcom · Gestión de torneos de Newcom</div>
+  </aside>
+</main>
+<script src="tornewcom_tooltips.js?v=12.36.19"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+V12.36.11 LOCAL — Agrupado visual de instituciones del Responsable
+
+Base: V12.36.10.
+Cambio único: index.html.
+
+- Cada institución aparece una sola vez en “Mis instituciones”.
+- Dentro de cada institución se listan sus torneos y cantidad de equipos.
+- Los accesos “Mi plantel” y “Mis equipos” conservan exactamente el torneo/institución correspondiente.
+- No se modifica Supabase, planteles, equipos, jugadores, permisos ni navegación interna.

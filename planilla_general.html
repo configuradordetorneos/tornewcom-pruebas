@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Planilla general — TorNewcom</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}
+.top{background:#2F5D7E;color:#fff;padding:18px 24px}.top b{font-size:16px}.who{font-size:13px;opacity:.92;margin-top:4px}
+.wrap{max-width:1260px;margin:26px auto;padding:0 16px}.nav{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.btn,button{display:inline-block;border:0;border-radius:9px;padding:9px 12px;background:#4A90C2;color:#fff;text-decoration:none;font-weight:700;cursor:pointer;font-size:13px}.secondary{background:#6c7f8d}.green{background:#3d8a66}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 5px 18px rgba(32,72,98,.07)}
+h1,h2,h3{margin-top:0}.muted{color:#647b89;font-size:13px}.note{padding:12px 14px;background:#EAF4FB;color:#2F5D7E;border-radius:10px;margin:12px 0}.error{padding:12px 14px;background:#faecec;color:#7b2c2c;border-radius:10px;margin:12px 0}
+.controls{display:grid;grid-template-columns:2fr 1.4fr 1.4fr 1.2fr 1.2fr;gap:10px;align-items:end}.field label{display:block;font-size:12px;font-weight:800;color:#536c7c;margin-bottom:5px}.field input,.field select{width:100%;padding:9px 10px;border:1px solid #cbd8e0;border-radius:8px;background:#fff;color:#1f3342}
+.controlActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.pill{background:#e9f2f8;color:#2F5D7E;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800}
+.torneoTitle{text-align:center;margin:2px 0 18px}.torneoTitle h1{margin:0;color:#2F5D7E;font-size:25px}.torneoTitle .sub{font-size:13px;color:#647b89;margin-top:5px;font-weight:700}
+.instBlock{margin:0 0 22px;border:1px solid #dbe6ed;border-radius:13px;overflow:hidden;break-inside:avoid-page}.instHead{background:#edf5fa;padding:12px 15px;border-bottom:1px solid #dbe6ed}.instHead h2{margin:0 0 5px;font-size:18px;color:#2F5D7E}.dt{font-size:13px;font-weight:800}.dt span{font-weight:700;color:#795f22}
+.scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:820px}th,td{padding:9px 10px;border-bottom:1px solid #e3ebf0;text-align:left;vertical-align:top;font-size:13px}th{background:#2F5D7E;color:#fff;cursor:pointer;user-select:none;white-space:nowrap}th:hover{background:#244d69}tbody tr:nth-child(even){background:#fafcfd}tbody tr:last-child td{border-bottom:0}.sortMark{opacity:.75;font-size:10px;margin-left:4px}.empty{padding:18px;color:#647b89;text-align:center}
+.tags{display:flex;gap:5px;flex-wrap:wrap}.tag{display:inline-block;background:#eef4f7;border:1px solid #d6e2e9;border-radius:999px;padding:3px 7px;font-size:11px;font-weight:800;color:#36566b}
+@media(max-width:950px){.controls{grid-template-columns:1fr 1fr}.controls .wide{grid-column:1/-1}}
+@media(max-width:560px){.controls{grid-template-columns:1fr}.controls .wide{grid-column:auto}.wrap{padding:0 10px}.top{padding:15px 14px}}
+@media print{
+  @page{size:A4 landscape;margin:9mm}
+  body{background:#fff;color:#000;font-family:"Times New Roman",Times,serif}
+  .top,.nav,.noPrint,.controlsCard{display:none!important}
+  .wrap{max-width:none;margin:0;padding:0}.card{box-shadow:none;padding:0;margin:0;border-radius:0}
+  .torneoTitle{margin-bottom:10px}.torneoTitle h1{color:#000;font-size:20pt}.torneoTitle .sub{color:#000;font-size:10pt}
+  .instBlock{border:1px solid #999;border-radius:0;margin-bottom:12px;break-inside:avoid-page}.instHead{background:#fff!important;border-bottom:1px solid #999;padding:7px 8px}.instHead h2{color:#000;font-size:13pt;margin-bottom:3px}.dt{font-size:10pt}.dt span{color:#000}
+  table{min-width:0}th{background:#fff!important;color:#000;border:1px solid #999;cursor:default;font-size:9pt;padding:5px 6px}td{border:1px solid #bbb;font-size:9pt;padding:5px 6px}tbody tr:nth-child(even){background:#fff}
+  .tag{background:#fff;border:0;padding:0;font-size:9pt;color:#000}.tags{display:block}.tag:not(:last-child)::after{content:" · ";font-weight:400}
+  .summary{margin:8px 0 10px}.pill{background:#fff;color:#000;border:1px solid #999;padding:4px 7px;font-size:9pt}
+}
+</style>
+<script src="legal_v12_33.js?v=12.35" defer></script>
+</head>
+<body>
+<div class="top"><b>TORNEWCOM — Planilla general</b><div class="who" id="quien"></div></div>
+<main class="wrap">
+  <div class="nav noPrint">
+    <a class="btn secondary" href="index.html">← Panel</a>
+    <a class="btn secondary" id="volverTorneo" href="index.html#mis-torneos">Volver al torneo</a>
+    <button class="secondary" id="cerrar">Cerrar sesión</button>
+  </div>
+
+  <section class="card controlsCard">
+    <h1>Planilla general de jugadores</h1>
+    <p class="muted">Vista de consulta para Administrador General y Organizador. Esta pantalla no permite modificar datos.</p>
+    <div id="msg" class="note">Cargando datos…</div>
+    <div class="controls">
+      <div class="field wide"><label for="torneo">Torneo</label><select id="torneo"></select></div>
+      <div class="field"><label for="institucion">Institución</label><select id="institucion"><option value="">Todas</option></select></div>
+      <div class="field"><label for="equipo">Equipo</label><select id="equipo"><option value="">Todos</option></select></div>
+      <div class="field"><label for="categoria">Categoría</label><select id="categoria"><option value="">Todas</option></select></div>
+      <div class="field"><label for="modalidad">Modalidad</label><select id="modalidad"><option value="">Todas</option></select></div>
+    </div>
+    <div class="field" style="margin-top:10px"><label for="buscar">Buscar</label><input id="buscar" type="search" placeholder="Nombre, DNI, institución, equipo, categoría o modalidad"></div>
+    <div class="controlActions">
+      <button id="limpiar" class="secondary">Limpiar filtros</button>
+      <button id="imprimir" class="green">Imprimir / Guardar PDF</button>
+    </div>
+  </section>
+
+  <section class="card" id="salida">
+    <div class="torneoTitle"><h1 id="tituloTorneo">Planilla general</h1><div class="sub">Nómina de consulta · una fila por jugador/a</div></div>
+    <div class="summary" id="resumen"></div>
+    <div id="contenido"><div class="empty">Cargando…</div></div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script src="roles_v12_24.js?v=12.35"></script>
+<script>
+const sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const norm=v=>String(v??'').trim().toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
+const coll=new Intl.Collator('es',{numeric:true,sensitivity:'base'});
+let torneos=[],instituciones=[],categorias=[],jugadores=[];
+let sortKey='nombre',sortDir=1;
+
+function setMsg(t,tipo='note'){const m=$('msg');m.className=tipo;m.textContent=t}
+function fmtFecha(v){if(!v)return '—';const s=String(v).slice(0,10);const p=s.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:s}
+function catCompare(a,b){const na=Number(String(a).match(/\d+/)?.[0]||NaN),nb=Number(String(b).match(/\d+/)?.[0]||NaN);if(Number.isFinite(na)&&Number.isFinite(nb)&&na!==nb)return na-nb;return coll.compare(a,b)}
+function uniq(arr){return [...new Set(arr.filter(Boolean))]}
+function optionList(vals,actual){return vals.map(v=>`<option value="${esc(v)}" ${String(v)===String(actual)?'selected':''}>${esc(v)}</option>`).join('')}
+
+function categoriaReal(asg){
+  const c=categorias.find(x=>String(x.id)===String(asg.categoria_torneo_id));
+  return String(c?.categoria||asg.categoria||'').trim();
+}
+function modalidadReal(asg){
+  const c=categorias.find(x=>String(x.id)===String(asg.categoria_torneo_id));
+  return String(c?.modalidad||asg.modalidad||'').trim();
+}
+
+async function cargarTorneos(){
+  const r=await NewcomSupabase.listarTorneos();
+  if(!r.ok)throw new Error(r.error||'No se pudieron leer los torneos.');
+  torneos=(r.data||[]).filter(t=>t.estado!=='PAPELERA');
+  const qs=new URLSearchParams(location.search),pedido=qs.get('torneo')||'';
+  $('torneo').innerHTML=torneos.map(t=>`<option value="${esc(t.id)}">${esc(t.nombre)}</option>`).join('');
+  if(pedido&&torneos.some(t=>String(t.id)===String(pedido)))$('torneo').value=pedido;
+  if(!$('torneo').value&&torneos[0])$('torneo').value=torneos[0].id;
+}
+
+async function cargarDatos(){
+  const torneoId=$('torneo').value;
+  if(!torneoId){instituciones=[];categorias=[];jugadores=[];render();return}
+  if(!NewcomRoles.esAdmin(sesion)&&!NewcomRoles.permisoEnTorneo(torneoId,'ORGANIZADOR')){
+    setMsg('No tenés permiso para consultar este torneo.','error');
+    instituciones=[];categorias=[];jugadores=[];render();return;
+  }
+  setMsg('Leyendo instituciones, categorías y listas de jugadores…');
+  const [ri,rc,re]=await Promise.all([
+    NewcomSupabase.listarInstituciones(torneoId),
+    NewcomSupabase.listarCategoriasTorneo(torneoId,false),
+    NewcomSupabase.listarEquiposCompetitivos(torneoId)
+  ]);
+  const fallo=[ri,rc,re].find(x=>!x.ok);if(fallo)throw new Error(fallo.error||'No se pudieron cargar los datos.');
+  instituciones=ri.data||[];categorias=rc.data||[];
+  const equipos=re.data||[];
+  const porInst=new Map(equipos.map(e=>[String(e.id),e]));
+  const respuestas=await Promise.all(instituciones.map(i=>NewcomSupabase.listarJugadoresInstitucion(torneoId,i.id)));
+  const malo=respuestas.find(x=>!x.ok);if(malo)throw new Error(malo.error||'No se pudieron leer los jugadores.');
+  jugadores=[];
+  instituciones.forEach((inst,idx)=>{
+    for(const j of (respuestas[idx].data||[])){
+      const asignaciones=[];
+      for(const je of (j.jugador_equipos||[])){
+        let e=je.equipos_competitivos||porInst.get(String(je.equipo_competitivo_id))||null;
+        if(Array.isArray(e))e=e[0]||null;
+        if(!e)continue;
+        asignaciones.push({
+          id:String(e.id||je.equipo_competitivo_id||''),
+          nombre:String(e.nombre||'').trim(),
+          categoria:String(e.categoria||'').trim(),
+          modalidad:String(e.modalidad||'').trim(),
+          categoria_torneo_id:e.categoria_torneo_id||null
+        });
+      }
+      if(!asignaciones.length)continue;
+      jugadores.push({
+        id:j.id,
+        institucion_id:inst.id,
+        institucion:inst.nombre||'Institución',
+        nombre:j.nombre_apellido||'—',
+        dni:j.dni||'—',
+        fecha_nacimiento:j.fecha_nacimiento||null,
+        asignaciones
+      });
+    }
+  });
+  actualizarFiltros();
+  const t=torneos.find(x=>String(x.id)===String(torneoId));
+  $('tituloTorneo').textContent=t?.nombre||'Planilla general';
+  $('volverTorneo').href=`equipos.html?torneo=${encodeURIComponent(torneoId)}`;
+  history.replaceState(null,'',`planilla_general.html?torneo=${encodeURIComponent(torneoId)}`);
+  setMsg('Planilla actualizada. Solo consulta.');
+  render();
+}
+
+function actualizarFiltros(){
+  const instActual=$('institucion').value,equipoActual=$('equipo').value,catActual=$('categoria').value,modActual=$('modalidad').value;
+  const insts=uniq(jugadores.map(j=>j.institucion)).sort(coll.compare);
+  const equipos=uniq(jugadores.flatMap(j=>j.asignaciones.map(a=>a.nombre))).sort(coll.compare);
+  const cats=uniq(jugadores.flatMap(j=>j.asignaciones.map(categoriaReal))).sort(catCompare);
+  const mods=uniq(jugadores.flatMap(j=>j.asignaciones.map(modalidadReal))).sort(coll.compare);
+  $('institucion').innerHTML='<option value="">Todas</option>'+optionList(insts,instActual);
+  $('equipo').innerHTML='<option value="">Todos</option>'+optionList(equipos,equipoActual);
+  $('categoria').innerHTML='<option value="">Todas</option>'+optionList(cats,catActual);
+  $('modalidad').innerHTML='<option value="">Todas</option>'+optionList(mods,modActual);
+}
+
+function datosFiltrados(){
+  const fi=$('institucion').value,fe=$('equipo').value,fc=$('categoria').value,fm=$('modalidad').value,q=norm($('buscar').value);
+  const out=[];
+  for(const j of jugadores){
+    if(fi&&j.institucion!==fi)continue;
+    const asg=j.asignaciones.filter(a=>(!fe||a.nombre===fe)&&(!fc||categoriaReal(a)===fc)&&(!fm||modalidadReal(a)===fm));
+    if(!asg.length)continue;
+    if(q){
+      const txt=norm([j.nombre,j.dni,j.institucion,...asg.flatMap(a=>[a.nombre,categoriaReal(a),modalidadReal(a)])].join(' '));
+      if(!txt.includes(q))continue;
+    }
+    out.push({...j,asignaciones:asg});
+  }
+  return out;
+}
+
+function valorSort(j,key){
+  if(key==='dni')return String(j.dni||'');
+  if(key==='fecha')return String(j.fecha_nacimiento||'');
+  if(key==='equipos')return uniq(j.asignaciones.map(a=>a.nombre)).sort(coll.compare).join(' ');
+  if(key==='categorias')return uniq(j.asignaciones.map(categoriaReal)).sort(catCompare).join(' ');
+  return String(j.nombre||'');
+}
+function ordenar(arr){return arr.slice().sort((a,b)=>{const va=valorSort(a,sortKey),vb=valorSort(b,sortKey);return sortDir*coll.compare(va,vb)})}
+function marks(k){return sortKey===k?`<span class="sortMark">${sortDir>0?'▲':'▼'}</span>`:''}
+
+function render(){
+  const datos=datosFiltrados();
+  const instMap=new Map();
+  for(const j of datos){if(!instMap.has(j.institucion))instMap.set(j.institucion,[]);instMap.get(j.institucion).push(j)}
+  const nombresInst=[...instMap.keys()].sort(coll.compare);
+  const equiposVisibles=new Set(datos.flatMap(j=>j.asignaciones.map(a=>a.nombre)));
+  $('resumen').innerHTML=`<span class="pill">${nombresInst.length} institución${nombresInst.length===1?'':'es'}</span><span class="pill">${equiposVisibles.size} equipo${equiposVisibles.size===1?'':'s'}</span><span class="pill">${datos.length} jugador${datos.length===1?'':'es'}</span>`;
+  if(!datos.length){$('contenido').innerHTML='<div class="empty">No hay jugadores que coincidan con los filtros.</div>';return}
+  $('contenido').innerHTML=nombresInst.map(inst=>{
+    const filas=ordenar(instMap.get(inst));
+    return `<section class="instBlock">
+      <div class="instHead"><h2>INSTITUCIÓN: ${esc(inst)}</h2><div class="dt">DT: <span>PENDIENTE</span></div></div>
+      <div class="scroll"><table><thead><tr>
+        <th data-sort="nombre">Jugador/a ${marks('nombre')}</th>
+        <th data-sort="dni">DNI ${marks('dni')}</th>
+        <th data-sort="fecha">Fecha nac. ${marks('fecha')}</th>
+        <th data-sort="equipos">Equipo(s) ${marks('equipos')}</th>
+        <th data-sort="categorias">Categorías ${marks('categorias')}</th>
+      </tr></thead><tbody>${filas.map(j=>{
+        const eq=uniq(j.asignaciones.map(a=>a.nombre)).sort(coll.compare);
+        const ca=uniq(j.asignaciones.map(categoriaReal)).sort(catCompare);
+        return `<tr><td><b>${esc(j.nombre)}</b></td><td>${esc(j.dni)}</td><td>${esc(fmtFecha(j.fecha_nacimiento))}</td><td><div class="tags">${eq.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div></td><td><div class="tags">${ca.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div></td></tr>`;
+      }).join('')}</tbody></table></div>
+    </section>`;
+  }).join('');
+  document.querySelectorAll('th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1}render()});
+}
+
+function limpiar(){
+  $('institucion').value='';$('equipo').value='';$('categoria').value='';$('modalidad').value='';$('buscar').value='';sortKey='nombre';sortDir=1;render();
+}
+
+async function iniciar(){
+  if(!sesion)return;
+  $('quien').textContent=`${sesion.nombre||sesion.email||'Usuario'} · ${NewcomRoles.esAdmin(sesion)?'Administrador General':'Organizador'}`;
+  $('cerrar').onclick=()=>NewcomRoles.salir();
+  $('torneo').onchange=()=>cargarDatos().catch(e=>setMsg('Error: '+(e?.message||e),'error'));
+  ['institucion','equipo','categoria','modalidad'].forEach(id=>$(id).onchange=render);
+  $('buscar').oninput=render;$('limpiar').onclick=limpiar;$('imprimir').onclick=()=>window.print();
+  try{await cargarTorneos();await cargarDatos()}catch(e){setMsg('Error: '+(e?.message||e),'error');$('contenido').innerHTML='<div class="empty">No se pudo cargar la planilla.</div>'}
+}
+iniciar();
+</script>
+<script src="tornewcom_icons.js?v=12.36.19"></script>
+<script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body>
+</html>

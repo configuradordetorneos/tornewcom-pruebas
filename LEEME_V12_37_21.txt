@@ -1,0 +1,12 @@
+TORNEWCOM V12.37.21 CANDIDATA — EDICIÓN Y RETIRO DE BOLSA
+
+Cambio funcional único:
+- En Mis jugadores / Bolsa, el Responsable puede EDITAR los datos de un jugador de su Bolsa.
+- Puede QUITAR DE LA BOLSA un jugador mediante baja lógica (activo=false).
+- Quitar de la Bolsa no borra participaciones ni historial de torneos/equipos.
+- Para sacar al jugador de un equipo se mantiene el flujo existente desde Lista de participación.
+- Organizador/Admin que consultan una Bolsa ajena no reciben estos botones operativos.
+
+No requiere SQL. Se reutilizan las funciones existentes actualizarJugadorMaestro() y desactivarJugadorMaestro().
+
+Base: V12.37.20.

@@ -1,0 +1,12 @@
+TORNEWCOM — V12.37.8 CANDIDATA — INTERFAZ SEGÚN ESTADO DE CUENTA
+
+Cambio exclusivamente visual/navegación en index.html.
+
+- Cuenta sin rol: no muestra Mensajes, Torneos ni Crear torneo; conserva Vista pública.
+- Organizador suspendido: no muestra Crear torneo ni accesos de administración; conserva sus torneos en modo consulta y Mensajes.
+- Responsable: conserva sus accesos de Responsable y Mensajes.
+- Admin / Organizador autorizado: sin cambios en sus accesos.
+- El recorrido de Organizador se muestra solamente mientras la autorización de Organizador está activa.
+- No se modifican RLS, permisos Supabase, autenticación ni sesiones.
+
+Base comparada: V12.37.7.

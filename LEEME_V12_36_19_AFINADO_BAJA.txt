@@ -1,0 +1,7 @@
+TORNEWCOM V12.36.19 — afinado BAJA / solicitudes
+
+- BAJA deja al jugador en Mis jugadores; solo lo quita de la lista de participación.
+- Corrección de filtro: un jugador sin asignaciones vuelve a quedar disponible para ALTA.
+- Solicitudes de cambios: el Responsable ve también “Mis solicitudes enviadas”.
+- Navegación por rol: el Organizador no ve “Mis jugadores” en la pantalla de solicitudes.
+- Sin cambios SQL en este afinado.

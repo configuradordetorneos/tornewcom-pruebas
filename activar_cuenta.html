@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TorNewcom — Crear cuenta · V12.37.30</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh;color:#123453;background:linear-gradient(rgba(5,29,53,.45),rgba(5,29,53,.58)),url("tornewcom-fondo-limpio.jpg") center/cover fixed no-repeat}
+.wrap{min-height:100vh;display:grid;place-items:center;padding:18px}
+.card{width:min(460px,100%);background:rgba(255,255,255,.95);border-radius:20px;padding:25px 28px;box-shadow:0 20px 50px rgba(0,16,36,.34)}
+h1{margin:0;color:#0d4079;font-size:29px;text-align:center}.sub{text-align:center;color:#5d7386;font-size:13px;margin:7px 0 20px}
+.field{margin-bottom:12px}label{display:block;font-weight:700;color:#17446e;margin-bottom:5px;font-size:13px}
+input{width:100%;height:42px;padding:9px 12px;border:1px solid #b9cad9;border-radius:9px;font-size:14px}
+button,.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:42px;border:0;border-radius:9px;font-weight:800;font-size:14px;text-decoration:none;cursor:pointer}
+.primary{background:linear-gradient(90deg,#2679d6,#155ca9);color:#fff;margin-top:15px}.secondary{background:#edf3f8;color:#245577;margin-top:9px}
+.note{background:#EAF4FB;color:#2F5D7E;padding:12px;border-radius:10px;font-size:12px;line-height:1.45;margin:14px 0}
+.msg{display:none;margin-top:12px;padding:11px;border-radius:9px;font-size:13px;font-weight:700}.ok{background:#e7f4ec;color:#2f7253}.err{background:#fdecec;color:#9a2626}.legal-box{display:flex;gap:8px;align-items:flex-start;margin:14px 0;padding:11px 12px;border:1px solid #c9dbe8;background:#f4f9fc;border-radius:10px;font-size:12px;line-height:1.45}.legal-box a{font-weight:700;color:#155ca9}.show-pass{display:flex;align-items:center;gap:7px;margin:-4px 0 11px;font-size:12px;color:#536d84;font-weight:600}.show-pass input{width:auto;height:auto;margin:0}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=12.35"></script>
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+<script>
+function alternarPasswords(){const t=document.getElementById('mostrarPass').checked?'text':'password';document.getElementById('pass').type=t;document.getElementById('pass2').type=t}
+function emailValido(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim().toLowerCase())}
+async function registrar(ev){
+  ev.preventDefault();
+  const n=document.getElementById('nombre').value.trim();
+  const e=document.getElementById('email').value.trim().toLowerCase();
+  const p=document.getElementById('pass').value;
+  const p2=document.getElementById('pass2').value;
+  const legal=document.getElementById('aceptoLegal').checked;
+  const m=document.getElementById('msg'),b=document.getElementById('btn');
+  m.style.display='none';
+  if(!emailValido(e)){m.className='msg err';m.textContent='Ingresá un email válido, por ejemplo nombre@correo.com.';m.style.display='block';return false}
+  if(p!==p2){m.className='msg err';m.textContent='Las contraseñas no coinciden.';m.style.display='block';return false}
+  if(!legal){m.className='msg err';m.textContent='Para crear la cuenta tenés que aceptar los Términos y la Política de Privacidad.';m.style.display='block';return false}
+  b.disabled=true;b.textContent='Creando cuenta…';
+  const r=await NewcomSupabase.registrarCuentaAuth(n,e,p,true);
+  b.disabled=false;b.textContent='Crear mi cuenta';
+  if(!r.ok){m.className='msg err';m.textContent='No se pudo crear la cuenta: '+r.error;m.style.display='block';return false}
+  m.className='msg ok';
+  m.innerHTML=r.data.requiere_confirmacion
+    ? 'Cuenta creada. Revisá tu email para confirmar la dirección. Después ingresás con esta misma cuenta.'
+    : 'Cuenta creada correctamente. Ya podés ingresar. Si vas a organizar, el Administrador General deberá autorizarte. Si ya figurabas como Responsable con este email, esa asignación aparecerá automáticamente.';
+  m.style.display='block';document.getElementById('form').reset();return false;
+}
+</script></head>
+<body><div class="wrap"><section class="card">
+<h1>Crear cuenta</h1><div class="sub">Una sola cuenta para todas tus participaciones en TorNewcom</div>
+<div class="note"><b>No elegís un rol al registrarte.</b><br>El Administrador General decide quién puede crear torneos. Cada Organizador asigna a sus Responsables dentro de su torneo.</div>
+<form id="form" onsubmit="registrar(event)">
+<div class="field"><label>Nombre y apellido</label><input id="nombre" required autocomplete="name"></div>
+<div class="field"><label>Email</label><input id="email" type="email" required autocomplete="email"></div>
+<div class="field"><label>Contraseña</label><input id="pass" type="password" minlength="8" required autocomplete="new-password"></div>
+<div class="field"><label>Repetir contraseña</label><input id="pass2" type="password" minlength="8" required autocomplete="new-password"></div>
+<label class="show-pass"><input id="mostrarPass" type="checkbox" onchange="alternarPasswords()"> Mostrar contraseñas</label>
+<div class="legal-box">
+<input id="aceptoLegal" type="checkbox" required style="width:auto;height:auto;margin-top:2px">
+<label for="aceptoLegal" style="font-weight:400;margin:0">He leído y acepto los <a href="terminos.html" target="_blank">Términos y Condiciones</a> y la <a href="terminos.html#privacidad" target="_blank">Política de Privacidad</a>.</label>
+</div><button id="btn" class="primary" type="submit">Crear mi cuenta</button>
+</form><div id="msg" class="msg"></div>
+<a class="btn secondary" href="acceso_real.html">Ya tengo cuenta · Ingresar</a>
+<a class="btn secondary" href="publico.html">Ver resultados sin registrarme</a>
+</section></div><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+</body></html>

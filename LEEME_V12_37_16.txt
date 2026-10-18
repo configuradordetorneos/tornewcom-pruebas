@@ -1,0 +1,9 @@
+TORNEWCOM V12.37.16 CANDIDATA — AYUDA DE CONTEXTO EN BOLSA
+
+Cambio UX único:
+- En Mis jugadores / Bolsa, mientras no haya torneo e institución seleccionados, las casillas siguen ocultas como antes.
+- Al pasar el mouse o enfocar una fila se muestra: “Para habilitar las casillas de selección, primero elegí un torneo e institución arriba.”
+- En móvil/táctil, al tocar una fila aparece el mismo aviso visible sobre la lista.
+- Al seleccionar torneo/institución, la ayuda desaparece y se habilita el comportamiento normal de las casillas.
+
+No modifica reglas deportivas, alertas, Supabase, RLS, sesiones ni asignaciones.

@@ -1,0 +1,14 @@
+TORNEWCOM V12.37.10 CANDIDATA — MENSAJES DE ERROR HUMANOS
+
+Base inmediata: V12.37.9 CANDIDATA.
+
+Cambios:
+- Traducción de errores técnicos frecuentes de Supabase/Postgres a mensajes comprensibles.
+- DNI duplicado en Bolsa: mensaje claro, sin constraint SQL.
+- Jugador ya presente en otra institución del mismo torneo: informa la institución y sugiere usar Mensajería.
+- Institución/equipo duplicado: mensaje claro.
+- Permisos, sesión vencida, conexión, claves foráneas y validaciones SQL: mensajes simples.
+- Aplicado en Mis jugadores, Equipos, Jornadas y Crear torneo.
+
+No requiere SQL.
+No se modificaron autenticación, sesiones, RLS, roles ni los módulos ya validados salvo la traducción de sus errores visibles.

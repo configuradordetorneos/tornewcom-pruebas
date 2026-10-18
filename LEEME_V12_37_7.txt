@@ -1,0 +1,14 @@
+TORNEWCOM V12.37.7 CANDIDATA — HISTORIAL DE ALERTAS
+
+Cambios:
+- Alertas ahora muestra pendientes y resueltas.
+- Estado visible: PENDIENTE / ACEPTADA / NO ACEPTADA.
+- ACEPAR / NO ACEPTAR aparece solo en alertas PENDIENTES.
+- Las resueltas quedan como historial sin acciones.
+- El contador del panel continúa usando solo alertas pendientes.
+
+Archivos funcionales modificados respecto de V12.37.6:
+- alertas.html
+- supabase_v12_24.js
+
+No requiere SQL.

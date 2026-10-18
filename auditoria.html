@@ -1,0 +1,37 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Auditoría — Sistema de Torneos Newcom</title><style>
+body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:white;padding:18px 24px}.wrap{max-width:1180px;margin:30px auto;background:white;padding:24px;border-radius:16px}.btn{display:inline-block;padding:10px 16px;border-radius:10px;text-decoration:none;background:#4A90C2;color:white}
+table{width:100%;border-collapse:collapse;margin-top:18px}th,td{padding:10px;border-bottom:1px solid #dbe5eb;text-align:left;vertical-align:top}th{background:#2F5D7E;color:white}tbody tr:nth-child(even){background:#EAF4FB}
+small{color:#60717f}.msg{padding:12px;border-radius:10px;background:#fff4dd;color:#795f22;margin-top:14px}.score{white-space:nowrap;font-weight:bold}</style><script src="legal_v12_33.js?v=12.35" defer></script>
+</head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script>
+<div class="top">TORNEWCOM — V12.37.30 CANDIDATA</div><div class="wrap">
+<a class="btn" href="index.html">← Volver al panel</a><h1>Auditoría de correcciones</h1>
+<p><small>Registro real guardado en Supabase. En esta etapa de desarrollo las políticas todavía son temporales; luego se vincularán a usuarios y roles.</small></p>
+<div id="msg"></div>
+<table><thead><tr><th>Fecha / hora</th><th>Partido</th><th>Motivo</th><th>Antes</th><th>Después</th></tr></thead><tbody id="cuerpo"></tbody></table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.36.19-login5"></script><script>
+const q=new URLSearchParams(location.search),torneo=q.get('torneo'),b=document.getElementById('cuerpo'),m=document.getElementById('msg');
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function res(x){
+ if(!x)return '—';
+ const np=x.no_presentado&&x.no_presentado!=='NINGUNO'?' · N/P '+x.no_presentado:'';
+ const sets=(x.sets_a??'—')+'-'+(x.sets_b??'—');
+ const tantos=(x.tantos_a??'—')+'-'+(x.tantos_b??'—');
+ return '<span class="score">Sets '+sets+'</span><br>Tantos '+tantos+np;
+}
+(async()=>{
+ const r=await NewcomSupabase.listarAuditoriaPartidos(torneo);
+ if(!r.ok){m.className='msg';m.textContent='Error: '+r.error;b.innerHTML='<tr><td colspan="5">No se pudo cargar la auditoría.</td></tr>';return}
+ if(!r.data.length){b.innerHTML='<tr><td colspan="5">Todavía no hay correcciones registradas.</td></tr>';return}
+ b.innerHTML=r.data.map(x=>{
+   const p=x.partidos||{};
+   const partido=[p.equipo_a,p.equipo_b].filter(Boolean).join(' vs ');
+   const div=[p.categoria,p.modalidad].filter(Boolean).join(' ');
+   return `<tr><td>${new Date(x.creado_en).toLocaleString()}</td><td><b>${esc(partido||x.partido_id)}</b><br><small>${esc(div)}</small></td><td>${esc(x.motivo)}</td><td>${res(x.antes)}</td><td>${res(x.despues)}</td></tr>`;
+ }).join('');
+})();
+</script><script src="guia_organizador_v12_35.js?v=12.35"></script>
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+</body></html>

@@ -1,0 +1,1163 @@
+<!DOCTYPE html><html lang="es" class="tn-auth-pending"><head>
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>TorNewcom</title><style>
+
+html.tn-auth-pending body{visibility:hidden}
+
+\*{box-sizing:border-box}
+
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}
+
+.topbar{background:#2F5D7E;color:white;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+.brand h1{margin:0;font-size:24px}.brand small{opacity:.9}
+
+.quicklinks{display:flex;gap:10px;flex-wrap:wrap}
+
+.quicklinks a{color:white;text-decoration:none;border:1px solid rgba(255,255,255,.45);padding:9px 13px;border-radius:10px;font-weight:700}
+
+.wrap{max-width:1100px;margin:32px auto;padding:0 18px}
+
+.welcome,.panel{background:white;border-radius:18px;padding:26px;box-shadow:0 7px 24px rgba(32,72,98,.10);margin-bottom:22px}
+
+.welcome h2,.panel h2{margin:0 0 8px;font-size:28px}.welcome p,.panel p{margin:0;color:#587080}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+
+.action{display:block;text-decoration:none;color:#1f3342;background:#fff;border-radius:18px;padding:24px;box-shadow:0 7px 24px rgba(32,72,98,.10);border:2px solid transparent}
+
+.action:hover{border-color:#4A90C2}.action .icon{font-size:36px}.action h3{margin:12px 0 6px;font-size:22px}.action p{margin:0;color:#617887}
+
+.section-title{margin:34px 0 14px;font-size:20px}
+
+.guidePanel{background:#fff;border-radius:18px;padding:22px 24px;box-shadow:0 7px 24px rgba(32,72,98,.10);margin:0 0 22px}
+
+.guidePanel h3{margin:0 0 6px;font-size:21px}.guideIntro{color:#607887;margin:0 0 14px}
+
+.guideRole{margin-top:16px;padding-top:15px;border-top:1px solid #e1eaf0}.guideRole:first-of-type{border-top:0;padding-top:0}
+
+.guideRole h4{margin:0 0 10px;color:#2F5D7E;font-size:16px}
+
+.guideSelectRow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 16px}.guideSelectRow label{font-size:13px}.guideSelectRow select{width:auto;min-width:260px;padding:9px 11px}.guideContextBox{max-width:640px;margin:12px auto 18px;padding:14px 16px;border:1px solid #d8e5ec;border-radius:12px;background:#f8fbfd;text-align:center}.guideContextBox label{display:block;font-weight:800;color:#2F5D7E;margin-bottom:4px}.guideContextBox p{margin:0 0 9px;color:#607887;font-size:13px}.guideContextBox select{width:min(100%,520px);padding:10px 12px}.guideProgressTitle{margin:12px 0 8px!important;color:#2F5D7E;font-size:15px!important;text-align:left}
+
+.guideSummary{font-size:13px;color:#536d7d;margin:-4px 0 14px}.guideSummary b{color:#2F5D7E}
+
+.guideTimeline{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:4px 0 8px}
+
+.guideStep{position:relative;min-width:132px;flex:1;padding:0 10px 0 0;text-decoration:none;color:#1f3342;background:transparent}
+
+.guideStep:after{content:"";position:absolute;top:15px;left:34px;right:0;height:3px;background:#d9e6ee}
+
+.guideStep:last-child:after{display:none}
+
+.guideDot{position:relative;z-index:2;width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#cbd8e0;color:#fff;font-weight:900;font-size:14px;box-shadow:0 0 0 4px #f1f5f7}
+
+.guideStep strong{display:block;margin-top:9px;font-size:13px;line-height:1.2}.guideStep small{display:block;margin-top:4px;color:#69808f;font-size:11px;line-height:1.25}
+
+.guideStep.done .guideDot{background:#2e7d4f}.guideStep.done:after{background:#8bc6a4}.guideStep.current .guideDot{background:#4A90C2;box-shadow:0 0 0 4px #dceefa}.guideStep.current strong{color:#2F5D7E}.guideStep.pending{opacity:.74}
+
+.guideLegend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#69808f}.guideLegend span{display:inline-flex;align-items:center;gap:5px}.guideLegend i{width:9px;height:9px;border-radius:50%;display:inline-block;background:#cbd8e0}.guideLegend .ok i{background:#2e7d4f}.guideLegend .next i{background:#4A90C2}
+
+.contactLine{margin-top:16px;padding-top:14px;border-top:1px solid #e1eaf0;text-align:center;color:#5c7383;font-size:13px;font-weight:700}
+
+@media(max-width:720px){.guideTimeline{display:block;overflow:visible}.guideStep{display:grid;grid-template-columns:40px 1fr;min-width:0;padding:5px 0 11px}.guideStep:after{top:36px;bottom:-2px;left:15px;right:auto;width:3px;height:auto}.guideStep strong,.guideStep small{grid-column:2;margin-top:0}.guideStep small{margin-top:3px}.guideDot{grid-row:1/3}.guideSelectRow select{width:100%;min-width:0}}
+
+
+
+.tournaments{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+.card{background:white;border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(32,72,98,.08)}
+
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#EAF4FB;color:#2F5D7E;font-size:12px;font-weight:700}
+
+.card h4{font-size:18px;margin:12px 0 6px}.card p{margin:0 0 16px;color:#6a7c88;font-size:14px}
+
+.buttons{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px;font-weight:700;font-size:14px;border:none;cursor:pointer}
+
+.primary{background:#4A90C2;color:white}.secondary{background:#EEF2F5;color:#2F5D7E}
+
+.footer{margin-top:38px;background:#eaf1f5;padding:22px 18px;text-align:center;color:#516a79;font-size:14px}
+
+.footer strong{color:#2F5D7E}.footer-links{margin-top:10px}.footer-links a{color:#2F5D7E;font-weight:700;margin:0 8px;text-decoration:none}
+
+.note{margin-top:20px;padding:14px 16px;border-radius:12px;background:#DCEEF8;color:#2F5D7E;font-size:14px}
+
+.back{display:inline-block;margin-bottom:16px;color:#2F5D7E;text-decoration:none;font-weight:700}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
+
+label{font-weight:700;color:#2F5D7E}
+
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid #c7d5df;border-radius:10px;font-size:15px;background:white;color:#1f3342}
+
+textarea{min-height:95px;resize:vertical}.help{font-size:12px;color:#728794}
+
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+
+.step{padding:7px 11px;border-radius:999px;background:#EEF2F5;color:#587080;font-size:13px;font-weight:700}
+
+.step.active{background:#4A90C2;color:white}
+
+.form-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;flex-wrap:wrap}
+
+.category-block{border:1px solid #d6e1e8;border-radius:14px;padding:16px;background:#fbfdfe}
+
+.category-block h4{margin:0 0 12px;color:#2F5D7E}
+
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+.cat{border:1px solid #c7d5df;border-radius:12px;padding:12px;background:#f9fbfc}
+
+.cat label{display:flex;align-items:center;gap:8px;cursor:pointer}.cat input{width:auto}
+
+.table-wrap{overflow:auto;margin-top:18px}
+
+table{width:100%;border-collapse:collapse;min-width:720px}
+
+th,td{padding:12px 10px;border-bottom:1px solid #dfe7ec;text-align:left}
+
+th{background:#EAF4FB;color:#2F5D7E;font-size:14px}
+
+td input,td select{padding:9px 10px}
+
+.small-btn{padding:8px 10px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+
+.danger{background:#f6e9e9;color:#8b3a3a}
+.trashPanel{background:#fff;border-radius:18px;padding:22px 24px;box-shadow:0 7px 24px rgba(32,72,98,.10);margin:0 0 22px;border:1px solid #dbe5eb}.trashPanel .card{border:1px solid #e0e7ec}.trashHelp{margin:0 0 14px;color:#607887;font-size:13px}.restore{background:#338a64;color:#fff}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+
+@media(max-width:760px){
+
+  .actions,.tournaments,.form-grid{grid-template-columns:1fr}
+
+  .newsCompact{width:100%;max-width:none}
+
+  .categories{grid-template-columns:1fr 1fr}
+
+}
+
+
+
+.msgBadge{display:none;background:#c93b3b;color:#fff;border-radius:999px;min-width:21px;padding:3px 6px;text-align:center;font-size:11px;font-weight:900}
+
+.newsLink{margin:2px 0 16px;font-size:13px;color:#456579}.newsLink summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;color:#456f8c;list-style:none;padding:4px 2px}.newsLink summary::-webkit-details-marker{display:none}.newsLink summary::before{content:'▸';font-size:12px;transition:transform .15s ease}.newsLink[open] summary::before{transform:rotate(90deg)}.newsLink summary:hover{text-decoration:underline}.newsLinkBody{margin-top:7px;background:#fff;border:1px solid #dfe9ef;border-radius:10px;padding:9px 12px;max-width:620px;box-shadow:0 2px 8px rgba(32,72,98,.05)}.newsRow{padding:6px 0;border-top:1px solid #edf2f5;font-size:12.5px;line-height:1.35}.newsRow:first-child{border-top:0}.newsRow b{color:#315b77}.newsRow small{color:#7b8f9c}.newsRow p{display:inline;margin:0 0 0 5px;color:#5f7583}.newsEmpty{font-size:12.5px;color:#7b8f9c}
+
+</style>
+
+<script>
+
+async function cerrarSesion(){
+
+  try{if(window.NewcomSupabase&&JSON.parse(localStorage.getItem('sesionNewcom')||'null')?.auth_real)await NewcomSupabase.cerrarSesionAuth()}catch(_){ }
+
+  localStorage.removeItem('sesionNewcom');
+
+  window.location.href='acceso_real.html';
+
+}
+
+function nombreRol(rol){
+
+  if(rol==='ADMIN_GENERAL') return 'Administrador general del sistema';
+
+  if(rol==='ORGANIZADOR') return 'Organizador';
+
+  if(rol==='RESPONSABLE') return 'Responsable';
+
+  if(rol==='USUARIO') return 'Cuenta registrada';
+
+  return rol;
+
+}
+
+function esc(v){
+
+  return String(v??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[m]));
+
+}
+
+function plural(n,sing,plur){ return `${n} ${n===1?sing:plur}`; }
+
+function sinPapelera(lista){
+  return (lista||[]).filter(t=>String(t?.estado||'').toUpperCase()!=='PAPELERA');
+}
+
+function soloPapelera(lista){
+  return (lista||[]).filter(t=>String(t?.estado||'').toUpperCase()==='PAPELERA');
+}
+
+function clienteAdminPapelera(){
+  try{
+    const cfg=window.NEWCOM_SUPABASE||{};
+    const respaldo=JSON.parse(localStorage.getItem('tornewcomSupabaseSession')||'null');
+    if(!window.supabase||!cfg.url||!cfg.anonKey||!respaldo?.access_token)return null;
+    return window.supabase.createClient(cfg.url,cfg.anonKey,{
+      auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},
+      global:{headers:{Authorization:'Bearer '+respaldo.access_token}}
+    });
+  }catch(_){return null}
+}
+
+async function restaurarDesdePapelera(id,nombre){
+  const s=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+  if(!s?.es_admin_general)return;
+  if(!confirm(`¿Restaurar el torneo "${nombre}" desde la Papelera?`))return;
+  const cli=clienteAdminPapelera();
+  if(!cli){alert('No se pudo obtener la sesión del Administrador General. Volvé a ingresar.');return;}
+  const {error}=await cli.rpc('admin_restaurar_torneo_papelera',{p_torneo:id});
+  if(error){alert('No se pudo restaurar: '+error.message);return;}
+  await cargarTorneosReales();
+  await cargarPapeleraAdmin();
+}
+
+async function eliminarDefinitivamenteDesdePapelera(id,nombre){
+  const s=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+  if(!s?.es_admin_general)return;
+  const escrito=prompt('ELIMINACIÓN DEFINITIVA. Para confirmar, escribí exactamente el nombre del torneo:\n\n'+nombre);
+  if(escrito===null)return;
+  if(escrito.trim()!==nombre){alert('El nombre no coincide. No se eliminó nada.');return;}
+  if(!confirm('Esta acción elimina definitivamente el torneo y sus datos asociados. No se puede deshacer. ¿Continuar?'))return;
+  const cli=clienteAdminPapelera();
+  if(!cli){alert('No se pudo obtener la sesión del Administrador General. Volvé a ingresar.');return;}
+  const {error}=await cli.rpc('eliminar_torneo_admin',{p_torneo:id,p_nombre_confirmacion:escrito.trim()});
+  if(error){alert('No se pudo eliminar: '+error.message);return;}
+  alert('Torneo eliminado definitivamente.');
+  await cargarPapeleraAdmin();
+}
+
+async function cargarPapeleraAdmin(){
+  const s=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+  const wrap=document.getElementById('papeleraAdminWrap');
+  const cont=document.getElementById('papeleraTorneos');
+  if(!wrap||!cont)return;
+  if(!s?.es_admin_general){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  if(!window.NewcomSupabase){cont.innerHTML='<article class="card"><span class="badge">ERROR</span><p>No está disponible la conexión con Supabase.</p></article>';return;}
+  const rt=await NewcomSupabase.listarTorneos();
+  if(!rt.ok){cont.innerHTML=`<article class="card"><span class="badge">ERROR</span><p>${esc(rt.error)}</p></article>`;return;}
+  const papelera=soloPapelera(rt.data);
+  if(!papelera.length){cont.innerHTML='<article class="card"><span class="badge">VACÍA</span><h4>No hay torneos en Papelera</h4><p>Los torneos enviados a Papelera aparecerán aquí.</p></article>';return;}
+  cont.innerHTML=papelera.map(t=>`<article class="card">
+    <span class="badge">🗑 PAPELERA</span>
+    <h4>${esc(t.nombre)}</h4>
+    <p>Podés restaurarlo o eliminarlo definitivamente.</p>
+    <div class="buttons">
+      <button class="btn restore" onclick="restaurarDesdePapelera('${t.id}',decodeURIComponent('${encodeURIComponent(t.nombre)}'))">↩ Restaurar</button>
+      <button class="btn danger" onclick="eliminarDefinitivamenteDesdePapelera('${t.id}',decodeURIComponent('${encodeURIComponent(t.nombre)}'))">🗑 Eliminar definitivamente</button>
+    </div>
+  </article>`).join('');
+}
+
+
+async function cargarTorneosReales(){
+
+  const sesion=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+
+  const cont=document.querySelector('.tournaments');
+
+  if(!sesion||!cont||(!sesion.es_admin_general&&!sesion.puede_crear_torneos&&!sesion.tiene_asignaciones_organizador)) return;
+
+  if(!window.NewcomSupabase){
+
+    cont.innerHTML='<article class="card"><span class="badge">ERROR</span><h4>No se pudo cargar</h4><p>No está disponible la conexión con Supabase.</p></article>';
+
+    return;
+
+  }
+
+  const rt=await NewcomSupabase.listarTorneos();
+
+  if(!rt.ok){
+
+    cont.innerHTML=`<article class="card"><span class="badge">ERROR</span><h4>No se pudieron actualizar los torneos</h4><p>${esc(rt.error)}</p></article>`;
+
+    return;
+
+  }
+
+  const visibles=sinPapelera(rt.data);
+
+  if(!visibles.length){
+
+    cont.innerHTML='<article class="card"><span class="badge">SIN TORNEOS</span><h4>Todavía no hay torneos</h4><p>Creá el primero desde “Crear nuevo torneo”.</p></article>';
+
+    return;
+
+  }
+
+  const cards=await Promise.all(visibles.map(async t=>{
+
+    let equipos=[];
+
+    try{
+
+      const re=await NewcomSupabase.listarEquiposCompetitivos(t.id);
+
+      if(re.ok) equipos=re.data||[];
+
+    }catch(_){ }
+
+    const divisiones=new Set(equipos.map(e=>`${(e.categoria||'').trim()}|${(e.modalidad||'').trim()}`).filter(x=>x!=='|'));
+
+    const meta=sesion.es_admin_general
+
+      ? `${plural(equipos.length,'equipo','equipos')} · ${plural(divisiones.size,'categoría/modalidad','categorías/modalidades')}`
+
+      : `Organizador · ${plural(equipos.length,'equipo','equipos')} · ${plural(divisiones.size,'categoría/modalidad','categorías/modalidades')}`;
+
+    return `<article class="card">
+
+      <span class="badge">${esc(t.estado||'ACTIVO')}</span>
+
+      <h4>${esc(t.nombre)}</h4>
+
+      <p>${meta}</p>
+
+      <div class="buttons">
+
+        ${(sesion.rol==='ADMIN_GENERAL'||sesion.puede_crear_torneos)
+
+          ? `<a href="equipos.html?torneo=${encodeURIComponent(t.id)}" class="btn primary">Administrar</a>
+
+             <a href="categorias.html?torneo=${encodeURIComponent(t.id)}" class="btn secondary">Editar configuración</a>
+
+             <a href="categorias.html?torneo=${encodeURIComponent(t.id)}#cierre-listas" class="btn secondary">Cierre de listas</a>
+
+             <a href="planilla_general.html?torneo=${encodeURIComponent(t.id)}" class="btn secondary">Planilla general</a>
+
+             <a href="solicitudes_lista.html" class="btn secondary">Solicitudes</a>`
+
+          : `<a href="tabla.html?torneo=${encodeURIComponent(t.id)}" class="btn primary">Ver tabla</a>
+
+             <a href="publico.html?torneo=${encodeURIComponent(t.id)}" class="btn secondary" target="_blank">Ver resultados</a>`}
+
+        ${sesion.es_admin_general?'<a href="torneos.html" class="btn secondary">Administrar / eliminar</a>':''}
+
+      </div>
+
+    </article>`;
+
+  }));
+
+  cont.innerHTML=cards.join('');
+
+}
+
+
+
+
+
+async function cargarResponsabilidades(){
+
+  const sesion=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+
+  if(!sesion?.tiene_responsabilidades||!window.NewcomSupabase)return;
+
+  // En la vista Responsable las instituciones ya se muestran en el bloque principal.
+
+  // Evita duplicar la misma información como “Mis responsabilidades”.
+
+  if(sesion.rol==='RESPONSABLE')return;
+
+  let sec=document.getElementById('responsabilidadesWrap');
+
+  if(!sec){
+
+    sec=document.createElement('section');
+
+    sec.id='responsabilidadesWrap';
+
+    sec.innerHTML='<h3 class="section-title">Mis responsabilidades</h3><div class="tournaments" id="responsabilidades"></div>';
+
+    const base=document.querySelector('.tournaments');
+
+    if(base&&base.parentNode)base.parentNode.insertBefore(sec,base.nextSibling);
+
+  }
+
+  const c=document.getElementById('responsabilidades');
+
+  const r=await NewcomSupabase.listarAsignacionesResponsable(sesion.email);
+
+  if(!r.ok){c.innerHTML=`<article class="card"><span class="badge">ERROR</span><p>${esc(r.error)}</p></article>`;return}
+
+  const a=r.data||[];
+
+  if(!a.length){c.innerHTML='<article class="card"><span class="badge">SIN ASIGNACIÓN</span><p>Todavía no tenés instituciones asignadas.</p></article>';return}
+
+  c.innerHTML=a.map(x=>`<article class="card">
+
+    <span class="badge">RESPONSABLE</span>
+
+    <h4>${esc(x.torneo?.nombre||'Torneo')}</h4>
+
+    <p><b>${esc(x.nombre)}</b> · ${(x.equipos_competitivos||[]).length} equipo(s)</p>
+
+    <div class="buttons">
+
+      <a class="btn primary" href="mis_jugadores.html?torneo=${encodeURIComponent(x.torneo_id)}&institucion=${encodeURIComponent(x.id)}">Mis jugadores</a>
+
+      <a class="btn secondary" href="jugadores.html?modo=responsable&torneo=${encodeURIComponent(x.torneo_id)}&institucion=${encodeURIComponent(x.id)}">Lista de participación</a>
+
+      <a class="btn secondary" href="equipos.html?modo=responsable&torneo=${encodeURIComponent(x.torneo_id)}&institucion=${encodeURIComponent(x.id)}">Mis equipos</a>
+
+      <a class="btn secondary" href="partidos.html?modo=responsable&torneo=${encodeURIComponent(x.torneo_id)}">Mis partidos jugados</a>
+
+      <a class="btn secondary" href="tabla.html?modo=responsable&torneo=${encodeURIComponent(x.torneo_id)}">Tabla de posiciones</a>
+
+    </div>
+
+  </article>`).join('');
+
+}
+
+
+
+async function renderGuiaVisible(){
+
+  const s=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+
+  const g=document.getElementById('guiaVisible');
+
+  if(!s||!g||s.es_admin_general){if(g)g.style.display='none';return}
+
+
+
+  const esOrg=!!s.puede_crear_torneos;
+
+  const esResp=!!s.tiene_responsabilidades;
+
+  if(!esOrg&&!esResp){g.style.display='none';return}
+
+
+
+  let html='<h3>Tu recorrido en TorNewcom</h3><p class="guideIntro">Se actualiza automáticamente según lo que ya cargaste.</p>';
+
+
+
+  if(esOrg){
+
+    const rt=await NewcomSupabase.listarTorneos();
+
+    if(!rt.ok){
+
+      html+=`<div class="guideRole"><h4>Como Organizador</h4><div class="guideSummary">No se pudo calcular el progreso: ${esc(rt.error)}</div></div>`;
+
+    }else{
+
+      const torneos=sinPapelera(rt.data);
+
+      if(!torneos.length){
+
+        html+=`<div class="guideRole"><h4>Como Organizador</h4><div class="guideTimeline"><a class="guideStep current" href="crear_torneo.html"><span class="guideDot">1</span><strong>Crear torneo</strong><small>Este es tu próximo paso.</small></a></div></div>`;
+
+      }else{
+
+        const guardado=localStorage.getItem('tornewcomGuiaTorneo')||'';
+
+        const elegido=torneos.some(t=>t.id===guardado)?guardado:torneos[0].id;
+
+        html+=`<div class="guideRole"><h4>Como Organizador</h4><div class="guideContextBox"><label for="guiaTorneo">Torneo seleccionado</label><p>Todo lo que ves y hacés en este panel corresponde al torneo elegido aquí.</p><select id="guiaTorneo">${torneos.map(t=>`<option value="${esc(t.id)}" ${t.id===elegido?'selected':''}>${esc(t.nombre)}</option>`).join('')}</select></div><h4 class="guideProgressTitle">Progreso del torneo</h4><div id="guiaOrgProgreso"><div class="guideSummary">Calculando progreso…</div></div></div>`;
+
+      }
+
+    }
+
+  }
+
+
+
+  if(esResp){
+
+    html+=`<div class="guideRole"><h4>Como Responsable · accesos principales</h4><div class="guideTimeline">
+
+      <a class="guideStep current" href="#mis-torneos"><span class="guideDot">1</span><strong>Mis instituciones</strong><small>Revisá los clubes que tenés a cargo.</small></a>
+
+      <a class="guideStep current" href="mis_jugadores.html"><span class="guideDot">2</span><strong>Mis jugadores</strong><small>Administrá tu bolsa permanente de jugadores.</small></a>
+
+      <a class="guideStep current" href="mis_torneos.html"><span class="guideDot">3</span><strong>Mis torneos</strong><small>Consultá dónde participa cada institución.</small></a>
+
+      <a class="guideStep current" href="equipos.html?modo=responsable"><span class="guideDot">4</span><strong>Mis equipos</strong><small>Revisá los equipos del torneo seleccionado.</small></a>
+
+      <a class="guideStep current" href="mis_jornadas.html"><span class="guideDot">5</span><strong>Mis jornadas</strong><small>Consultá jornadas y partidos pendientes o jugados.</small></a>
+
+      <a class="guideStep current" href="partidos.html?modo=responsable"><span class="guideDot">6</span><strong>Mis partidos jugados</strong><small>Consultá los resultados finalizados.</small></a>
+
+      <a class="guideStep current" href="tabla.html?modo=responsable"><span class="guideDot">7</span><strong>Tabla de posiciones</strong><small>Consultá posiciones por torneo y categoría.</small></a>
+
+    </div></div>`;
+
+  }
+
+
+
+  html+='<div class="contactLine">¿Necesitás ayuda? WhatsApp 1122527681</div>';
+
+  g.innerHTML=html;g.style.display='block';
+
+
+
+  const sel=document.getElementById('guiaTorneo');
+
+  if(sel){
+
+    sel.onchange=async()=>{localStorage.setItem('tornewcomGuiaTorneo',sel.value);actualizarTarjetaDocumentacion(sel.value);await cargarProgresoOrganizador(sel.value)};
+
+    actualizarTarjetaDocumentacion(sel.value);
+
+    await cargarProgresoOrganizador(sel.value);
+
+  }
+
+}
+
+
+
+async function cargarProgresoOrganizador(torneoId){
+
+  const box=document.getElementById('guiaOrgProgreso');
+
+  if(!box||!torneoId)return;
+
+  box.innerHTML='<div class="guideSummary">Calculando progreso…</div>';
+
+
+
+  const [rt,ri,re,rc,rp]=await Promise.all([
+
+    NewcomSupabase.listarTorneos(),
+
+    NewcomSupabase.listarInstituciones(torneoId),
+
+    NewcomSupabase.listarEquiposCompetitivos(torneoId),
+
+    NewcomSupabase.listarCategoriasTorneo(torneoId,false),
+
+    NewcomSupabase.listarPartidos(torneoId)
+
+  ]);
+
+  const fallo=[rt,ri,re,rc,rp].find(x=>!x?.ok);
+
+  if(fallo){box.innerHTML=`<div class="guideSummary">No se pudo calcular el progreso: ${esc(fallo.error||'error de lectura')}</div>`;return}
+
+
+
+  const torneo=(rt.data||[]).find(t=>t.id===torneoId);
+
+  const instituciones=ri.data||[], equipos=re.data||[], categorias=rc.data||[], partidos=rp.data||[];
+
+  const estados=[
+
+    true,
+
+    instituciones.length>0,
+
+    equipos.length>0,
+
+    categorias.length>0,
+
+    partidos.length>0,
+
+    partidos.some(p=>p.estado==='FINALIZADO'),
+
+    !!torneo?.publicado
+
+  ];
+
+  const labels=['Torneo creado','Institución','Equipos','Categorías y reglas','Jornadas / partidos','Resultados','Publicación'];
+
+  const ayudas=['Ya existe el torneo.','Cargá al menos una institución.','Cargá al menos un equipo.','Revisá edades, excepciones y reglas.','Programá al menos un partido.','Finalizá al menos un partido.','Publicá resultados cuando corresponda.'];
+
+  const links=[
+
+    `torneos.html`,
+
+    `equipos.html?torneo=${encodeURIComponent(torneoId)}`,
+
+    `equipos.html?torneo=${encodeURIComponent(torneoId)}`,
+
+    `categorias.html?torneo=${encodeURIComponent(torneoId)}`,
+
+    `jornadas.html?torneo=${encodeURIComponent(torneoId)}`,
+
+    `partidos.html?torneo=${encodeURIComponent(torneoId)}`,
+
+    `publico.html?torneo=${encodeURIComponent(torneoId)}`
+
+  ];
+
+  const siguiente=estados.findIndex(v=>!v);
+
+  const completos=estados.filter(Boolean).length;
+
+  const resumen=siguiente<0
+
+    ? `<b>Recorrido completo.</b> Las 7 etapas principales están listas.`
+
+    : `<b>${completos} de 7 etapas completas.</b> Próximo paso: ${esc(labels[siguiente])}.`;
+
+
+
+  const pasos=labels.map((label,i)=>{
+
+    const clase=estados[i]?'done':(i===siguiente?'current':'pending');
+
+    const punto=estados[i]?'✓':String(i+1);
+
+    const target=i===6?' target="_blank"':'';
+
+    return `<a class="guideStep ${clase}" href="${links[i]}"${target}><span class="guideDot">${punto}</span><strong>${esc(label)}</strong><small>${esc(ayudas[i])}</small></a>`;
+
+  }).join('');
+
+
+
+  box.innerHTML=`<div class="guideSummary">${resumen}</div><div class="guideTimeline">${pasos}</div><div class="guideLegend"><span class="ok"><i></i>Completado</span><span class="next"><i></i>Próximo paso</span><span><i></i>Pendiente</span></div>`;
+
+}
+
+function prepararPanel(){
+
+  const sesion=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+
+  if(!sesion||!sesion.auth_real){
+
+    localStorage.removeItem('sesionNewcom');
+
+    location.replace('acceso_real.html');
+
+    return false;
+
+  }
+
+  const bienvenida=document.querySelector('.welcome');
+
+  const acciones=document.querySelector('.actions');
+
+  const titulo=document.querySelector('#mis-torneos');
+
+  const tags=[];
+
+  if(sesion.es_admin_general)tags.push('Administrador General');
+
+  if(sesion.puede_crear_torneos)tags.push('Organizador autorizado');
+
+  else if(sesion.tiene_asignaciones_organizador)tags.push('Organizador sin autorización activa');
+
+  if(sesion.tiene_responsabilidades)tags.push('Responsable');
+
+  if(!tags.length)tags.push('Cuenta registrada');
+
+  if(bienvenida)bienvenida.innerHTML=`<h2>Bienvenido, ${esc(sesion.nombre)}</h2><p>${tags.join(' · ')}</p>`;
+
+
+
+  if(sesion.es_admin_general){
+
+    acciones.innerHTML=`
+
+      <a class="action" href="admin_general.html"><div class="icon">🛡️</div><h3>Administración general</h3><p>Usuarios, autorizaciones y torneos.</p></a>
+
+      <a class="action" id="alertasAccion" href="alertas.html"><div class="icon">⚠️</div><h3>Alertas</h3><p>Ver incidencias informadas por el sistema.</p></a>`;
+
+    if(titulo)titulo.textContent='Torneos del sistema';
+
+  }else{
+
+    const a=[];
+
+    if(sesion.puede_crear_torneos){
+
+      a.push(`<a class="action" href="crear_torneo.html"><div class="icon">➕</div><h3>Crear nuevo torneo</h3><p>El torneo que crees quedará vinculado a tu cuenta como Organizador.</p></a>`);
+
+      a.push(`<a class="action" href="#mis-torneos"><div class="icon">🏆</div><h3>Mis torneos como Organizador</h3><p>Administrá solamente los torneos en los que figurás como Organizador.</p></a>`);
+
+    }else if(sesion.tiene_asignaciones_organizador){
+
+      a.push(`<a class="action" href="#mis-torneos"><div class="icon">👁️</div><h3>Torneos que organizabas</h3><p>Tu autorización global está suspendida. Los datos siguen existiendo, pero no podés modificarlos.</p></a>`);
+
+    }
+
+    if(sesion.tiene_responsabilidades){
+
+      a.push(`<a class="action" href="#responsabilidadesWrap"><div class="icon">👥</div><h3>Mis responsabilidades</h3><p>Instituciones donde figurás como Responsable, incluso en otros torneos.</p></a>`);
+
+      a.push(`<a class="action" href="jugadores.html?modo=responsable"><div class="icon">📋</div><h3>Listas de participación</h3><p>Consultá quién participa en cada equipo de tus torneos.</p></a>`);
+
+    }
+
+    if(!sesion.puede_crear_torneos&&!sesion.tiene_asignaciones_organizador&&!sesion.tiene_responsabilidades){
+
+      a.push(`<div class="action" style="cursor:default"><div class="icon">✅</div><h3>Cuenta creada</h3><p>Tu cuenta todavía no tiene funciones privadas asignadas.</p></div>`);
+
+    }
+
+    if(sesion.puede_crear_torneos||sesion.tiene_asignaciones_organizador||sesion.tiene_responsabilidades)a.push(`<a class="action" href="alertas.html"><div class="icon">🔔</div><h3>Alertas</h3><p>Notificaciones automáticas y avisos del sistema.</p></a>`);
+
+    a.push(`<a class="action" href="publico.html"><div class="icon">📊</div><h3>Ver resultados</h3><p>Consulta pública sin necesidad de permisos.</p></a>`);
+
+    acciones.innerHTML=a.join('');
+
+    if(titulo){
+
+      titulo.textContent=(sesion.puede_crear_torneos||sesion.tiene_asignaciones_organizador)
+
+        ? 'Mis torneos como Organizador'
+
+        : 'Sin torneos como Organizador';
+
+    }
+
+  }
+
+
+
+  // V12.37.8 — Interfaz coherente con el estado real de la cuenta.
+
+  // No cambia permisos ni RLS: solamente oculta accesos que el usuario no puede utilizar.
+
+  const tieneRolOperativo=!!(sesion.es_admin_general||sesion.puede_crear_torneos||sesion.tiene_asignaciones_organizador||sesion.tiene_responsabilidades);
+
+  const botonMensajes=tieneRolOperativo
+
+    ? '<a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a>'
+
+    : '';
+
+
+
+  const navGestion=document.getElementById('navGestion');
+
+  if(navGestion){
+
+    if(sesion.es_admin_general){
+
+      navGestion.innerHTML='<a class="btn primary" href="torneos.html">TORNEOS</a> &nbsp; <a class="btn primary" href="crear_torneo.html">CREAR TORNEO</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+
+    }else if(sesion.puede_crear_torneos){
+
+      navGestion.innerHTML='<a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+
+    }else if(sesion.tiene_asignaciones_organizador){
+
+      navGestion.innerHTML='<a class="btn primary" href="#mis-torneos">MIS TORNEOS</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+
+    }else if(sesion.tiene_responsabilidades){
+
+      navGestion.innerHTML='<a class="btn primary" href="#responsabilidadesWrap">MIS INSTITUCIONES</a> &nbsp; '+botonMensajes+' &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+
+    }else{
+
+      navGestion.innerHTML='<a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+
+    }
+
+  }
+
+
+
+  return true;
+
+}
+
+
+
+window.addEventListener('DOMContentLoaded',async()=>{
+
+  if(!prepararPanel()) return;
+
+  if(window.NewcomSupabase){
+
+    const r=await NewcomSupabase.restaurarSesionAuth();
+
+    if(!r.ok){
+
+      localStorage.removeItem('sesionNewcom');
+
+      location.replace('acceso_real.html');
+
+      return;
+
+    }
+
+  }
+
+  document.documentElement.classList.remove('tn-auth-pending');
+
+  await cargarTorneosReales();
+
+  await cargarPapeleraAdmin();
+
+  await cargarResponsabilidades();
+
+  await renderGuiaVisible();
+
+});
+
+</script>
+
+
+
+
+
+<script>
+
+function actualizarTarjetaDocumentacion(torneoId){
+
+ const e=document.getElementById('documentacionTorneoCard');
+
+ if(e&&torneoId)e.href='documentacion.html?torneo='+encodeURIComponent(torneoId);
+
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+
+ const a=document.querySelector('.actions');
+
+ const s=JSON.parse(localStorage.getItem('sesionNewcom')||'null');
+
+ if(!a||!s)return;
+
+ const e=document.createElement('a');e.className='action';e.id='documentacionTorneoCard';
+
+ const esOrg=!!(s.es_admin_general||s.puede_crear_torneos);
+
+ if(esOrg){
+
+   const tid=localStorage.getItem('tornewcomGuiaTorneo')||'';
+
+   e.href=tid?'documentacion.html?torneo='+encodeURIComponent(tid):'torneos.html';
+
+   e.innerHTML='<div class="icon">📄</div><h3>Documentación del torneo</h3><p>Cargá y descargá los documentos del torneo seleccionado.</p>';
+
+ }else if(s.tiene_responsabilidades){
+
+   return;
+
+ }else return;
+
+ a.appendChild(e);
+
+});
+
+</script>
+
+<script src="legal_v12_33.js?v=12.35" defer></script>
+
+</head><body>
+
+
+
+<header class="topbar">
+
+  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.30 CANDIDATA</small></div>
+
+  <nav class="quicklinks"><span style="width:100%;font-size:12px;font-weight:700;opacity:.9">VISITÁ TAMBIÉN</span>
+
+    <a href="https://script.google.com/macros/s/AKfycbxikpnjHRjmeZglD4VhPXLeNEBG4c48tetx_duJqms_AZ8YGvlceTdmBFpf4GwEHBrRGw/exec" target="_blank">📘 R.I.N.<br><small>Reglamento Interactivo de Newcom</small></a>
+
+    <a href="https://dondejugarnewcom.netlify.app" target="_blank">🌐 Dónde Jugar Newcom</a>
+
+  </nav>
+
+</header>
+
+<p id="navGestion" style="text-align:center;margin:18px 0"><a class="btn primary" href="torneos.html">PANEL DE TORNEOS</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a></p>
+
+<main class="wrap">
+
+<section class="welcome"><h2>Bienvenido</h2><p>Ingresá a un torneo existente o comenzá uno nuevo.</p></section>
+
+<details id="novedadesBox" class="newsLink"><summary>Novedades y actualizaciones del sistema</summary><div class="newsLinkBody"><div id="novedadesLista" class="newsEmpty">Cargando…</div></div></details>
+
+<section id="guiaVisible" class="guidePanel" style="display:none"></section>
+
+<section class="actions">
+
+<a class="action" href="crear_torneo.html"><div class="icon">➕</div><h3>Crear nuevo torneo</h3><p>Creá el torneo y continuá con institución y equipos.</p></a>
+
+<a class="action" href="#mis-torneos"><div class="icon">🏆</div><h3>Mis torneos</h3><p>Ingresá, editá o continuá un torneo ya creado.</p></a>
+
+</section>
+
+<h3 class="section-title" id="mis-torneos">Mis torneos activos</h3>
+
+<section class="tournaments">
+
+<article class="card"><span class="badge">CARGANDO</span><h4>Actualizando torneos…</h4><p>Consultando Supabase.</p></article>
+
+</section>
+
+<section id="papeleraAdminWrap" style="display:none">
+  <h3 class="section-title">🗑 Papelera</h3>
+  <div class="trashPanel">
+    <p class="trashHelp"><b>Solo Administrador General.</b> Acá aparecen los torneos retirados de la lista normal. Podés restaurarlos o eliminarlos definitivamente.</p>
+    <div class="tournaments" id="papeleraTorneos">
+      <article class="card"><span class="badge">CARGANDO</span><h4>Actualizando Papelera…</h4></article>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+
+<footer class="footer">
+
+  <div><strong>Creado por Gabriel Prozzillo</strong></div><div>Proyecto Newcom</div>
+
+  <div class="footer-links">
+
+    <a href="https://script.google.com/macros/s/AKfycbxikpnjHRjmeZglD4VhPXLeNEBG4c48tetx_duJqms_AZ8YGvlceTdmBFpf4GwEHBrRGw/exec" target="_blank">R.I.N. — Reglamento Interactivo de Newcom</a>
+
+    <a href="https://dondejugarnewcom.netlify.app" target="_blank">VISITAR DÓNDE JUGAR NEWCOM ↗</a>
+
+  </div>
+
+</footer>
+
+
+
+
+
+<script>
+
+(function(){
+
+ const LIM=30\*60\*1000,AV=25\*60\*1000;let t=Date.now(),avisado=false;
+
+ function act(){t=Date.now();avisado=false}
+
+ ['click','keydown','input','change','touchstart'].forEach(e=>addEventListener(e,act,{passive:true}));
+
+ setInterval(()=>{
+
+  const s=JSON.parse(localStorage.getItem('sesionNewcom')||'null');if(!s)return;
+
+  const d=Date.now()-t;
+
+  if(d>=LIM){
+
+   try{if(typeof autoGuardar==='function')autoGuardar()}catch(e){}
+
+   localStorage.removeItem('sesionNewcom');
+
+   alert('La sesión se cerró por inactividad. El borrador local fue conservado.');
+
+   location.href='acceso_real.html';
+
+  }else if(d>=AV&&!avisado){avisado=true;if(confirm('Tu sesión está por cerrarse por inactividad. ¿Querés continuar?'))act()}
+
+ },15000);
+
+})();
+
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js?v=12.35"></script>
+
+<script src="supabase_v12_24.js?v=12.36.19-login5"></script>
+
+<script src="roles_v12_24.js?v=12.35"></script>
+
+<script src="mensajes_v12_35.js?v=12.35"></script>
+
+<script>
+
+async function cargarNovedadesV1235(){
+
+ const box=document.getElementById('novedadesLista');if(!box||!window.TorNewcomMensajes)return;
+
+ const r=await TorNewcomMensajes.novedades(3);
+
+ if(!r.ok){box.textContent='No se pudieron cargar las novedades.';return}
+
+ const a=r.data||[];if(!a.length){box.textContent='Todavía no hay novedades publicadas.';return}
+
+ box.className='';
+
+ box.innerHTML=a.map(n=>`<div class="newsRow"><b>${esc(n.titulo||'Mejora')}</b>${n.version?` <small>${esc(n.version)}</small>`:''}<p>${esc(n.descripcion||'')}</p></div>`).join('');
+
+}
+
+async function cargarContadorMensajesV1235(){
+
+ const b=document.getElementById('mensajesBadge');if(!b||!window.TorNewcomMensajes)return;
+
+ const r=await TorNewcomMensajes.contarNoLeidos();if(!r.ok)return;
+
+ const n=Number(r.data||0);b.textContent=n;b.style.display=n?'inline-block':'none';
+
+}
+
+window.addEventListener('DOMContentLoaded',async()=>{
+
+ await cargarNovedadesV1235();
+
+ await cargarContadorMensajesV1235();
+
+});
+
+async function actualizarPanelResponsableV1220(){
+
+ const s=NewcomRoles.sesion();if(!s||s.rol!=='RESPONSABLE')return;
+
+ const nav=document.getElementById('navGestion');
+
+ if(nav){
+
+   nav.style.display='block';
+
+   nav.innerHTML='<a class="btn primary" href="#mis-torneos">MIS INSTITUCIONES</a> &nbsp; <a id="mensajesTop" class="btn secondary" href="mensajes.html">✉ MENSAJES <span id="mensajesBadge" class="msgBadge">0</span></a> &nbsp; <a class="btn secondary" href="publico.html" target="_blank">VER VISTA PÚBLICA</a>';
+
+   await cargarContadorMensajesV1235();
+
+ }
+
+ const titulo=document.getElementById('mis-torneos');if(titulo)titulo.textContent='Mis instituciones';
+
+ const acciones=document.querySelector('.actions');
+
+ if(acciones)acciones.innerHTML=`<a class="action" href="#mis-torneos"><div class="icon">🏛️</div><h3>Mis instituciones</h3><p>Consultá las instituciones o clubes que tenés a cargo.</p></a><a class="action" href="mis_jugadores.html"><div class="icon">👥</div><h3>Mis jugadores</h3><p>Administrá tu bolsa permanente y usala para armar las listas de cada torneo.</p></a><a class="action" href="mis_torneos.html"><div class="icon">🏆</div><h3>Mis torneos</h3><p>Consultá los torneos en los que participa cada institución.</p></a><a class="action" href="documentacion.html"><div class="icon">📄</div><h3>Documentación del torneo</h3><p>Descargá e imprimí los documentos publicados por el Organizador.</p></a><a class="action" href="equipos.html?modo=responsable"><div class="icon">🏐</div><h3>Mis equipos</h3><p>Elegí torneo e institución y consultá sus equipos.</p></a><a class="action" href="mis_jornadas.html"><div class="icon">🗓️</div><h3>Mis jornadas</h3><p>Consultá jornadas y partidos pendientes o jugados de tus equipos.</p></a><a class="action" href="partidos.html?modo=responsable"><div class="icon">✅</div><h3>Mis partidos jugados</h3><p>Consultá los resultados de los partidos finalizados.</p></a><a class="action" href="tabla.html?modo=responsable"><div class="icon">📊</div><h3>Tabla de posiciones</h3><p>Consultá posiciones por torneo, categoría y modalidad.</p></a>`;
+
+ const cont=document.querySelector('.tournaments');if(!cont)return;
+
+ cont.innerHTML='<article class="card"><span class="badge">CARGANDO</span><h4>Buscando tus asignaciones…</h4></article>';
+
+ const r=await NewcomSupabase.listarAsignacionesResponsable(s.email);
+
+ if(!r.ok){cont.innerHTML=`<article class="card"><span class="badge">ERROR</span><h4>No se pudo cargar</h4><p>${esc(r.error)}</p></article>`;return}
+
+ if(!r.data.length){cont.innerHTML=`<article class="card"><span class="badge">SIN ASIGNACIÓN</span><h4>Todavía no tenés una institución asignada</h4><p>El Organizador debe crearla utilizando tu email: <b>${esc(s.email||'')}</b>.</p></article>`;return}
+
+ const grupos=new Map();
+
+ for(const a of r.data){
+
+   const clave=(a.nombre||'').trim().toLocaleLowerCase('es');
+
+   if(!grupos.has(clave))grupos.set(clave,{nombre:a.nombre||'Institución',asignaciones:[]});
+
+   grupos.get(clave).asignaciones.push(a);
+
+ }
+
+ const perfilesSusp=await NewcomSupabase.listarEstadoOrganizadoresPorTorneo();
+
+ const mapaSusp=new Map((perfilesSusp.ok?perfilesSusp.data:[]).map(x=>[String(x.torneo_id),!!x.suspendido]));
+
+ const tarjetas=await Promise.all([...grupos.values()].sort((x,y)=>x.nombre.localeCompare(y.nombre,'es')).map(async g=>{
+
+   const ordenadas=g.asignaciones.sort((x,y)=>(x.torneo?.nombre||'').localeCompare(y.torneo?.nombre||'','es'));
+
+   const principal=ordenadas[0];
+
+   const filas=await Promise.all(ordenadas.map(async a=>{
+
+     const equipos=a.equipos_competitivos||[];
+
+     const suspendido=mapaSusp.get(String(a.torneo_id))===true;
+
+     const alerta=suspendido?'<div style="margin:4px 0 7px;color:#9a3f3f;font-weight:800">⚠ TORNEO SUSPENDIDO</div>':'';
+
+     return `<div style="padding:10px 0;border-top:1px solid #dfe7ee"><div style="font-weight:800;margin-bottom:5px">${esc(a.torneo?.nombre||'Torneo')}</div>${alerta}<div style="font-size:13px;color:#5f7180;margin-bottom:8px">${plural(equipos.length,'equipo','equipos')}</div><div class="buttons"><a href="equipos.html?torneo=${encodeURIComponent(a.torneo_id)}&institucion=${encodeURIComponent(a.id)}" class="btn primary">Mis equipos</a></div></div>`;
+
+   }));
+
+   const hrefPlantel=principal?`jugadores.html?torneo=${encodeURIComponent(principal.torneo_id)}&institucion=${encodeURIComponent(principal.id)}`:'jugadores.html?modo=responsable';
+
+   return `<article class="card"><span class="badge">RESPONSABLE</span><h4>${esc(g.nombre)}</h4><p style="margin-bottom:8px"><b>${plural(g.asignaciones.length,'torneo','torneos')}</b></p><div class="buttons" style="margin-bottom:6px"><a href="${hrefPlantel}" class="btn secondary">Lista de participación — ${esc(g.nombre)}</a></div>${filas.join('')}</article>`;
+
+ }));
+
+ cont.innerHTML=tarjetas.join('');
+
+}
+
+window.addEventListener('DOMContentLoaded',actualizarPanelResponsableV1220);
+
+async function actualizarContadorAlertasV1222(){
+
+ const s=NewcomRoles.sesion();if(!s||!['ADMIN_GENERAL','ORGANIZADOR'].includes(s.rol)||(s.rol==='ORGANIZADOR'&&!s.puede_crear_torneos))return;
+
+ const a=document.getElementById('alertasAccion');if(!a)return;
+
+ const r=await NewcomSupabase.listarAlertasPlantelPendientes();if(!r.ok)return;
+
+ const n=(r.data||[]).length, p=a.querySelector('p');
+
+ if(p)p.innerHTML=n?`<b>${n} pendiente${n===1?'':'s'}</b> de decisión.`:'Sin alertas pendientes.';
+
+}
+
+window.addEventListener('DOMContentLoaded',actualizarContadorAlertasV1222);
+
+
+
+</script>
+
+
+
+<script>
+
+async function instalarSolicitudesBilateralesV123616(){
+
+ // V12.37.9: un Organizador con autorización global suspendida no ve Solicitudes.
+
+ // La seguridad de fondo no cambia; solo se alinea la interfaz con su estado.
+
+ const s=NewcomRoles.sesion();if(!s||!window.NewcomSupabase)return;
+
+ const acciones=document.querySelector('.actions');
+
+ const esOrg=!!(s.es_admin_general||s.puede_crear_torneos);
+
+ if(esOrg&&acciones&&!document.getElementById('solicitudesBilateralesCard')){
+
+   acciones.insertAdjacentHTML('beforeend',`<a id="solicitudesBilateralesCard" class="action" href="solicitudes_lista.html"><div class="icon">📨</div><h3>Solicitudes <span id="solBilBadge" style="display:none;background:#b84a4a;color:#fff;border-radius:999px;padding:2px 7px;font-size:12px"></span></h3><p>Revisá cambios pedidos en listas cerradas de todos tus torneos.</p></a>`);
+
+ }
+
+ const r=await NewcomSupabase.resumenSolicitudesListaCerrada();
+
+ if(!r.ok)return;
+
+ const org=Number(r.data?.como_organizador||0),resp=Number(r.data?.como_responsable||0);
+
+ const b=document.getElementById('solBilBadge');if(b&&org){b.textContent=org;b.style.display='inline-block'}
+
+ if(s.tiene_responsabilidades&&resp>0&&!document.getElementById('solicitudesRespAlerta')){
+
+   const alerta=document.createElement('div');alerta.id='solicitudesRespAlerta';alerta.style.cssText='background:#fff4dd;color:#6d561d;border:1px solid #ead7a3;border-left:5px solid #c6912c;border-radius:12px;padding:13px 15px;margin:0 0 18px;font-size:14px';
+
+   alerta.innerHTML=`<b>Tenés ${resp} solicitud${resp===1?'':'es'} del Organizador para revisar.</b> <a href="solicitudes_lista.html?modo=responsable" style="color:#315b77;font-weight:800">Ver y responder</a>`;
+
+   const guia=document.getElementById('guiaVisible'),welcome=document.querySelector('.welcome');
+
+   if(guia&&guia.parentNode)guia.parentNode.insertBefore(alerta,guia.nextSibling);else if(welcome&&welcome.parentNode)welcome.parentNode.insertBefore(alerta,welcome.nextSibling);
+
+ }
+
+}
+
+window.addEventListener('DOMContentLoaded',()=>setTimeout(instalarSolicitudesBilateralesV123616,250));
+
+</script>
+
+
+
+<script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
+
+<script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
+
+</body></html>

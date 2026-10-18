@@ -1,0 +1,30 @@
+TORNEWCOM V12.37.26 CANDIDATA — AJUSTES DETECTADOS EN PRUEBA INTEGRAL
+
+BASE: V12.37.24 CANDIDATA, construida sobre V12.37.22 VALIDADA.
+
+CAMBIOS:
+1. Mensajes: se elimina el botón visible “← Panel” de la cabecera que generaba el tooltip flotante debajo de “Cerrar sesión”.
+2. Mensajes: nomenclatura uniforme:
+   - Administrador General → “Gabriel”.
+   - Organizador → nombre del torneo.
+   - Responsable → nombre de la institución.
+3. Mensajes y Organizador suspendido:
+   - Responsable NO puede seleccionar ni enviar mensajes a un Organizador suspendido.
+   - Organizador suspendido NO puede escribir a Responsables.
+   - Admin General ↔ Organizador suspendido continúa habilitado en ambos sentidos.
+4. Inicio Responsable: si el Organizador del torneo está suspendido, la tarjeta muestra “⚠ TORNEO SUSPENDIDO”. En torneos activos no muestra ningún aviso.
+
+SQL:
+Ejecutar/aplicar SQL_V12_37_25_MENSAJES_SUSPENSION.sql en tornewcom-test.
+
+NO SE TOCÓ:
+- resultados
+- tablas
+- jornadas
+- equipos
+- bolsa de jugadores
+- solicitudes ALTA/BAJA/REASIGNACIÓN
+- cierre de listas
+- vista pública
+
+V12.37.22 continúa siendo la última VALIDADA hasta completar las pruebas de esta candidata.

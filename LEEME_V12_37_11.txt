@@ -1,0 +1,8 @@
+TORNEWCOM V12.37.11 CANDIDATA — BLOQUEO PROGRESIVO DE SETS
+
+Cambio funcional único:
+- SET 2 permanece bloqueado hasta que SET 1 tenga un tanteo final válido.
+- SET 3 conserva la lógica ya existente: solo se habilita si los dos primeros sets están válidos y el partido queda 1-1.
+- No se modifica Supabase, RLS, sesiones, puntuación ni guardado de resultados.
+
+Base: V12.37.10 CANDIDATA.

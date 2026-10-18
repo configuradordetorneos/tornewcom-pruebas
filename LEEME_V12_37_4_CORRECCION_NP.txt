@@ -1,0 +1,9 @@
+TORNEWCOM V12.37.4 CANDIDATA — CORRECCIÓN N/P → PARTIDO JUGADO
+
+Cambio único funcional:
+- En Cargar resultado, el selector "No presentado" incorpora "Partido jugado normalmente".
+- Un partido FINALIZADO como N/P puede habilitar Corrección, elegir "Partido jugado normalmente", cargar SET 1/2/3 y guardar la corrección sin borrar ni recrear el partido.
+- Si durante una corrección se cambia temporalmente de partido normal a N/P y se vuelve a normal, se restauran los tanteos normales que estaban cargados en esa sesión.
+- La auditoría existente se mantiene sin cambios.
+
+No requiere SQL.

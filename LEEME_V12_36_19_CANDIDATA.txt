@@ -1,0 +1,31 @@
+TORNEWCOM V12.36.19 CANDIDATA — AJUSTES UX
+
+BASE: V12.36.18 CANDIDATA.
+
+CAMBIOS DE ESTA VERSION:
+1. En torneos.html se agrega “Cierre de listas” dentro de las acciones de cada torneo.
+2. Se incorpora una ayuda contextual global para botones y acciones del sistema.
+   - En escritorio aparece un cartel flotante al pasar el mouse.
+   - Se usa un único tooltip visual de TorNewcom; se evita el tooltip nativo duplicado del navegador.
+   - Se mantienen aria-label para accesibilidad.
+   - Los botones dinámicos también reciben ayuda mediante observación del DOM.
+3. No se modifica la lógica de cierre de listas, solicitudes, planteles, resultados ni mensajería.
+4. NO HAY SQL NUEVO.
+
+PRUEBA SIGUIENTE:
+Continuar con la batería de pruebas de cierre/reapertura de listas antes de tocar la mensajería interna.
+
+
+AFINADO DE FLUJO — MISMA VERSIÓN V12.36.19
+- Mis jugadores queda como única fuente para ALTA.
+- Lista de participación queda como vista de los jugadores ya inscriptos en el torneo.
+- En listas cerradas, Mis equipos muestra acciones separadas: Solicitar ALTA y BAJA / REASIGNACIÓN.
+- La pantalla de solicitudes ya no mezcla ALTA con jugadores de la lista: muestra cada jugador actual con sus acciones BAJA / REASIGNACIÓN.
+- Se unifica la nomenclatura “Lista de participación”.
+- Se corrige la validación para que un Responsable use su propia bolsa Mis jugadores aun si la institución conserva un vínculo anterior.
+- Se refuerza que ALTA no puede duplicar un jugador en otro equipo del mismo torneo: en ese caso corresponde REASIGNACIÓN.
+
+IMPORTANTE: volver a ejecutar SQL_AJUSTE_V12_36_19_UNIFICAR_LISTAS.sql en tornewcom-test. Es idempotente (ALTER IF NOT EXISTS + CREATE OR REPLACE) y no borra datos.
+
+
+AJUSTE SESIÓN: se impide que la sesión visual de TorNewcom y el usuario autenticado real de Supabase pertenezcan a cuentas distintas. Al iniciar sesión se limpia cualquier identidad previa y se verifica el user_id antes de operar.
