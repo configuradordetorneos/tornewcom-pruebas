@@ -1191,7 +1191,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   let box=document.getElementById('installInstructions');
   if(!box){box=document.createElement('div');box.id='installInstructions';box.className='installInstructions';btn.parentElement.appendChild(box);}
   const standalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
-  if(standalone && help)help.textContent='TorNewcom está instalada. Este botón queda disponible para consultar cómo instalarla en otro dispositivo.';
+  if(standalone){const panel=document.querySelector('.installAppPanel');if(panel)panel.style.display='none';}
   btn.addEventListener('click',async()=>{
     if(tornewcomInstallPrompt){
       tornewcomInstallPrompt.prompt();
