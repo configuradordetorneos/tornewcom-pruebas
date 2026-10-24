@@ -1,0 +1,13 @@
+TorNewcom V12.37.39 PRUEBAS
+
+Cambios principales:
+- Selector real de jornadas al agregar partidos: permite usar una existente o crear una nueva.
+- Evita duplicar Jornada 1/2/etc. y valida coherencia entre numero y fecha.
+- Crear jornada desde la misma pantalla de edicion del partido y seleccionarla inmediatamente.
+- Fechas visibles DD/MM/AA en pantallas principales de partidos/jornadas.
+- Tooltip explicativo en Editar.
+- Actividad reciente compacta para Organizador, con movimientos mas recientes primero.
+- Admin: Alertas pasa a llamarse Notificaciones y alertas.
+- Mantiene reapertura, auditoria, notificaciones y control de correccion sin cambios de V12.37.38.
+
+SOLO PRUEBAS. No desplegar en produccion sin validacion.

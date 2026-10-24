@@ -665,7 +665,7 @@ function prepararPanel(){
 
       <a class="action" href="admin_general.html"><div class="icon">🛡️</div><h3>Administración general</h3><p>Usuarios, autorizaciones y torneos.</p></a>
 
-      <a class="action" id="alertasAccion" href="alertas.html"><div class="icon">⚠️</div><h3>Alertas</h3><p>Ver incidencias informadas por el sistema.</p></a>`;
+      <a class="action" id="alertasAccion" href="alertas.html"><div class="icon">⚠️</div><h3>Notificaciones y alertas</h3><p>Ver avisos e incidencias informadas por el sistema.</p></a>`;
 
     if(titulo)titulo.textContent='Torneos del sistema';
 
@@ -856,7 +856,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <header class="topbar">
 
-  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.38 PRUEBAS</small></div>
+  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.39 PRUEBAS</small></div>
 
   <nav class="quicklinks"><span style="width:100%;font-size:12px;font-weight:700;opacity:.9">VISITÁ TAMBIÉN</span>
 
@@ -885,6 +885,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 <a class="action" href="#mis-torneos"><div class="icon">🏆</div><h3>Mis torneos</h3><p>Ingresá, editá o continuá un torneo ya creado.</p></a>
 
 </section>
+<section id="actividadOrganizador" class="activityPanel" style="display:none"><h3>Actividad reciente</h3><div class="activityMuted">Últimos movimientos registrados en tus torneos.</div><div id="actividadOrganizadorBody" class="activityScroll" style="margin-top:10px">Cargando…</div></section>
 
 <h3 class="section-title" id="mis-torneos">Mis torneos activos</h3>
 
@@ -966,7 +967,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <script src="supabase-config.js?v=12.35"></script>
 
-<script src="supabase_v12_24.js?v=12.37.38"></script>
+<script src="supabase_v12_24.js?v=12.37.39"></script>
 
 <script src="roles_v12_24.js?v=12.35"></script>
 
@@ -1000,6 +1001,9 @@ async function cargarContadorMensajesV1235(){
 
 }
 
+function fmtActividadFecha(v){if(!v)return'';const d=new Date(v);return Number.isNaN(d.getTime())?'':d.toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function nombreAccionActividad(a){return({REAPERTURA_PARTIDO:'Reabrió partido',CORRECCION_RESULTADO:'Corrigió resultado',EDICION_PARTIDO:'Editó partido'}[a]||String(a||'Actividad').replaceAll('_',' ').toLowerCase().replace(/^./,c=>c.toUpperCase()))}
+async function cargarActividadOrganizadorV123739(){const panel=document.getElementById('actividadOrganizador'),body=document.getElementById('actividadOrganizadorBody');if(!panel||!body)return;const s=NewcomRoles.sesion();if(s.es_admin_general||!(s.puede_crear_torneos||s.tiene_asignaciones_organizador)){panel.style.display='none';return}panel.style.display='block';const r=await NewcomSupabase.listarAuditoriaPartidos();if(!r.ok){body.textContent='No se pudo cargar la actividad reciente.';return}const xs=(r.data||[]).slice(0,8);if(!xs.length){body.innerHTML='<div class="activityMuted">Todavía no hay movimientos registrados.</div>';return}body.innerHTML=`<table class="activityTable"><thead><tr><th>Fecha / hora</th><th>Acción</th><th>Partido</th><th>Detalle</th></tr></thead><tbody>${xs.map(x=>{const p=x.partidos||{},partido=[p.equipo_a,p.equipo_b].filter(Boolean).join(' vs ')||'—';return`<tr><td>${esc(fmtActividadFecha(x.creado_en))}</td><td><b>${esc(nombreAccionActividad(x.accion))}</b></td><td>${esc(partido)}</td><td>${esc(x.motivo||'—')}</td></tr>`}).join('')}</tbody></table>`}
 async function cargarBotonAlertasV123734(){
  const b=document.getElementById('alertasBadge');if(!b||!window.NewcomSupabase)return;
  const r=await NewcomSupabase.hayAlertasNoLeidasActual();
@@ -1109,7 +1113,7 @@ async function actualizarContadorAlertasV1222(){
 
 }
 
-window.addEventListener('DOMContentLoaded',actualizarContadorAlertasV1222);
+window.addEventListener('DOMContentLoaded',actualizarContadorAlertasV1222);window.addEventListener('DOMContentLoaded',cargarActividadOrganizadorV123739);
 
 
 

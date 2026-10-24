@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tabla de posiciones — V12.37.36 — Sistema de Torneos Newcom</title>
+<title>Tabla de posiciones — V12.37.39 — Sistema de Torneos Newcom</title>
 <style>
 body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:white;padding:18px 24px}
 .wrap{max-width:1350px;margin:28px auto;background:white;padding:24px;border-radius:16px}.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -27,7 +27,7 @@ tbody tr:nth-child(even){background:#EAF4FB}td:nth-child(2),th:nth-child(2){text
 }
 </style><script src="legal_v12_33.js?v=12.35" defer></script>
 </head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);</script>
-<div class="top">TORNEWCOM — V12.37.38 PRUEBAS</div>
+<div class="top">TORNEWCOM — V12.37.39 PRUEBAS</div>
 <div class="wrap">
 <div class="bar"><a class="btn" id="volver" href="torneos.html">← Volver</a><label id="torneoWrap" style="display:none">Torneo <select id="torneoSel"></select></label>
 <label>Categoría <select id="cat"><option value="">Seleccionar...</option></select></label>
@@ -42,7 +42,7 @@ tbody tr:nth-child(even){background:#EAF4FB}td:nth-child(2),th:nth-child(2){text
 <th>POS</th><th>EQUIPO</th><th>PJ</th><th>PG 2-0</th><th>PG 2-1</th><th>PP 1-2</th><th>PP 0-2</th><th>N/P</th><th>PTS</th><th>SETS +</th><th>SETS -</th><th>DIF SETS</th><th>PF</th><th>PC</th><th>DIF PTS</th>
 </tr></thead><tbody id="body"></tbody></table></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.38"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.39"></script>
 <script>
 const $=x=>document.getElementById(x), qs=new URLSearchParams(location.search),sesion=NewcomRoles.sesion();
 const esResp=qs.get('modo')==='responsable'
