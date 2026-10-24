@@ -60,7 +60,7 @@ td input,td select{padding:9px 10px}
 .bad{color:#9a2626;font-weight:700}
 code{background:#eef3f6;padding:3px 6px;border-radius:6px}
 </style>
-</head>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 
 
@@ -128,5 +128,5 @@ code{background:#eef3f6;padding:3px 6px;border-radius:6px}
   </div>
 </footer>
 <script src="tornewcom_tooltips.js?v=12.36.19"></script>
-</body>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body>
 </html>

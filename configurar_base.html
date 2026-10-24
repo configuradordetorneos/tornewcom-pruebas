@@ -1,21 +1,21 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Base de datos — V12.37.39</title><style>
+<title>Base de datos — V12.37.40</title><style>
 body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:#fff;padding:18px 24px}
 .wrap{max-width:850px;margin:28px auto;padding:0 16px}.card{background:#fff;border-radius:16px;padding:24px}
 .estado{background:#EAF4FB;padding:14px;border-radius:10px;margin:14px 0}.btn,button{display:inline-block;background:#4A90C2;color:#fff;padding:10px 14px;border-radius:9px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}
 button:disabled{opacity:.55}.ok{background:#e8f5ee;color:#245d39}.err{background:#faecec;color:#7b2c2c}pre{white-space:pre-wrap;background:#f6f8fa;padding:12px;border-radius:10px}
 </style><script src="legal_v12_33.js?v=12.35" defer></script>
-</head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL']);</script><div class="top"><b>TORNEWCOM — V12.37.39 PRUEBAS</b></div>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL']);</script><div class="top"><b>TORNEWCOM — V12.37.40 PRUEBAS</b></div>
 <main class="wrap"><p><a class="btn" href="index.html">← Volver</a></p><div class="card">
 <h1>Base de datos real</h1><p>La conexión real con Supabase está configurada. La etapa Torneos ya puede trabajar directamente con la base.</p>
 <div class="estado" id="estado">Comprobando configuración…</div><p><a class="btn" href="torneos.html">Abrir Torneos reales</a></p><div id="resultado"></div>
 <hr><p><b>Importante:</b> esta prueba crea un registro visible en la tabla <b>torneos</b>. Más adelante podremos borrarlo.</p>
 </div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.39"></script>
+<script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.40"></script>
 <script>
 const estado=document.getElementById('estado');
 if(NewcomSupabase.iniciar()){estado.textContent='Conexión configurada. Etapa Torneos lista.';}
 else{estado.textContent='No se pudo iniciar Supabase.';estado.className='estado err';}
 </script><script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
-</body></html>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>

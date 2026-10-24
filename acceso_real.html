@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>TorNewcom — Ingresar · V12.37.39</title>
+<title>TorNewcom — Ingresar · V12.37.40</title>
 <style>
 :root{
   --blue:#2679d6;
@@ -126,7 +126,7 @@ input:focus{border-color:#2a78c5;box-shadow:0 0 0 3px rgba(42,120,197,.11)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=12.35"></script>
-<script src="supabase_v12_24.js?v=12.37.39"></script>
+<script src="supabase_v12_24.js?v=12.37.40"></script>
 <script>
 function alternarPassword(){const p=document.getElementById('pass'),c=document.getElementById('mostrarPass');p.type=c.checked?'text':'password';}
 function emailValido(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim().toLowerCase())}
@@ -178,7 +178,7 @@ async function ingresar(ev){
 }
 window.addEventListener('DOMContentLoaded',mostrarErrorRecuperacion);
 </script>
-</head>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <main class="page">
   <section class="login-card" aria-label="Acceso a TorNewcom">
@@ -239,5 +239,5 @@ window.addEventListener('DOMContentLoaded',mostrarErrorRecuperacion);
   </aside>
 </main>
 <script src="tornewcom_tooltips.js?v=12.36.19"></script>
-</body>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body>
 </html>

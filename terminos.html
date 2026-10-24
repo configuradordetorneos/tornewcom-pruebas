@@ -14,7 +14,7 @@ h1{margin-top:0;color:#123f69}h2{margin-top:28px;color:#2F5D7E;font-size:20px}
 .small{font-size:13px;color:#617988}a{color:#1b69a9}ul{padding-left:22px}
 footer{margin-top:28px;border-top:1px solid #dfe8ee;padding-top:18px;color:#5e7381;font-size:13px}
 </style>
-</head>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div class="top"><strong>TORNEWCOM</strong><br>Plataforma de gestión de torneos de Newcom</div>
 <main><article class="card">
@@ -73,4 +73,4 @@ footer{margin-top:28px;border-top:1px solid #dfe8ee;padding-top:18px;color:#5e73
 </footer>
 </article></main>
 <script src="tornewcom_tooltips.js?v=12.36.19"></script>
-</body></html>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>

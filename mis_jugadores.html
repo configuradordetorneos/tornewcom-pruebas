@@ -5,7 +5,7 @@
 @media(max-width:760px){.grid,.actionRow{grid-template-columns:1fr 1fr}.player{grid-template-columns:auto 1fr}.player .extra,.player .playerActions{grid-column:2}.playerActions{justify-content:flex-start}}
 @media(max-width:520px){.grid,.actionRow{grid-template-columns:1fr}.player{grid-template-columns:auto 1fr}}
 </style>
-<script src="legal_v12_33.js?v=12.35" defer></script></head><body>
+<script src="legal_v12_33.js?v=12.35" defer></script><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head><body>
 <div class="top"><b>TORNEWCOM — Mis jugadores / Bolsa</b></div>
 <div class="wrap">
   <div class="nav"><a class="btn secondary" href="index.html">← Inicio</a><a class="btn secondary" id="volverPlantel" href="jugadores.html">Lista de participación</a><a class="btn secondary" id="irSolicitudes" href="solicitudes_lista.html?modo=responsable">Solicitudes de cambios</a></div>
@@ -33,7 +33,7 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.39"></script><script src="roles_v12_24.js?v=12.35"></script><script src="autosave_v12_26.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.40"></script><script src="roles_v12_24.js?v=12.35"></script><script src="autosave_v12_26.js"></script>
 <script>
 const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search);const sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR','RESPONSABLE']);let jugadores=[],jugadoresTorneo=[],asignaciones=[],torneoId=qs.get('torneo')||'',instId=qs.get('institucion')||'',equipoInicial=qs.get('equipo')||'',institucion=null,equipos=[],reglas=[],responsableFiltro=null,jugadorEditandoId=null,puedeGestionarBolsa=false;
 const ayudaContextoTexto='Para habilitar las casillas de selección, primero elegí un torneo e institución arriba.';
@@ -138,4 +138,4 @@ $('accionSeleccionados').onclick=async()=>{const ids=seleccionados();if(!ids.len
 inicio();
 </script><script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
 <script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
-</body></html>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>

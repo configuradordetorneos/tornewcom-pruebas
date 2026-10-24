@@ -5,8 +5,8 @@
 @media(max-width:800px){.grid,.teams{grid-template-columns:1fr}.hero h2{font-size:25px}.card{padding:17px}.field{min-width:140px;flex:1}.filters{align-items:stretch}.btn{width:100%;text-align:center}.topin{align-items:flex-start}}
 </style>
 <script src="legal_v12_33.js?v=12.35" defer></script>
-</head><body>
-<header class="top"><div class="topin"><div><h1>Sistema de Torneos Newcom</h1><div style="opacity:.85;font-size:13px">Consulta pública · V12.37.39 PRUEBAS</div></div><a href="acceso_real.html">Acceso Organizador / Responsable</a></div></header>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head><body>
+<header class="top"><div class="topin"><div><h1>Sistema de Torneos Newcom</h1><div style="opacity:.85;font-size:13px">Consulta pública · V12.37.40 PRUEBAS</div></div><a href="acceso_real.html">Acceso Organizador / Responsable</a></div></header>
 <main class="wrap">
   <section class="card hero"><h2 id="titulo">Torneos públicos</h2><p id="subtitulo" class="muted">Consultá resultados, posiciones y equipos sin iniciar sesión.</p><div id="volverWrap" style="display:none;margin-top:14px"><a class="btn secondary" href="publico.html">← Ver otros torneos</a></div></section>
   <section id="novedadesBox" class="newsCompact"><div class="newsCompactHead"><h3>✨ Novedades</h3><small>Últimas mejoras</small></div><div id="novedadesLista" class="newsEmpty">Cargando…</div></section>
@@ -23,7 +23,7 @@
   </section>
 </main>
 <footer class="footer">Información publicada por la organización del torneo · No se muestran datos personales de jugadores ni responsables.</footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.39"></script><script src="mensajes_v12_35.js?v=12.35"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.40"></script><script src="mensajes_v12_35.js?v=12.35"></script>
 <script>
 const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search),torneoId=qs.get('torneo');let torneos=[],equipos=[],finalizados=[],programacion=[],torneo=null;
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
@@ -52,4 +52,4 @@ async function cargarNovedadesPublicas(){
 async function inicio(){if(!window.NewcomSupabase){$('listaTorneos').innerHTML='<div class="card">No se pudo conectar con el sistema.</div>';return;}const rt=await NewcomSupabase.listarTorneosPublicos();if(!rt.ok){$('listaTorneos').innerHTML=`<div class="card">Error: ${esc(rt.error)}</div>`;return;}torneos=rt.data||[];if(!torneoId){$('listaTorneos').innerHTML=torneos.length?torneos.map(t=>`<article class="torneo"><span class="badge">${esc(t.estado||'ACTIVO')}</span><h3>${esc(t.nombre)}</h3><p class="muted">Resultados, posiciones y equipos participantes.</p><a class="btn" href="publico.html?torneo=${encodeURIComponent(t.id)}">Ver torneo</a></article>`).join(''):'<div class="card">Todavía no hay torneos publicados.</div>';return;}torneo=torneos.find(t=>String(t.id)===String(torneoId));if(!torneo){$('listaTorneos').innerHTML='<div class="card">Este torneo no está publicado o ya no está disponible.</div>';return;}$('listaTorneos').style.display='none';$('detalle').style.display='block';$('volverWrap').style.display='block';$('titulo').textContent=torneo.nombre;$('subtitulo').textContent='Resultados, tabla y equipos participantes.';document.title=torneo.nombre+' — Torneos Newcom';const [re,rp,rg]=await Promise.all([NewcomSupabase.listarEquiposPublicos(torneoId),NewcomSupabase.listarPartidosPublicosFinalizados(torneoId),NewcomSupabase.listarProgramacionPublica(torneoId)]);if(!re.ok||!rp.ok||!rg.ok){$('aviso').textContent='No se pudieron cargar todos los datos: '+esc(re.error||rp.error||rg.error);return;}equipos=re.data||[];finalizados=rp.data||[];programacion=rg.data||[];cargarFiltros();pintarEquipos('','');}
 $('cat').addEventListener('change',actualizarMod);$('mod').addEventListener('change',pintar);cargarNovedadesPublicas();inicio();
 </script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
-</body></html>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>

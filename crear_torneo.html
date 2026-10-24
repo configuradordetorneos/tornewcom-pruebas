@@ -2,9 +2,9 @@
 <title>Crear torneo — Sistema de Torneos Newcom</title><style>
 *{box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:#fff;padding:18px 24px}.wrap{max-width:900px;margin:28px auto;padding:0 16px}.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:18px}.btn,button{display:inline-block;background:#4A90C2;color:#fff;padding:11px 16px;border-radius:10px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}.secondary{background:#6c7f8d}label{display:block;font-size:12px;font-weight:bold;color:#2F5D7E;margin:0 0 6px}input,select{width:100%;padding:12px;border:1px solid #bdcbd5;border-radius:9px;font-size:15px;background:#fff;color:#243746}.scoreGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.scoreBox{border:1px solid #dbe5eb;border-radius:12px;padding:12px;background:#f8fbfd}.scoreBox b{display:block;margin-bottom:5px}.customGrid{display:none;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.mini{font-size:12px;color:#607787}.scorePreview{margin-top:8px;font-size:13px;font-weight:bold;color:#2F5D7E}@media(max-width:700px){.scoreGrid,.customGrid{grid-template-columns:1fr}}.msg{margin-top:16px;padding:14px;border-radius:10px}.err{background:#faecec;color:#7b2c2c}.note{background:#EAF4FB;padding:14px;border-radius:10px;margin-top:18px;color:#526b7a}.flow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.step{padding:7px 11px;border-radius:999px;background:#eef2f5;color:#607787;font-weight:bold;font-size:13px}.step.active{background:#4A90C2;color:#fff}
 </style><script src="legal_v12_33.js?v=12.35" defer></script>
-</head><body>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head><body>
 <script src="roles_v12_24.js?v=12.35"></script><script>window.__sesionCrear=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script>
-<div class="top"><b>TORNEWCOM — V12.37.39 PRUEBAS</b></div>
+<div class="top"><b>TORNEWCOM — V12.37.40 PRUEBAS</b></div>
 <main class="wrap">
 <p><a class="btn secondary" href="index.html">← Panel</a> <a class="btn" href="torneos.html">Ver torneos</a></p>
 <div class="flow"><span class="step active">1 · Crear torneo</span><span class="step">2 · Cargar institución</span><span class="step">3 · Cargar equipos</span></div>
@@ -40,7 +40,7 @@
 <div id="resultado"></div>
 </section>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.39"></script><script src="autosave_v12_26.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.40"></script><script src="autosave_v12_26.js"></script>
 <script>
 const $=id=>document.getElementById(id);const clave=NewcomAutosave.key('crear_torneo');
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
@@ -82,4 +82,4 @@ prepararAsignacionAdmin();
 </script><script src="guia_organizador_v12_35.js?v=12.35"></script>
 <script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
 <script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
-</body></html>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>

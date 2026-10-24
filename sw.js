@@ -1,0 +1,1 @@
+const VERSION='tornewcom-12.37.40';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',event=>event.waitUntil(self.clients.claim()));/* Sin cache intencional: siempre se priorizan la versión y los datos online más recientes. */

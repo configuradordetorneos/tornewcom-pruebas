@@ -850,13 +850,13 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <script src="legal_v12_33.js?v=12.35" defer></script>
 
-</head><body>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"><style>.installAppPanel{margin:14px 0 18px;text-align:center}.installAppBtn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:12px 22px;border:0;border-radius:14px;background:#1f7f4c;color:#fff;font-weight:800;font-size:16px;box-shadow:0 8px 18px rgba(31,127,76,.24);cursor:pointer}.installAppBtn:hover{filter:brightness(.96);transform:translateY(-1px)}.installAppBtn:active{transform:translateY(0)}.installAppHelp{margin-top:7px;color:#5f7280;font-size:12px}.installInstructions{margin-top:9px;display:none;background:#f3f8fb;border:1px solid #d7e5ed;border-radius:10px;padding:10px 12px;text-align:left;max-width:560px;margin-left:auto;margin-right:auto;font-size:13px;line-height:1.4}.installInstructions.show{display:block}.activityPanel{background:#fff;border-radius:16px;padding:18px 20px;margin:14px 0;box-shadow:0 6px 18px rgba(45,74,95,.08)}.activityPanel h3{margin:0 0 4px}.activityMuted{color:#657784;font-size:13px}.activityScroll{max-height:260px;overflow-y:auto;border:1px solid #dbe6ed;border-radius:10px}.activityTable{width:100%;border-collapse:collapse;font-size:13px}.activityTable th,.activityTable td{padding:9px 10px;border-bottom:1px solid #e6eef3;text-align:left;vertical-align:top}.activityTable thead th{position:sticky;top:0;background:#eaf4fb;z-index:1}</style></head><body>
 
 
 
 <header class="topbar">
 
-  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.39 PRUEBAS</small></div>
+  <div class="brand"><h1>TorNewcom</h1><small>Plataforma de gestión de torneos de Newcom · V12.37.40 PRUEBAS</small></div>
 
   <nav class="quicklinks"><span style="width:100%;font-size:12px;font-weight:700;opacity:.9">VISITÁ TAMBIÉN</span>
 
@@ -874,6 +874,11 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <section class="welcome"><h2>Bienvenido</h2><p>Ingresá a un torneo existente o comenzá uno nuevo.</p></section>
 
+<section class="installAppPanel" aria-label="Instalar TorNewcom">
+  <button id="installAppBtn" class="installAppBtn" type="button">📱 Instalá TorNewcom en tu celular</button>
+  <div id="installAppHelp" class="installAppHelp">Acceso directo, pantalla completa y siempre conectado a la versión actual.</div>
+</section>
+
 <details id="novedadesBox" class="newsLink"><summary>Novedades y actualizaciones del sistema</summary><div class="newsLinkBody"><div id="novedadesLista" class="newsEmpty">Cargando…</div></div></details>
 
 <section id="guiaVisible" class="guidePanel" style="display:none"></section>
@@ -885,7 +890,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 <a class="action" href="#mis-torneos"><div class="icon">🏆</div><h3>Mis torneos</h3><p>Ingresá, editá o continuá un torneo ya creado.</p></a>
 
 </section>
-<section id="actividadOrganizador" class="activityPanel" style="display:none"><h3>Actividad reciente</h3><div class="activityMuted">Últimos movimientos registrados en tus torneos.</div><div id="actividadOrganizadorBody" class="activityScroll" style="margin-top:10px">Cargando…</div></section>
+<section id="actividadOrganizador" class="activityPanel" style="display:none"><h3>Alertas y modificaciones</h3><div class="activityMuted">Historial de movimientos registrados en tus torneos. Lo más reciente aparece primero.</div><div id="actividadOrganizadorBody" class="activityScroll" style="margin-top:10px">Cargando…</div></section>
 
 <h3 class="section-title" id="mis-torneos">Mis torneos activos</h3>
 
@@ -967,7 +972,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <script src="supabase-config.js?v=12.35"></script>
 
-<script src="supabase_v12_24.js?v=12.37.39"></script>
+<script src="supabase_v12_24.js?v=12.37.40"></script>
 
 <script src="roles_v12_24.js?v=12.35"></script>
 
@@ -1003,7 +1008,7 @@ async function cargarContadorMensajesV1235(){
 
 function fmtActividadFecha(v){if(!v)return'';const d=new Date(v);return Number.isNaN(d.getTime())?'':d.toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'})}
 function nombreAccionActividad(a){return({REAPERTURA_PARTIDO:'Reabrió partido',CORRECCION_RESULTADO:'Corrigió resultado',EDICION_PARTIDO:'Editó partido'}[a]||String(a||'Actividad').replaceAll('_',' ').toLowerCase().replace(/^./,c=>c.toUpperCase()))}
-async function cargarActividadOrganizadorV123739(){const panel=document.getElementById('actividadOrganizador'),body=document.getElementById('actividadOrganizadorBody');if(!panel||!body)return;const s=NewcomRoles.sesion();if(s.es_admin_general||!(s.puede_crear_torneos||s.tiene_asignaciones_organizador)){panel.style.display='none';return}panel.style.display='block';const r=await NewcomSupabase.listarAuditoriaPartidos();if(!r.ok){body.textContent='No se pudo cargar la actividad reciente.';return}const xs=(r.data||[]).slice(0,8);if(!xs.length){body.innerHTML='<div class="activityMuted">Todavía no hay movimientos registrados.</div>';return}body.innerHTML=`<table class="activityTable"><thead><tr><th>Fecha / hora</th><th>Acción</th><th>Partido</th><th>Detalle</th></tr></thead><tbody>${xs.map(x=>{const p=x.partidos||{},partido=[p.equipo_a,p.equipo_b].filter(Boolean).join(' vs ')||'—';return`<tr><td>${esc(fmtActividadFecha(x.creado_en))}</td><td><b>${esc(nombreAccionActividad(x.accion))}</b></td><td>${esc(partido)}</td><td>${esc(x.motivo||'—')}</td></tr>`}).join('')}</tbody></table>`}
+async function cargarActividadOrganizadorV123739(){const panel=document.getElementById('actividadOrganizador'),body=document.getElementById('actividadOrganizadorBody');if(!panel||!body)return;const s=NewcomRoles.sesion();if(s.es_admin_general||!(s.puede_crear_torneos||s.tiene_asignaciones_organizador)){panel.style.display='none';return}panel.style.display='block';const r=await NewcomSupabase.listarAuditoriaPartidos();if(!r.ok){body.textContent='No se pudo cargar el historial de alertas y modificaciones.';return}const xs=(r.data||[]);if(!xs.length){body.innerHTML='<div class="activityMuted">Todavía no hay movimientos registrados.</div>';return}body.innerHTML=`<table class="activityTable"><thead><tr><th>Fecha / hora</th><th>Acción</th><th>Partido</th><th>Detalle</th></tr></thead><tbody>${xs.map(x=>{const p=x.partidos||{},partido=[p.equipo_a,p.equipo_b].filter(Boolean).join(' vs ')||'—';return`<tr><td>${esc(fmtActividadFecha(x.creado_en))}</td><td><b>${esc(nombreAccionActividad(x.accion))}</b></td><td>${esc(partido)}</td><td>${esc(x.motivo||'—')}</td></tr>`}).join('')}</tbody></table>`}
 async function cargarBotonAlertasV123734(){
  const b=document.getElementById('alertasBadge');if(!b||!window.NewcomSupabase)return;
  const r=await NewcomSupabase.hayAlertasNoLeidasActual();
@@ -1173,4 +1178,33 @@ window.addEventListener('DOMContentLoaded',()=>setTimeout(instalarSolicitudesBil
 
 <script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
 
-</body></html>
+<script>
+let tornewcomInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();tornewcomInstallPrompt=e;});
+window.addEventListener('appinstalled',()=>{tornewcomInstallPrompt=null;const h=document.getElementById('installAppHelp');if(h)h.textContent='TorNewcom ya quedó instalada en este dispositivo.';});
+window.addEventListener('DOMContentLoaded',()=>{
+  const btn=document.getElementById('installAppBtn');
+  const help=document.getElementById('installAppHelp');
+  if(!btn)return;
+  let box=document.getElementById('installInstructions');
+  if(!box){box=document.createElement('div');box.id='installInstructions';box.className='installInstructions';btn.parentElement.appendChild(box);}
+  const standalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+  if(standalone && help)help.textContent='TorNewcom está instalada. Este botón queda disponible para consultar cómo instalarla en otro dispositivo.';
+  btn.addEventListener('click',async()=>{
+    if(tornewcomInstallPrompt){
+      tornewcomInstallPrompt.prompt();
+      try{await tornewcomInstallPrompt.userChoice;}catch(_){ }
+      tornewcomInstallPrompt=null;
+      return;
+    }
+    const ua=navigator.userAgent||'';
+    const ios=/iPad|iPhone|iPod/.test(ua);
+    const android=/Android/i.test(ua);
+    if(ios){box.innerHTML='<b>En iPhone/iPad:</b> abrí TorNewcom en Safari, tocá <b>Compartir</b> y elegí <b>Agregar a pantalla de inicio</b>.';}
+    else if(android){box.innerHTML='<b>En Android:</b> abrí el menú de Chrome (⋮) y elegí <b>Instalar app</b> o <b>Agregar a pantalla principal</b>.';}
+    else{box.innerHTML='<b>En computadora:</b> buscá el ícono de instalación en la barra del navegador o usá el menú del navegador. En el celular, abrí TorNewcom desde Chrome o Safari para instalarla.';}
+    box.classList.toggle('show');
+  });
+});
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>

@@ -33,7 +33,7 @@ h1,h2,h3{margin-top:0}.muted{color:#647b89;font-size:13px}.note{padding:12px 14p
 }
 </style>
 <script src="legal_v12_33.js?v=12.35" defer></script>
-</head>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div class="top"><b>TORNEWCOM — Planilla general</b><div class="who" id="quien"></div></div>
 <main class="wrap">
@@ -69,7 +69,7 @@ h1,h2,h3{margin-top:0}.muted{color:#647b89;font-size:13px}.note{padding:12px 14p
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=12.35"></script>
-<script src="supabase_v12_24.js?v=12.37.39"></script>
+<script src="supabase_v12_24.js?v=12.37.40"></script>
 <script src="roles_v12_24.js?v=12.35"></script>
 <script>
 const sesion=NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);
@@ -245,5 +245,5 @@ iniciar();
 <script src="tornewcom_icons.js?v=12.36.19"></script>
 <script src="tornewcom_tooltips.js?v=12.36.19"></script>
 <script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
-</body>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body>
 </html>

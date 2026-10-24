@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mensajes — TorNewcom V12.37.39</title>
+<title>Mensajes — TorNewcom V12.37.40</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fa;color:#1f3342}
 .top{background:#2F5D7E;color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -16,13 +16,13 @@ label{font-weight:700;color:#2F5D7E;font-size:13px}input,select,textarea{width:1
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=12.35"></script>
-<script src="supabase_v12_24.js?v=12.37.39"></script>
+<script src="supabase_v12_24.js?v=12.37.40"></script>
 <script src="roles_v12_24.js?v=12.35"></script>
 <script src="mensajes_v12_35.js?v=12.35"></script>
 <script src="legal_v12_33.js?v=12.35" defer></script>
-</head>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
-<div class="top"><b>TORNEWCOM — V12.37.39 PRUEBAS · Mensajes</b></div>
+<div class="top"><b>TORNEWCOM — V12.37.40 PRUEBAS · Mensajes</b></div>
 <main class="wrap">
   <div style="margin-bottom:12px"><a class="btn secondary" href="index.html">Inicio</a></div>
   <div class="grid">
@@ -243,5 +243,5 @@ window.addEventListener('DOMContentLoaded',async()=>{
 <script src="guia_organizador_v12_35.js?v=12.35"></script>
 <script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
 <script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
-</body>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body>
 </html>

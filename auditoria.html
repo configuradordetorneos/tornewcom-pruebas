@@ -3,14 +3,14 @@
 body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top{background:#2F5D7E;color:white;padding:18px 24px}.wrap{max-width:1180px;margin:30px auto;background:white;padding:24px;border-radius:16px}.btn{display:inline-block;padding:10px 16px;border-radius:10px;text-decoration:none;background:#4A90C2;color:white}
 table{width:100%;border-collapse:collapse;margin-top:18px}th,td{padding:10px;border-bottom:1px solid #dbe5eb;text-align:left;vertical-align:top}th{background:#2F5D7E;color:white}tbody tr:nth-child(even){background:#EAF4FB}
 small{color:#60717f}.msg{padding:12px;border-radius:10px;background:#fff4dd;color:#795f22;margin-top:14px}.score{white-space:nowrap;font-weight:bold}</style><script src="legal_v12_33.js?v=12.35" defer></script>
-</head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script>
-<div class="top">TORNEWCOM — V12.37.39 PRUEBAS</div><div class="wrap">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F5D7E"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="TorNewcom"><link rel="apple-touch-icon" href="icon-192.png"></head><body><script src="roles_v12_24.js?v=12.35"></script><script>NewcomRoles.exigir(['ADMIN_GENERAL','ORGANIZADOR']);</script>
+<div class="top">TORNEWCOM — V12.37.40 PRUEBAS</div><div class="wrap">
 <a class="btn" href="index.html">← Volver al panel</a><h1>Auditoría de correcciones</h1>
 <p><small>Registro real guardado en Supabase. En esta etapa de desarrollo las políticas todavía son temporales; luego se vincularán a usuarios y roles.</small></p>
 <div id="msg"></div>
 <table><thead><tr><th>Fecha / hora</th><th>Partido</th><th>Motivo</th><th>Antes</th><th>Después</th></tr></thead><tbody id="cuerpo"></tbody></table>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.39"></script><script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js?v=12.35"></script><script src="supabase_v12_24.js?v=12.37.40"></script><script>
 const q=new URLSearchParams(location.search),torneo=q.get('torneo'),b=document.getElementById('cuerpo'),m=document.getElementById('msg');
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function res(x){
@@ -34,4 +34,4 @@ function res(x){
 </script><script src="guia_organizador_v12_35.js?v=12.35"></script>
 <script src="tornewcom_icons.js?v=12.36.19"></script><script src="tornewcom_tooltips.js?v=12.36.19"></script>
 <script src="tornewcom_session_ui.js?v=12.36.19-login5"></script>
-</body></html>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12.37.40').catch(()=>{}));}</script></body></html>
