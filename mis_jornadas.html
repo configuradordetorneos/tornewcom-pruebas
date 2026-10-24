@@ -12,7 +12,7 @@ body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top
 <body>
 <script src="roles_v12_24.js?v=12.35"></script>
 <script>NewcomRoles.exigir(['RESPONSABLE']);</script>
-<div class="top"><b>TORNEWCOM — V12.37.36 PRUEBAS</b></div>
+<div class="top"><b>TORNEWCOM — V12.37.38 PRUEBAS</b></div>
 <main class="wrap">
 <p><a class="btn secondary" href="index.html">← Inicio</a></p>
 <div class="card">
@@ -25,7 +25,7 @@ body{font-family:Arial,sans-serif;background:#f3f7fa;color:#243746;margin:0}.top
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=12.35"></script>
-<script src="supabase_v12_24.js?v=12.37.36"></script>
+<script src="supabase_v12_24.js?v=12.37.38"></script>
 <script>
 const sesion=NewcomRoles.sesion();
 const asignacionSel=document.getElementById('asignacion');
@@ -54,6 +54,7 @@ async function cargar(){
    grupos.get(key).partidos.push(p);
  }
  const orden=[...grupos.values()].sort((x,y)=>String(x.fecha||'').localeCompare(String(y.fecha||''))||String(x.nombre).localeCompare(String(y.nombre),'es'));
+ orden.forEach(g=>g.partidos.sort((a,b)=>String(a.hora||'99:99').localeCompare(String(b.hora||'99:99'))||String(a.equipo_a||'').localeCompare(String(b.equipo_a||''),'es')));
  contenido.className='';
  contenido.innerHTML=orden.map((g,idx)=>`<section class="jornada"><h2>Jornada ${idx+1}</h2><div class="muted">${esc(g.fecha||'Fecha a confirmar')}</div><div class="scroll"><table><thead><tr><th>Hora</th><th>Sede</th><th>Cancha</th><th>Categoría</th><th>Mi equipo</th><th>Rival</th><th>Estado</th></tr></thead><tbody>${g.partidos.map(p=>{const aMio=esMio(p,'A'),bMio=esMio(p,'B');const mio=aMio?p.equipo_a:p.equipo_b;const rival=aMio?p.equipo_b:p.equipo_a;const ambos=aMio&&bMio;const sede=p.sedes_torneo;const sedeHtml=sede?`<span title="${esc(sede.domicilio||'')}">${esc(sede.nombre)}</span>`:'—';return `<tr><td>${esc(p.hora||'A confirmar')}</td><td>${sedeHtml}</td><td>${esc(p.cancha||'A confirmar')}</td><td>${esc(p.categoria)} · ${esc(p.modalidad)}</td><td><b>${esc(ambos?(p.equipo_a+' / '+p.equipo_b):mio)}</b></td><td>${esc(ambos?'—':rival)}</td><td class="estado ${p.estado==='FINALIZADO'?'fin':(p.estado==='SUSPENDIDO'?'sus':'pen')}">${esc(p.estado||'PENDIENTE')}</td></tr>`;}).join('')}</tbody></table></div></section>`).join('');
 }

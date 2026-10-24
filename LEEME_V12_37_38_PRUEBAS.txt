@@ -1,0 +1,27 @@
+TORNEWCOM V12.37.38 PRUEBAS
+
+ENTORNO: sistema-torneos-newcom
+PROJECT REF: bxymdhkxotpiunyuntdd
+NO USAR EN PRODUCCION.
+
+CAMBIOS:
+1. Nuevo circuito "Anular resultado / Reabrir partido" para partidos FINALIZADOS.
+   - vuelve a PENDIENTE
+   - limpia sets, tantos, puntos, ganador y finalizado_en
+   - motivo obligatorio
+   - auditoria REAPERTURA_PARTIDO
+   - alertas/email a responsables
+2. Correccion de resultado sin cambios reales:
+   - no ejecuta UPDATE
+   - no genera auditoria
+   - no genera alerta ni email
+3. Orden de partidos:
+   - jornadas por fecha
+   - partidos dentro de jornada por hora
+   - aplicado en Partidos, Mis jornadas, Historial y vista publica
+4. Version visible: V12.37.38 PRUEBAS.
+
+BACKEND DE PRUEBAS:
+- funcion public.reabrir_partido_finalizado(uuid,text) creada y con EXECUTE para authenticated.
+
+PRODUCCION NO FUE MODIFICADA.

@@ -738,6 +738,20 @@ function snapshotResultado(p){
     finalizado_en:p.finalizado_en
   };
 }
+function mismoSnapshotResultado(a,b){
+  return JSON.stringify(a)===JSON.stringify(b);
+}
+async function reabrirPartidoFinalizado(id,motivo){
+  const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;
+  if(!iniciar())return{ok:false,error:'Supabase no configurado'};
+  motivo=(motivo||'').trim();
+  if(motivo.length<3)return{ok:false,error:'Indicá el motivo de la reapertura.'};
+  const{data,error}=await client.rpc('reabrir_partido_finalizado',{p_partido:id,p_motivo:motivo});
+  if(error)return{ok:false,error:error.message};
+  const ids=Array.isArray(data?.notification_ids)?data.notification_ids:[];
+  const mail=await enviarNotificacionesPartidoEmail(ids);
+  return{ok:true,data,notification_ids:ids,warning:mail.ok?null:'Partido reabierto, pero no se pudo enviar el aviso por email: '+mail.error,email:mail};
+}
 async function corregirPartido(id,d,motivo){
   const __sesion=await exigirSesionDatos();if(!__sesion.ok)return __sesion;
   if(!iniciar())return{ok:false,error:'Supabase no configurado'};
@@ -763,6 +777,11 @@ async function corregirPartido(id,d,motivo){
     estado:'FINALIZADO',
     actualizado_en:new Date().toISOString()
   };
+
+  const propuesto=snapshotResultado({...previo.data,...cambios});
+  if(mismoSnapshotResultado(antes,propuesto)){
+    return{ok:true,data:previo.data,sin_cambios:true,notification_ids:[],warning:null,email:{ok:true,enviados:0,omitido:true}};
+  }
 
   const{data,error}=await client.from('partidos').update(cambios).eq('id',id).select().single();
   if(error)return{ok:false,error:error.message};
@@ -1544,5 +1563,5 @@ async function listarProgramacionPublica(torneoId){
   return error?{ok:false,error:error.message,data:[]}:{ok:true,data:data||[]};
 }
 
-return{iniciar,mensajeErrorHumano,restaurarSesionAuth,usuarioAuth,obtenerContextoUsuario,registrarCuentaAuth,solicitarRecuperacionPassword,esperarRecuperacionPassword,actualizarPasswordRecuperacion,iniciarSesionAuth,verificarAceptacionLegal,registrarAceptacionLegal,cerrarSesionAuth,listarTorneos,crearTorneo,obtenerTorneo,actualizarPuntuacionTorneo,eliminarTorneoAdmin,cerrarPlantelAhora,programarCierrePlantel,eliminarSedeTorneo,actualizarSedeTorneo,crearSedeTorneo,listarSedesTorneo,crearJornadaConPartidos,listarPartidos,obtenerPartido,listarJornadasTorneo,actualizarProgramacionPartido,eliminarPartidoPendiente,enviarNotificacionesPartidoEmail,hayAlertasNoLeidasActual,listarNotificacionesSistema,marcarNotificacionLeida,guardarBorradorPartido,suspenderPartido,finalizarPartido,corregirPartido,listarAuditoriaPartidos,listarPartidosFinalizados,listarCategoriasTorneo,crearCategoriaTorneo,actualizarCategoriaTorneo,eliminarCategoriaTorneo,actualizarCierreCategoriaTorneo,actualizarCierreTodasCategoriasTorneo,listarInstituciones,listarEquiposCompetitivos,crearInstitucion,actualizarInstitucion,crearEquipoCompetitivo,actualizarEquipoCompetitivo,eliminarEquipoCompetitivo,urlPublicaLogoEquipo,guardarLogoEquipo,eliminarLogoEquipo,listarJugadoresInstitucion,listarJugadoresParticipantesInstitucion,guardarJugador,actualizarAsignacionesJugador,eliminarJugador,listarAlertasPlantelPendientes,listarAlertasPlantel,resolverAlertaPlantel,listarAsignacionesResponsable,obtenerInstitucion,listarEstadoOrganizadoresPorTorneo,listarJugadoresMaestros,crearJugadorMaestro,actualizarJugadorMaestro,desactivarJugadorMaestro,plantelCategoriaAbierto,agregarJugadorMaestroEquipoAbierto,solicitarCambioPlantel,resolverCambioPlantel,aplicarAltaExcepcionalPlantel,listarSolicitudesCambioPlantel,crearSolicitudListaCerrada,resolverSolicitudListaCerrada,listarSolicitudesListaCerrada,resumenSolicitudesListaCerrada,adminListarPerfiles,adminListarMembresias,adminResumen,adminConfigurarOrganizador,adminAsignarOrganizadorTorneo,actualizarPublicacionTorneo,listarTorneosPublicos,listarEquiposPublicos,listarPartidosPublicosFinalizados,listarProgramacionPublica};
+return{iniciar,mensajeErrorHumano,restaurarSesionAuth,usuarioAuth,obtenerContextoUsuario,registrarCuentaAuth,solicitarRecuperacionPassword,esperarRecuperacionPassword,actualizarPasswordRecuperacion,iniciarSesionAuth,verificarAceptacionLegal,registrarAceptacionLegal,cerrarSesionAuth,listarTorneos,crearTorneo,obtenerTorneo,actualizarPuntuacionTorneo,eliminarTorneoAdmin,cerrarPlantelAhora,programarCierrePlantel,eliminarSedeTorneo,actualizarSedeTorneo,crearSedeTorneo,listarSedesTorneo,crearJornadaConPartidos,listarPartidos,obtenerPartido,listarJornadasTorneo,actualizarProgramacionPartido,eliminarPartidoPendiente,reabrirPartidoFinalizado,enviarNotificacionesPartidoEmail,hayAlertasNoLeidasActual,listarNotificacionesSistema,marcarNotificacionLeida,guardarBorradorPartido,suspenderPartido,finalizarPartido,corregirPartido,listarAuditoriaPartidos,listarPartidosFinalizados,listarCategoriasTorneo,crearCategoriaTorneo,actualizarCategoriaTorneo,eliminarCategoriaTorneo,actualizarCierreCategoriaTorneo,actualizarCierreTodasCategoriasTorneo,listarInstituciones,listarEquiposCompetitivos,crearInstitucion,actualizarInstitucion,crearEquipoCompetitivo,actualizarEquipoCompetitivo,eliminarEquipoCompetitivo,urlPublicaLogoEquipo,guardarLogoEquipo,eliminarLogoEquipo,listarJugadoresInstitucion,listarJugadoresParticipantesInstitucion,guardarJugador,actualizarAsignacionesJugador,eliminarJugador,listarAlertasPlantelPendientes,listarAlertasPlantel,resolverAlertaPlantel,listarAsignacionesResponsable,obtenerInstitucion,listarEstadoOrganizadoresPorTorneo,listarJugadoresMaestros,crearJugadorMaestro,actualizarJugadorMaestro,desactivarJugadorMaestro,plantelCategoriaAbierto,agregarJugadorMaestroEquipoAbierto,solicitarCambioPlantel,resolverCambioPlantel,aplicarAltaExcepcionalPlantel,listarSolicitudesCambioPlantel,crearSolicitudListaCerrada,resolverSolicitudListaCerrada,listarSolicitudesListaCerrada,resumenSolicitudesListaCerrada,adminListarPerfiles,adminListarMembresias,adminResumen,adminConfigurarOrganizador,adminAsignarOrganizadorTorneo,actualizarPublicacionTorneo,listarTorneosPublicos,listarEquiposPublicos,listarPartidosPublicosFinalizados,listarProgramacionPublica};
 })();
